@@ -1,0 +1,168 @@
+{
+  "name": "contrivox",
+  "version": "1.0.0",
+  "description": "Contrivox development plugin — contract analysis SaaS. Bundles CLAUDE.md, skills, hooks, and subagents for the full team.",
+  "author": "Contrivox Engineering",
+  "license": "UNLICENSED",
+  "marketplace_url": "https://contrivox.com/claude-plugin",
+  "repository": "https://github.com/contrivox/contrivox",
+
+  "claude": {
+    "min_version": "claude-3-5-sonnet"
+  },
+
+  "constitution": {
+    "path": ".claude/CLAUDE.md",
+    "scope": "project",
+    "description": "Contrivox agent constitution — security rules, conventions, anti-patterns, DB schema reference"
+  },
+
+  "skills": [
+    {
+      "name": "contract-analysis",
+      "path": "skills/contract-analysis/SKILL.md",
+      "description": "Claude API integration for multilingual contract analysis — prompt engineering, Zod validation, error handling",
+      "triggers": [
+        "contract analysis",
+        "claude prompt",
+        "analyse contract",
+        "analyseContract",
+        "buildContrivoxPrompt",
+        "ContrivoxAnalysis"
+      ]
+    },
+    {
+      "name": "pdf-generation",
+      "path": "skills/pdf-generation/SKILL.md",
+      "description": "Branded Contrivox PDF report generation with jsPDF — layout, colours, download, base64 for email",
+      "triggers": [
+        "pdf",
+        "jsPDF",
+        "generate report",
+        "generateContrivoxPDF",
+        "download report",
+        "pdf attachment"
+      ]
+    },
+    {
+      "name": "email-delivery",
+      "path": "skills/email-delivery/SKILL.md",
+      "description": "Transactional email with Resend — branded HTML template, PDF attachment, WhatsApp deep link, rate limiting",
+      "triggers": [
+        "send email",
+        "resend",
+        "email report",
+        "whatsapp",
+        "send-report",
+        "email template",
+        "buildEmailHTML"
+      ]
+    }
+  ],
+
+  "hooks": [
+    {
+      "event": "PreToolUse",
+      "path": "hooks/pre-tool-use.sh",
+      "description": "Blocks dangerous commands — rm -rf, force push, secret writing, pipe-to-shell, migration overwrite",
+      "matcher": ".*"
+    },
+    {
+      "event": "PostToolUse",
+      "path": "hooks/post-tool-use.sh",
+      "description": "Audit logging, secret scanning in output, TypeScript auto-check, .env gitignore guard",
+      "matcher": ".*"
+    }
+  ],
+
+  "subagents": [
+    {
+      "name": "code-reviewer",
+      "path": "subagents/code-reviewer.md",
+      "description": "Security and quality code review — checklist-based, returns structured verdict in one message",
+      "invocation": "Run the code reviewer on [file or diff]"
+    },
+    {
+      "name": "migration-generator",
+      "path": "subagents/migration-generator.md",
+      "description": "Generates safe, RLS-enabled, idempotent Supabase SQL migrations following Contrivox schema conventions",
+      "invocation": "Generate a migration for [change description]"
+    },
+    {
+      "name": "security-auditor",
+      "path": "subagents/security-auditor.md",
+      "description": "Full security audit by scope — API, auth, payments, file upload, data access. Returns severity-classified report",
+      "invocation": "Run security audit on [full | api | auth | payments]"
+    }
+  ],
+
+  "env_template": {
+    "file": ".env.example",
+    "required": [
+      "NEXT_PUBLIC_SUPABASE_URL",
+      "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+      "SUPABASE_SERVICE_ROLE_KEY",
+      "ANTHROPIC_API_KEY",
+      "STRIPE_SECRET_KEY",
+      "STRIPE_PUBLISHABLE_KEY",
+      "STRIPE_WEBHOOK_SECRET",
+      "RESEND_API_KEY",
+      "UPSTASH_REDIS_REST_URL",
+      "UPSTASH_REDIS_REST_TOKEN",
+      "NEXT_PUBLIC_URL"
+    ],
+    "client_safe": [
+      "NEXT_PUBLIC_SUPABASE_URL",
+      "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+      "NEXT_PUBLIC_URL"
+    ]
+  },
+
+  "scripts": {
+    "install": "pnpm install",
+    "dev": "pnpm dev",
+    "build": "pnpm build",
+    "test": "pnpm test",
+    "typecheck": "pnpm tsc --noEmit",
+    "db:push": "supabase db push",
+    "db:reset": "supabase db reset",
+    "db:types": "supabase gen types typescript --local > types/supabase.ts"
+  },
+
+  "security": {
+    "secret_patterns": [
+      "sk-[a-zA-Z0-9]{20,}",
+      "rk_live_[a-zA-Z0-9]{20,}",
+      "re_[a-zA-Z0-9]{20,}",
+      "AKIA[A-Z0-9]{16}",
+      "eyJ[a-zA-Z0-9_-]{50,}"
+    ],
+    "protected_files": [
+      ".claude/CLAUDE.md",
+      ".claude/settings.json",
+      "supabase/migrations/**/*.sql"
+    ],
+    "gitignore_required": [
+      ".env",
+      ".env.local",
+      ".env.*.local",
+      ".claude/hooks.log",
+      ".claude/changed-files.log",
+      ".claude/tsc.log"
+    ]
+  },
+
+  "changelog": [
+    {
+      "version": "1.0.0",
+      "date": "2025-05",
+      "changes": [
+        "Initial plugin release",
+        "3 skills: contract-analysis, pdf-generation, email-delivery",
+        "2 hooks: pre-tool-use (security), post-tool-use (audit)",
+        "3 subagents: code-reviewer, migration-generator, security-auditor",
+        "Full CLAUDE.md constitution with security rules"
+      ]
+    }
+  ]
+}
