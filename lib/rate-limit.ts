@@ -2,17 +2,27 @@ import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 import { NextRequest, NextResponse } from "next/server";
 
-const redis = Redis.fromEnv();
+let _redis: Redis | null = null;
+let _limiters: ReturnType<typeof buildLimiters> | null = null;
 
-// Per-route rate limiters
-export const limiters = {
-  analyse:     new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(5,  "1h"), prefix: "cvx:analyse" }),
-  checkout:    new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(10, "1h"), prefix: "cvx:checkout" }),
-  sendReport:  new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(20, "1h"), prefix: "cvx:send-report" }),
-  webhook:     new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(100,"1m"), prefix: "cvx:webhook" }),
-};
+function buildLimiters(redis: Redis) {
+  return {
+    analyse:    new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(5,   "1h"), prefix: "cvx:analyse" }),
+    checkout:   new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(10,  "1h"), prefix: "cvx:checkout" }),
+    sendReport: new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(20,  "1h"), prefix: "cvx:send-report" }),
+    webhook:    new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(100, "1m"), prefix: "cvx:webhook" }),
+  };
+}
 
-export type LimiterKey = keyof typeof limiters;
+function getLimiters() {
+  if (!_limiters) {
+    _redis = Redis.fromEnv();
+    _limiters = buildLimiters(_redis);
+  }
+  return _limiters;
+}
+
+export type LimiterKey = keyof ReturnType<typeof buildLimiters>;
 
 export async function checkRateLimit(
   req: NextRequest,
@@ -23,7 +33,7 @@ export async function checkRateLimit(
     req.headers.get("x-real-ip") ??
     "unknown";
 
-  const { success, reset, remaining } = await limiters[key].limit(ip);
+  const { success, reset, remaining } = await getLimiters()[key].limit(ip);
 
   if (!success) {
     return NextResponse.json(
