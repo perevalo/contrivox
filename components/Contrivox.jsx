@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import { Analytics } from "@/lib/analytics";
 
 // ─── TRANSLATIONS ─────────────────────────────────────────────────────────────
 // Strings live here. To add a language: duplicate this object, translate it,
@@ -90,11 +91,6 @@ const T = {
     score_label_map: { Fair:"Fair", Acceptable:"Acceptable", Concerning:"Concerning", Unfair:"Unfair", Dangerous:"Dangerous" },
   },
 };
-
-// ─── Analytics ────────────────────────────────────────────────────────────────
-const _fbq = (...a) => window.fbq && window.fbq(...a);
-const _gtag = (...a) => window.gtag && window.gtag(...a);
-function track(name, params={}) { _fbq("track", name, params); _gtag("event", name, params); }
 
 // ─── Claude prompt ────────────────────────────────────────────────────────────
 function buildPrompt() {
@@ -451,7 +447,7 @@ function FlagCard({ flag, t }) {
       <p style={{ margin:0, fontSize:12.5, color:COLORS.muted, lineHeight:1.68, fontFamily:"'DM Sans',sans-serif" }}>{flag.why_it_matters}</p>
       {flag.challengeable ? (
         <>
-          <button onClick={()=>setShow(s=>!s)} style={{ marginTop:10, padding:"5px 12px", fontSize:11, fontWeight:700, background:show?"rgba(99,102,241,0.22)":"rgba(99,102,241,0.1)", color:"#a5b4fc", border:"0.5px solid rgba(99,102,241,0.22)", borderRadius:7, cursor:"pointer", fontFamily:"'DM Sans',sans-serif", transition:"all .15s" }}>
+          <button onClick={()=>{ const next=!show; setShow(next); if(next) Analytics.challengeViewed(flag.issue); }} style={{ marginTop:10, padding:"5px 12px", fontSize:11, fontWeight:700, background:show?"rgba(99,102,241,0.22)":"rgba(99,102,241,0.1)", color:"#a5b4fc", border:"0.5px solid rgba(99,102,241,0.22)", borderRadius:7, cursor:"pointer", fontFamily:"'DM Sans',sans-serif", transition:"all .15s" }}>
             {show ? t.challenge_hide : t.challenge_btn}
           </button>
           {show && (
@@ -499,7 +495,7 @@ function DeliveryPanel({ result, t, pdfUri }) {
   const doEmail = () => {
     if(!email||emailSt==="sending") return;
     setEmailSt("sending");
-    track("DeliverEmail", { method:"email" });
+    Analytics.reportSentEmail();
     setTimeout(()=>{
       const sub = encodeURIComponent(`Contrivox — ${result.contract_type}`);
       const body = encodeURIComponent(`${t.rec_title}:\n${result.overall_recommendation}\n\n${t.score_lbl}: ${result.score}/100 — ${result.score_label_map?.[result.score_label]||result.score_label}\n\n${t.disclaimer}`);
@@ -511,7 +507,7 @@ function DeliveryPanel({ result, t, pdfUri }) {
   const doWa = () => {
     if(!wa||waSt==="sending") return;
     setWaSt("sending");
-    track("DeliverWhatsApp", { method:"whatsapp" });
+    Analytics.reportSentWhatsapp();
     setTimeout(()=>{ openWhatsApp(wa, result, t); setWaSt("sent"); }, 500);
   };
 
@@ -532,7 +528,7 @@ function DeliveryPanel({ result, t, pdfUri }) {
         </button>
       </div>
       {pdfUri && (
-        <a href={pdfUri} download="Contrivox-Report.pdf" style={{ display:"inline-flex", alignItems:"center", gap:5, marginTop:13, fontSize:12, color:"rgba(167,139,250,0.75)", fontFamily:"'DM Sans',sans-serif", textDecoration:"underline" }}>
+        <a href={pdfUri} download="Contrivox-Report.pdf" onClick={()=>Analytics.pdfDownloaded()} style={{ display:"inline-flex", alignItems:"center", gap:5, marginTop:13, fontSize:12, color:"rgba(167,139,250,0.75)", fontFamily:"'DM Sans',sans-serif", textDecoration:"underline" }}>
           {t.download_pdf}
         </a>
       )}
@@ -605,7 +601,7 @@ function FaqItem({ q, a }) {
   const [open, setOpen] = useState(false);
   return (
     <div style={{ borderBottom:`0.5px solid ${COLORS.border}`, padding:"17px 0" }}>
-      <button onClick={()=>setOpen(o=>!o)} style={{ width:"100%", display:"flex", justifyContent:"space-between", alignItems:"center", background:"none", border:"none", cursor:"pointer", textAlign:"left", padding:0, gap:12 }}>
+      <button onClick={()=>{ const next=!open; setOpen(next); if(next) Analytics.faqOpened(q); }} style={{ width:"100%", display:"flex", justifyContent:"space-between", alignItems:"center", background:"none", border:"none", cursor:"pointer", textAlign:"left", padding:0, gap:12 }}>
         <span style={{ fontSize:14, fontWeight:500, color:COLORS.text, fontFamily:"'DM Sans',sans-serif", lineHeight:1.4 }}>{q}</span>
         <span style={{ color:COLORS.faint, fontSize:20, flexShrink:0, transition:"transform .2s", transform:open?"rotate(45deg)":"rotate(0)" }}>+</span>
       </button>
@@ -635,6 +631,8 @@ export default function Contrivox() {
   const [contactWa, setContactWa]       = useState("");
   const [contactError, setContactError] = useState(null);
   const [autoSentTo, setAutoSentTo]     = useState(null);
+  const emailTrackedRef = useRef(false);
+  const waTrackedRef    = useRef(false);
   const fileRef    = useRef();
   const resultsRef = useRef();
   const t = T.en;
@@ -642,24 +640,11 @@ export default function Contrivox() {
   useEffect(()=>{
     setAccount(getAccount());
 
-    // jsPDF
+    // jsPDF — loaded lazily so it doesn't block initial render
     const js = document.createElement("script");
     js.src = "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";
     js.onload = () => setPdfReady(true);
     document.head.appendChild(js);
-
-    // GA4
-    const gs = document.createElement("script");
-    gs.src = "https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"; gs.async=true;
-    document.head.appendChild(gs);
-    window.dataLayer=window.dataLayer||[];
-    window.gtag=function(){window.dataLayer.push(arguments);};
-    window.gtag("js",new Date()); window.gtag("config","G-XXXXXXXXXX"); // ← replace with GA4 ID
-
-    // Facebook Pixel
-    !function(f,b,e,v,n,tt,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];tt=b.createElement(e);tt.async=!0;tt.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(tt,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");
-    window.fbq("init","XXXXXXXXXXXXXXXXX"); // ← replace with Pixel ID
-    window.fbq("track","PageView");
   },[]);
 
   // Build PDF whenever result is ready
@@ -668,13 +653,24 @@ export default function Contrivox() {
     generatePDF(result,t).then(setPdfUri).catch(e=>console.error("PDF error",e));
   },[result, pdfReady]);
 
+  // Fire paywall_shown once per result when paywall is visible
+  useEffect(()=>{
+    if(!result||unlocked) return;
+    const hidden =
+      (result.key_clauses?.length ?? 0) - CLAUSE_PREVIEW +
+      (result.red_flags?.length ?? 0) - FLAG_PREVIEW +
+      (result.missing_protections?.length ?? 0) - MISSING_PREVIEW;
+    if(hidden > 0) Analytics.paywallShown({ tab, items_hidden: hidden });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[result]);
+
   const handleFile = useCallback((f)=>{
     if(!f) return;
     const ext = f.name.split(".").pop().toLowerCase();
     if(!["pdf","png","jpg","jpeg","gif","webp","txt","doc","docx"].includes(ext)){ setError("Unsupported file type."); return; }
     if(f.size>20*1024*1024){ setError("File too large. Max 20MB."); return; }
     setFile(f); setError(null); setResult(null); setUnlocked(false); setPdfUri(null);
-    track("ContractUploaded",{ file_type:ext });
+    Analytics.contractUploaded({ file_type: ext, file_size_kb: Math.round(f.size / 1024) });
   },[]);
 
   const onDrop = useCallback((e)=>{ e.preventDefault(); setDragging(false); handleFile(e.dataTransfer.files[0]); },[handleFile]);
@@ -695,9 +691,21 @@ export default function Contrivox() {
     const iv = setInterval(()=>{ mi=Math.min(mi+1,msgs.length-1); setLoadMsg(msgs[mi]); },2800);
     try {
       const payload = await extractFile(file);
+      Analytics.analysisStarted({
+        file_type: file.name.split(".").pop()?.toLowerCase() ?? "unknown",
+        has_email: !!contactEmail.trim(),
+        has_whatsapp: !!contactWa.trim(),
+      });
       const analysis = await callClaude(payload, outLang);
       setResult(analysis); setTab("clauses");
-      track("AnalysisComplete",{ score:analysis.score, contract_type:analysis.contract_type });
+      Analytics.analysisCompleted({
+        score: analysis.score,
+        score_label: analysis.score_label,
+        contract_type: analysis.contract_type,
+        clause_count: analysis.key_clauses?.length ?? 0,
+        red_flag_count: analysis.red_flags?.length ?? 0,
+        missing_count: analysis.missing_protections?.length ?? 0,
+      });
       if(account) pushHistory({ ...analysis, savedAt:Date.now(), fileName:file.name });
 
       // Auto-send via email (mailto fallback — replace with real API in production)
@@ -713,18 +721,18 @@ export default function Contrivox() {
       setTimeout(()=>resultsRef.current?.scrollIntoView({ behavior:"smooth", block:"start" }),250);
     } catch(e) {
       setError("Analysis failed: "+e.message);
-      track("AnalysisError",{ error:e.message });
+      Analytics.analysisErrored(e.message);
     } finally {
       clearInterval(iv); setLoading(false);
     }
   };
 
   const handleUnlock = () => {
-    track("InitiateCheckout",{ value:3.99, currency:"USD", content_name:"full_contract_analysis" });
+    Analytics.unlockClicked();
     // Production: POST /api/checkout → redirect to Stripe session
     window.open("https://buy.stripe.com/your_payment_link","_blank");
     // DEMO: simulate unlock after redirect — remove in production
-    setTimeout(()=>{ setUnlocked(true); track("Purchase",{ value:3.99, currency:"USD" }); },2000);
+    setTimeout(()=>{ setUnlocked(true); },2000);
   };
 
   function renderPaywalled(items, limit, renderFn) {
@@ -748,7 +756,7 @@ export default function Contrivox() {
   }
 
   const tabBtn = (k, label) => (
-    <button key={k} onClick={()=>setTab(k)} style={{ flex:1, padding:"7px 6px", fontSize:12, fontWeight:500, cursor:"pointer", borderRadius:9, border:"none", fontFamily:"'DM Sans',sans-serif", background:tab===k?"rgba(255,255,255,0.1)":"transparent", color:tab===k?COLORS.text:COLORS.muted, transition:"all .15s" }}>{label}</button>
+    <button key={k} onClick={()=>{ if(k!==tab){ Analytics.tabSwitched({ from:tab, to:k }); } setTab(k); }} style={{ flex:1, padding:"7px 6px", fontSize:12, fontWeight:500, cursor:"pointer", borderRadius:9, border:"none", fontFamily:"'DM Sans',sans-serif", background:tab===k?"rgba(255,255,255,0.1)":"transparent", color:tab===k?COLORS.text:COLORS.muted, transition:"all .15s" }}>{label}</button>
   );
 
   return (
@@ -786,7 +794,7 @@ export default function Contrivox() {
         .nav-link:hover{color:white!important;}
       `}</style>
 
-      {showAuth && <AuthModal t={t} onClose={()=>setShowAuth(false)} onAuth={acc=>{ setAccount(acc); track("SignUp",{}); }}/>}
+      {showAuth && <AuthModal t={t} onClose={()=>setShowAuth(false)} onAuth={acc=>{ setAccount(acc); Analytics.signUpCompleted(acc.email); }}/>}
       {showHist && <HistoryPanel t={t} account={account} onClose={()=>setShowHist(false)} onLoad={r=>{ setResult(r); setUnlocked(true); setTab("clauses"); setTimeout(()=>resultsRef.current?.scrollIntoView({behavior:"smooth"}),200); }}/>}
 
       <div style={{ minHeight:"100vh", background:COLORS.bg, backgroundImage:"radial-gradient(ellipse 65% 38% at 50% -4%, rgba(109,40,217,0.22) 0%, transparent 55%), radial-gradient(ellipse 35% 25% at 90% 90%, rgba(239,68,68,0.07) 0%, transparent 50%)" }}>
@@ -799,12 +807,12 @@ export default function Contrivox() {
               {account ? (
                 <>
                   <button onClick={()=>setShowHist(true)} className="nav-link" style={{ padding:"6px 13px", fontSize:12, fontWeight:500, background:"rgba(255,255,255,0.06)", color:COLORS.muted, border:`0.5px solid ${COLORS.border}`, borderRadius:8, cursor:"pointer" }}>{t.nav_history}</button>
-                  <button onClick={()=>{ saveAccount(null); setAccount(null); }} className="nav-link" style={{ padding:"6px 10px", fontSize:12, background:"none", color:"rgba(255,255,255,0.3)", border:"none", cursor:"pointer" }}>{t.signout}</button>
+                  <button onClick={()=>{ Analytics.signedOut(); saveAccount(null); setAccount(null); }} className="nav-link" style={{ padding:"6px 10px", fontSize:12, background:"none", color:"rgba(255,255,255,0.3)", border:"none", cursor:"pointer" }}>{t.signout}</button>
                 </>
               ) : (
                 <>
-                  <button onClick={()=>setShowAuth(true)} className="nav-link" style={{ padding:"6px 13px", fontSize:12, fontWeight:500, background:"rgba(255,255,255,0.06)", color:COLORS.muted, border:`0.5px solid ${COLORS.border}`, borderRadius:8, cursor:"pointer" }}>{t.nav_signin}</button>
-                  <button onClick={()=>document.getElementById("upload-sec")?.scrollIntoView({behavior:"smooth"})} style={{ padding:"7px 16px", fontSize:12.5, fontWeight:700, background:COLORS.accentGrad, color:"white", border:"none", borderRadius:8, cursor:"pointer", animation:"glow 3s infinite", letterSpacing:"0.01em" }}>{t.nav_cta}</button>
+                  <button onClick={()=>{ Analytics.signInClicked(); setShowAuth(true); }} className="nav-link" style={{ padding:"6px 13px", fontSize:12, fontWeight:500, background:"rgba(255,255,255,0.06)", color:COLORS.muted, border:`0.5px solid ${COLORS.border}`, borderRadius:8, cursor:"pointer" }}>{t.nav_signin}</button>
+                  <button onClick={()=>{ Analytics.ctaClicked("nav"); document.getElementById("upload-sec")?.scrollIntoView({behavior:"smooth"}); }} style={{ padding:"7px 16px", fontSize:12.5, fontWeight:700, background:COLORS.accentGrad, color:"white", border:"none", borderRadius:8, cursor:"pointer", animation:"glow 3s infinite", letterSpacing:"0.01em" }}>{t.nav_cta}</button>
                 </>
               )}
             </div>
@@ -937,6 +945,7 @@ export default function Contrivox() {
                   placeholder={t.contact_email_ph}
                   value={contactEmail}
                   onChange={e=>{ setContactEmail(e.target.value); setContactError(null); }}
+                  onBlur={()=>{ if(contactEmail&&!emailTrackedRef.current){ emailTrackedRef.current=true; Analytics.emailCaptured(); } }}
                   style={{ display:"block", width:"100%", background:"rgba(255,255,255,0.06)", border:`0.5px solid ${contactError?"rgba(239,68,68,0.5)":COLORS.border}`, borderRadius:9, padding:"12px 13px", color:"white", fontSize:14, fontFamily:"'DM Sans',sans-serif", outline:"none", marginBottom: contactError ? 4 : 14, boxSizing:"border-box" }}
                 />
                 {contactError && <p style={{ fontSize:11, color:"#f87171", margin:"0 0 12px", fontFamily:"'DM Sans',sans-serif" }}>{contactError}</p>}
@@ -955,6 +964,7 @@ export default function Contrivox() {
                     placeholder={t.contact_wa_ph}
                     value={contactWa}
                     onChange={e=>setContactWa(e.target.value)}
+                    onBlur={()=>{ if(contactWa&&!waTrackedRef.current){ waTrackedRef.current=true; Analytics.whatsappCaptured(); } }}
                     style={{ display:"block", width:"100%", background:"rgba(255,255,255,0.06)", border:`0.5px solid ${COLORS.border}`, borderRadius:9, padding:"12px 13px 12px 36px", color:"white", fontSize:14, fontFamily:"'DM Sans',sans-serif", outline:"none", boxSizing:"border-box" }}
                   />
                 </div>
@@ -1131,7 +1141,7 @@ export default function Contrivox() {
               The analysis is free. The full report is $3.99.<br/>
               <span style={{ color:"rgba(255,255,255,0.38)" }}>No account required. No subscription.</span>
             </p>
-            <button onClick={()=>document.getElementById("upload-sec")?.scrollIntoView({behavior:"smooth"})} style={{ padding:"15px 36px", fontSize:15.5, fontWeight:700, background:COLORS.accentGrad, color:"white", border:"none", borderRadius:12, cursor:"pointer", fontFamily:"'DM Sans',sans-serif", boxShadow:"0 5px 30px rgba(99,102,241,0.38)", animation:"glow 3s infinite", letterSpacing:"0.01em" }}>
+            <button onClick={()=>{ Analytics.ctaClicked("cta_band"); document.getElementById("upload-sec")?.scrollIntoView({behavior:"smooth"}); }} style={{ padding:"15px 36px", fontSize:15.5, fontWeight:700, background:COLORS.accentGrad, color:"white", border:"none", borderRadius:12, cursor:"pointer", fontFamily:"'DM Sans',sans-serif", boxShadow:"0 5px 30px rgba(99,102,241,0.38)", animation:"glow 3s infinite", letterSpacing:"0.01em" }}>
               Analyse My Contract — Free
             </button>
             <div style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:16, marginTop:14, flexWrap:"wrap" }}>

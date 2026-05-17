@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { createSupabaseServiceClient } from "@/lib/supabase/server";
+import { getPostHogServer } from "@/lib/posthog";
 import Stripe from "stripe";
 
 export const runtime = "nodejs";
@@ -61,6 +62,25 @@ export async function POST(req: NextRequest) {
     }
 
     console.log(`[webhook] ✓ payment recorded session=${session.id} credits=${credits}`);
+
+    // Server-side purchase event — cannot be blocked by browser extensions
+    const ph = getPostHogServer();
+    const distinctId = userId ?? session.customer_details?.email ?? session.id;
+    ph.capture({
+      distinctId,
+      event: "purchase_completed",
+      properties: {
+        value: (session.amount_total ?? 0) / 100,
+        currency: (session.currency ?? "usd").toUpperCase(),
+        credits,
+        plan,
+        stripe_session_id: session.id,
+      },
+    });
+    if (userId) {
+      ph.groupIdentify({ groupType: "plan", groupKey: plan, properties: { plan } });
+    }
+    await ph.shutdown();
   }
 
   return NextResponse.json({ received: true });

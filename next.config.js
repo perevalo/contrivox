@@ -18,7 +18,7 @@ const securityHeaders = [
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com",
       "img-src 'self' data: blob:",
-      "connect-src 'self' https://*.supabase.co https://api.anthropic.com https://api.stripe.com https://www.google-analytics.com",
+      "connect-src 'self' https://*.supabase.co https://api.anthropic.com https://api.stripe.com https://www.google-analytics.com https://us.i.posthog.com https://eu.i.posthog.com",
       "frame-src https://js.stripe.com https://hooks.stripe.com",
       "script-src-elem 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://js.stripe.com https://www.googletagmanager.com https://connect.facebook.net",
     ].join("; "),
