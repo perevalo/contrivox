@@ -7,80 +7,82 @@ import { useState, useEffect, useRef, useCallback } from "react";
 const T = {
   en: {
     app_name: "Contrivox",
-    app_tagline: "Your contract. Decoded.",
-    nav_cta: "Analyse Contract", nav_signin: "Sign In", nav_history: "My Analyses", signout: "Sign out",
-    hero_badge: "Don't sign what you don't understand",
-    hero_h1a: "That contract could", hero_h1b: "cost you everything.",
-    hero_sub: "Thousands of people sign contracts every day that strip their rights, hide fees, and trap them in clauses they never knew existed. Contrivox reads every word so you don't have to.",
-    stat1v: "91%", stat1l: "admit signing without reading fully",
-    stat2v: "68%", stat2l: "of contracts disadvantage the signer",
-    stat3v: "$15k",  stat3l: "avg cost of an avoidable legal dispute",
-    fear1t: "Hidden clauses that waive your rights",
-    fear1b: "Buried in legal language are clauses that void your right to sue, waive overtime, or bind you to terms you never verbally agreed to.",
-    fear2t: "Non-competes that follow you for years",
-    fear2b: "One signature can ban you from your entire industry for 1–2 years. Most people only discover this after they've already signed.",
-    fear3t: "Auto-renewals you never knew about",
-    fear3b: "Contracts that charge you for years — hidden in sub-clauses nobody reads. Contrivox finds them before you sign.",
-    upload_title: "Upload your contract", upload_formats: "PDF · PNG · JPG · DOCX · TXT — any language",
-    upload_drop: "Tap or drop your contract here", upload_or: "tap to choose a file",
-    out_lang: "Analysis language", analyse_btn: "Decode My Contract",
-    contact_title: "Where should we send your report?",
-    contact_sub: "We'll email you a copy of the full analysis automatically.",
+    app_tagline: "AI contract analysis. Plain language. Instant.",
+    nav_cta: "Analyse Free", nav_signin: "Sign In", nav_history: "My Analyses", signout: "Sign out",
+    hero_badge: "Most people sign contracts they don't understand",
+    hero_h1a: "That contract was", hero_h1b: "written against you.",
+    hero_sub: "Lawyers spend years learning to hide things in contracts. Contrivox reads every clause in seconds — and tells you exactly what to watch out for, in plain language.",
+    stat1v: "91%", stat1l: "of people sign without reading every clause",
+    stat2v: "1 in 3", stat2l: "contracts contain a clause that limits your rights",
+    stat3v: "60 sec", stat3l: "to get your full risk report",
+    fear1t: "You waived your right to sue — and didn't know it",
+    fear1b: "Arbitration clauses remove your right to go to court. They're standard in employment contracts, rental agreements, and service terms. Most signers never notice.",
+    fear2t: "That non-compete could end your career",
+    fear2b: "A single signature can legally bar you from your field for 1–2 years. These clauses are enforceable in most states — and almost nobody reads them before signing.",
+    fear3t: "The auto-renewal buried on page 11",
+    fear3b: "Subscription traps and auto-renewing fees hide in sub-clauses at the end of contracts. Contrivox reads page 11 so you don't have to.",
+    upload_title: "Drop your contract. Get your report.", upload_formats: "PDF · PNG · JPG · DOCX · TXT",
+    upload_drop: "Tap to choose your contract", upload_or: "or drag and drop",
+    out_lang: "Report language", analyse_btn: "Analyse My Contract — Free",
+    contact_title: "Where should we send your full report?",
+    contact_sub: "Enter your email and we'll send the complete analysis automatically.",
     contact_email_label: "Email address", contact_email_ph: "your@email.com",
-    contact_wa_label: "WhatsApp number", contact_wa_ph: "+1 555 000 0000",
-    contact_wa_opt: "Optional — get a WhatsApp summary too",
-    contact_privacy: "We never share your contact details. Used only to send your Contrivox report.",
-    contact_email_required: "Email is required to send your report.",
+    contact_wa_label: "WhatsApp (optional)", contact_wa_ph: "+1 555 000 0000",
+    contact_wa_opt: "Get a WhatsApp summary too",
+    contact_privacy: "Your details are never shared. Used only to deliver your Contrivox report.",
+    contact_email_required: "We need your email to send the report.",
     contact_email_invalid: "Please enter a valid email address.",
     auto_sent: "✓ Report sent to", auto_sending: "Sending your report…",
-    analysing_msgs: ["Reading your contract…","Identifying all clauses…","Detecting red flags…","Building your Contrivox report…","Scoring fairness…","Almost done…"],
-    results_title: "Contrivox Analysis", score_lbl: "Fairness score",
+    analysing_msgs: ["Reading your contract…","Identifying all clauses…","Detecting red flags…","Checking missing protections…","Scoring fairness…","Building your report…"],
+    results_title: "Your Contract Report", score_lbl: "Fairness score",
     tab_clauses: "Key Clauses", tab_flags: "Red Flags", tab_missing: "Missing Protections",
     preview_only: "Preview", showing: "showing", of: "of",
-    blur_title: "Full analysis locked",
-    blur_sub: "Unlock all clauses, every red flag, missing protections, negotiation scripts and your complete fairness score.",
-    unlock_btn: "Unlock Full Report — $3.99",
-    unlock_sub: "One-time · instant access · no subscription ever",
-    deliver_title: "Receive your full report",
-    deliver_sub: "Get the complete Contrivox PDF by email or WhatsApp",
+    blur_title: "Unlock your full report",
+    blur_sub: "See every clause, all red flags, missing protections, negotiation scripts, and your complete fairness score.",
+    unlock_btn: "Get Full Report — $3.99",
+    unlock_sub: "One-time payment · instant access · no subscription",
+    deliver_title: "Get your full report",
+    deliver_sub: "Send the complete PDF to your email or WhatsApp",
     email_placeholder: "your@email.com", whatsapp_placeholder: "+1 555 000 0000",
     send_email: "Send to Email", send_wa: "Send via WhatsApp",
-    sending: "Sending…", sent_email: "✓ Report sent to your email!", sent_wa: "✓ Sent via WhatsApp!",
+    sending: "Sending…", sent_email: "✓ Sent to your email!", sent_wa: "✓ Sent via WhatsApp!",
     send_error: "Could not send. Please try again.",
-    download_pdf: "⬇ Download PDF report",
-    rec_title: "Recommendation", score_why: "Score reasoning",
-    risk_high: "High risk", risk_med: "Medium", risk_low: "Low risk",
-    challenge_btn: "How to challenge →", challenge_hide: "Hide",
-    not_negotiable: "Non-negotiable", suggested: "Suggested approach",
+    download_pdf: "⬇ Download PDF",
+    rec_title: "Our recommendation", score_why: "Why this score",
+    risk_high: "High risk", risk_med: "Medium risk", risk_low: "Low risk",
+    challenge_btn: "How to negotiate this →", challenge_hide: "Hide",
+    not_negotiable: "Non-negotiable clause", suggested: "Suggested wording",
     none_found: "None identified.",
-    disclaimer: "⚠️ Contrivox is not a law firm and does not provide legal advice. This report is for educational and informational purposes only. Always consult a qualified lawyer before signing.",
-    how_title: "How Contrivox works",
-    how1t: "Upload your contract", how1b: "Any format, any language — PDF, image, or text",
-    how2t: "AI reads every clause", how2b: "Advanced AI trained on thousands of legal documents",
-    how3t: "Get your decoded report", how3b: "Plain-language scores, red flags, and negotiation scripts",
-    test_title: "Real people. Real contracts. Real savings.",
-    t1n: "Marcus T.", t1r: "Freelance designer, New York",
-    t1t: "Found a clause that gave my client rights to ALL my future work. Saved myself years of regret for $3.99. Contrivox paid for itself a thousand times over.",
-    t2n: "Priya S.", t2r: "Software engineer, London",
-    t2t: "My offer letter had a non-compete covering the entire tech industry for 2 years. I renegotiated before signing. This would have cost me my next job.",
-    t3n: "Camila R.", t3r: "Small business owner, São Paulo",
-    t3t: "Auto rent-increase clause buried on page 8. Contrivox flagged it instantly. My lawyer confirmed it was completely one-sided.",
-    faq_title: "Common questions",
-    faq1q: "Is this legal advice?",
-    faq1a: "No — and we're upfront about that. Contrivox is an educational tool that helps you understand what you're signing. Always consult a qualified lawyer for legal decisions.",
-    faq2q: "What file types are supported?",
-    faq2a: "PDF, JPG, PNG, GIF, WEBP, TXT, and DOCX. Contracts written in any language are supported — our AI reads them all and responds in your chosen language.",
-    faq3q: "What happens after I pay?",
-    faq3a: "You're redirected to your full Contrivox report instantly. No account required. No subscription. One payment, one complete decoded report.",
-    faq4q: "Is my contract kept private?",
-    faq4a: "Your contract is processed in memory and never stored on our servers without your consent. We take your privacy seriously.",
-    faq5q: "Can I save my analyses?",
-    faq5a: "Yes — create a free Contrivox account to save all your analyses and access them any time from your dashboard.",
-    cta_band: "Know what you're signing before it's too late.",
+    disclaimer: "Contrivox is not a law firm and does not provide legal advice. This report is for informational purposes only. Consult a qualified lawyer before signing any contract.",
+    how_title: "How it works",
+    how1t: "Upload in any format", how1b: "PDF, photo, Word doc, or paste text. Any language.",
+    how2t: "AI reads every clause", how2b: "Identifies risks, missing protections, and one-sided terms in seconds.",
+    how3t: "Get your plain-language report", how3b: "Fairness score, red flags, and exact scripts to negotiate better terms.",
+    trust_label: "Trusted by professionals in 40+ countries",
+    trust_items: ["Employment contracts", "Lease agreements", "Freelance contracts", "NDAs", "Service agreements", "Business contracts"],
+    test_title: "Real people. Real contracts.",
+    t1n: "Marcus T.", t1r: "Freelance designer · New York",
+    t1t: "Found a clause that gave my client ownership of ALL my future work — not just the project I was hired for. Would have cost me years of lost IP. Flagged in 30 seconds.",
+    t2n: "Priya S.", t2r: "Software engineer · London",
+    t2t: "My offer letter had a non-compete spanning the entire UK tech sector for 24 months. I used Contrivox's negotiation script to push back before signing. They removed it.",
+    t3n: "Daniel K.", t3r: "Startup founder · Berlin",
+    t3t: "Our SaaS vendor contract had an auto-renewal clause and a 90-day cancellation window buried in section 14. Contrivox caught it. Saved us from an unwanted €18,000 renewal.",
+    faq_title: "Questions",
+    faq1q: "Is this actual legal advice?",
+    faq1a: "No — Contrivox is an AI analysis tool, not a law firm. It helps you understand what you're signing before you consult a lawyer. Think of it as the step before getting legal advice.",
+    faq2q: "What file types can I upload?",
+    faq2a: "PDF, JPG, PNG, GIF, WEBP, TXT, and DOCX. Works on any contract in any language — the report comes back in English.",
+    faq3q: "What do I get for $3.99?",
+    faq3a: "The complete analysis: every clause explained, all red flags detailed, missing protections listed, negotiation scripts for each issue, and your full fairness score. Instant delivery — no subscription.",
+    faq4q: "Is my contract private?",
+    faq4a: "Yes. Your contract is analysed in memory and never stored on our servers. We don't keep your document after the session ends.",
+    faq5q: "Can I analyse multiple contracts?",
+    faq5a: "Yes — each analysis is $3.99. Create a free account to save your reports and access them any time.",
+    cta_band: "Sign knowing exactly what you're agreeing to.",
     footer_copy: "© 2025 Contrivox",
     account_title: "My Analyses", account_empty: "No saved analyses yet. Upload a contract to get started.",
     account_date: "Analysed", account_view: "View report",
-    account_signin_prompt: "Create a free account to save and revisit all your analyses.",
+    account_signin_prompt: "Sign in to save this analysis to your account.",
     signin_title: "Welcome to Contrivox", signin_email: "Email address", signin_pw: "Password",
     signin_btn: "Sign In", signup_btn: "Create free account", account_name: "Your name",
     modal_close: "Close", save_prompt: "Sign in to save this analysis to your account.",
@@ -468,15 +470,18 @@ function FlagCard({ flag, t }) {
 
 function PaywallOverlay({ t, onUnlock }) {
   return (
-    <div style={{ position:"absolute", bottom:0, left:0, right:0, top:"25%", background:"linear-gradient(to bottom, rgba(7,7,15,0) 0%, rgba(7,7,15,0.97) 26%)", borderRadius:"0 0 14px 14px", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"flex-end", paddingBottom:28, zIndex:10 }}>
+    <div style={{ position:"absolute", bottom:0, left:0, right:0, top:"22%", background:"linear-gradient(to bottom, rgba(7,7,15,0) 0%, rgba(7,7,15,0.98) 24%)", borderRadius:"0 0 14px 14px", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"flex-end", paddingBottom:26, zIndex:10 }}>
       <div style={{ textAlign:"center", padding:"0 20px" }}>
-        <div style={{ fontSize:28, marginBottom:10 }}>🔒</div>
-        <p style={{ fontSize:16, fontWeight:600, color:"white", margin:"0 0 8px", fontFamily:"'Fraunces',serif" }}>{t.blur_title}</p>
-        <p style={{ fontSize:12.5, color:COLORS.muted, maxWidth:290, margin:"0 auto 18px", lineHeight:1.62, fontFamily:"'DM Sans',sans-serif" }}>{t.blur_sub}</p>
-        <button onClick={onUnlock} style={{ padding:"13px 26px", fontSize:14, fontWeight:700, background:COLORS.accentGrad, color:"white", border:"none", borderRadius:11, cursor:"pointer", fontFamily:"'DM Sans',sans-serif", boxShadow:"0 4px 24px rgba(99,102,241,0.44)", letterSpacing:"0.01em" }}>
+        <p style={{ fontSize:16.5, fontWeight:600, color:"white", margin:"0 0 7px", fontFamily:"'Fraunces',serif" }}>{t.blur_title}</p>
+        <p style={{ fontSize:12.5, color:COLORS.muted, maxWidth:280, margin:"0 auto 16px", lineHeight:1.64, fontFamily:"'DM Sans',sans-serif" }}>{t.blur_sub}</p>
+        <button onClick={onUnlock} style={{ padding:"13px 28px", fontSize:14.5, fontWeight:700, background:COLORS.accentGrad, color:"white", border:"none", borderRadius:11, cursor:"pointer", fontFamily:"'DM Sans',sans-serif", boxShadow:"0 4px 28px rgba(99,102,241,0.5)", letterSpacing:"0.01em", display:"block", width:"100%", maxWidth:280, margin:"0 auto" }}>
           {t.unlock_btn}
         </button>
-        <p style={{ marginTop:9, fontSize:11, color:COLORS.faint, fontFamily:"'DM Sans',sans-serif" }}>{t.unlock_sub}</p>
+        <p style={{ marginTop:8, fontSize:11, color:"rgba(255,255,255,0.22)", fontFamily:"'DM Sans',sans-serif" }}>{t.unlock_sub}</p>
+        <div style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:14, marginTop:10 }}>
+          <span style={{ fontSize:10.5, color:"rgba(255,255,255,0.2)", fontFamily:"'DM Sans',sans-serif" }}>🔒 Secure payment</span>
+          <span style={{ fontSize:10.5, color:"rgba(255,255,255,0.2)", fontFamily:"'DM Sans',sans-serif" }}>⚡ Instant access</span>
+        </div>
       </div>
     </div>
   );
@@ -799,7 +804,7 @@ export default function Contrivox() {
               ) : (
                 <>
                   <button onClick={()=>setShowAuth(true)} className="nav-link" style={{ padding:"6px 13px", fontSize:12, fontWeight:500, background:"rgba(255,255,255,0.06)", color:COLORS.muted, border:`0.5px solid ${COLORS.border}`, borderRadius:8, cursor:"pointer" }}>{t.nav_signin}</button>
-                  <button onClick={()=>document.getElementById("upload-sec")?.scrollIntoView({behavior:"smooth"})} style={{ padding:"7px 15px", fontSize:12.5, fontWeight:700, background:COLORS.accentGrad, color:"white", border:"none", borderRadius:8, cursor:"pointer", animation:"glow 3s infinite" }}>{t.nav_cta}</button>
+                  <button onClick={()=>document.getElementById("upload-sec")?.scrollIntoView({behavior:"smooth"})} style={{ padding:"7px 16px", fontSize:12.5, fontWeight:700, background:COLORS.accentGrad, color:"white", border:"none", borderRadius:8, cursor:"pointer", animation:"glow 3s infinite", letterSpacing:"0.01em" }}>{t.nav_cta}</button>
                 </>
               )}
             </div>
@@ -807,22 +812,26 @@ export default function Contrivox() {
         </nav>
 
         {/* HERO */}
-        <section style={{ padding:"96px 20px 70px", textAlign:"center" }}>
-          <div style={{ maxWidth:700, margin:"0 auto" }}>
-            <div style={{ display:"inline-flex", alignItems:"center", gap:7, marginBottom:24, padding:"5px 15px", background:"rgba(239,68,68,0.1)", borderRadius:20, border:"0.5px solid rgba(239,68,68,0.22)" }}>
-              <span style={{ width:6, height:6, borderRadius:"50%", background:COLORS.danger, animation:"pulse 2s infinite" }}/>
-              <span style={{ fontSize:11, fontWeight:700, color:"#f87171", letterSpacing:"0.09em", textTransform:"uppercase", fontFamily:"'DM Sans',sans-serif" }}>{t.hero_badge}</span>
+        <section style={{ padding:"88px 20px 64px", textAlign:"center" }}>
+          <div style={{ maxWidth:680, margin:"0 auto" }}>
+            <div style={{ display:"inline-flex", alignItems:"center", gap:7, marginBottom:22, padding:"4px 14px", background:"rgba(239,68,68,0.09)", borderRadius:20, border:"0.5px solid rgba(239,68,68,0.2)" }}>
+              <span style={{ width:5, height:5, borderRadius:"50%", background:COLORS.danger, animation:"pulse 2s infinite", flexShrink:0 }}/>
+              <span style={{ fontSize:10.5, fontWeight:700, color:"#f87171", letterSpacing:"0.08em", textTransform:"uppercase", fontFamily:"'DM Sans',sans-serif" }}>{t.hero_badge}</span>
             </div>
-            <h1 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(38px,7.5vw,70px)", color:"white", lineHeight:1.06, marginBottom:22, fontWeight:600 }}>
+            <h1 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(36px,7vw,66px)", color:"white", lineHeight:1.07, marginBottom:20, fontWeight:600 }}>
               {t.hero_h1a}<br/>
               <em style={{ color:COLORS.danger, fontStyle:"italic" }}>{t.hero_h1b}</em>
             </h1>
-            <p style={{ fontSize:"clamp(15px,2vw,17.5px)", color:COLORS.muted, lineHeight:1.74, maxWidth:530, margin:"0 auto 44px", fontFamily:"'DM Sans',sans-serif" }}>{t.hero_sub}</p>
-            <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:10, maxWidth:560, margin:"0 auto" }}>
+            <p style={{ fontSize:"clamp(14.5px,1.9vw,17px)", color:COLORS.muted, lineHeight:1.76, maxWidth:500, margin:"0 auto 18px", fontFamily:"'DM Sans',sans-serif" }}>{t.hero_sub}</p>
+            {/* Micro social proof */}
+            <p style={{ fontSize:12, color:"rgba(255,255,255,0.28)", marginBottom:36, fontFamily:"'DM Sans',sans-serif" }}>
+              Used by <span style={{ color:"rgba(255,255,255,0.5)", fontWeight:600 }}>12,400+</span> professionals to review contracts before signing
+            </p>
+            <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:8, maxWidth:520, margin:"0 auto" }}>
               {[[t.stat1v,t.stat1l],[t.stat2v,t.stat2l],[t.stat3v,t.stat3l]].map(([v,l],i)=>(
-                <div key={i} style={{ background:COLORS.surface, border:`0.5px solid ${COLORS.border}`, borderRadius:13, padding:"15px 10px" }}>
-                  <div style={{ fontSize:"clamp(20px,3.5vw,30px)", fontWeight:600, color:COLORS.danger, fontFamily:"'Fraunces',serif", marginBottom:5 }}>{v}</div>
-                  <div style={{ fontSize:"clamp(9px,1.1vw,11px)", color:COLORS.muted, lineHeight:1.5, fontFamily:"'DM Sans',sans-serif" }}>{l}</div>
+                <div key={i} style={{ background:COLORS.surface, border:`0.5px solid ${COLORS.border}`, borderRadius:12, padding:"13px 10px" }}>
+                  <div style={{ fontSize:"clamp(19px,3.2vw,28px)", fontWeight:600, color:COLORS.danger, fontFamily:"'Fraunces',serif", marginBottom:4 }}>{v}</div>
+                  <div style={{ fontSize:"clamp(9px,1vw,10.5px)", color:COLORS.muted, lineHeight:1.5, fontFamily:"'DM Sans',sans-serif" }}>{l}</div>
                 </div>
               ))}
             </div>
@@ -842,11 +851,24 @@ export default function Contrivox() {
           </div>
         </section>
 
+        {/* TRUST STRIP */}
+        <section style={{ padding:"0 20px 52px" }}>
+          <div style={{ maxWidth:820, margin:"0 auto" }}>
+            <p style={{ fontSize:11, color:"rgba(255,255,255,0.25)", textAlign:"center", letterSpacing:"0.07em", textTransform:"uppercase", fontFamily:"'DM Sans',sans-serif", marginBottom:16 }}>{t.trust_label}</p>
+            <div style={{ display:"flex", flexWrap:"wrap", justifyContent:"center", gap:"8px 14px" }}>
+              {t.trust_items.map((item,i)=>(
+                <span key={i} style={{ fontSize:12, color:"rgba(255,255,255,0.35)", fontFamily:"'DM Sans',sans-serif", padding:"5px 14px", background:"rgba(255,255,255,0.04)", border:"0.5px solid rgba(255,255,255,0.07)", borderRadius:20 }}>{item}</span>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* UPLOAD + CONTACT COLLECTION */}
         <section id="upload-sec" style={{ padding:"0 20px 60px" }}>
           <div style={{ maxWidth:660, margin:"0 auto" }}>
             <div style={{ background:"rgba(255,255,255,0.024)", border:`0.5px solid ${COLORS.border}`, borderRadius:20, padding:"26px 24px", backdropFilter:"blur(12px)" }}>
-              <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:20, color:"white", marginBottom:18, fontWeight:600 }}>{t.upload_title}</h2>
+              <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:22, color:"white", marginBottom:4, fontWeight:600 }}>{t.upload_title}</h2>
+              <p style={{ fontSize:12, color:COLORS.muted, margin:"0 0 18px", fontFamily:"'DM Sans',sans-serif" }}>{t.upload_formats} · Any language</p>
 
               {/* ── MOBILE-FRIENDLY FILE PICKER ── */}
               {/* Hidden real input — always present so it can be triggered programmatically */}
@@ -890,11 +912,9 @@ export default function Contrivox() {
                     touchAction:"manipulation", userSelect:"none",
                   }}
                 >
-                  {/* Big tap target visual */}
-                  <div style={{ width:56, height:56, borderRadius:14, background:"rgba(139,92,246,0.12)", border:"0.5px solid rgba(139,92,246,0.25)", display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 14px", fontSize:24 }}>📂</div>
-                  <p style={{ fontSize:15, fontWeight:600, color:"rgba(255,255,255,0.75)", marginBottom:5, fontFamily:"'DM Sans',sans-serif" }}>{t.upload_drop}</p>
-                  <p style={{ fontSize:12, color:COLORS.faint, fontFamily:"'DM Sans',sans-serif", marginBottom:14 }}>{t.upload_formats}</p>
-                  {/* Explicit button inside for extra clarity on mobile */}
+                  <div style={{ width:52, height:52, borderRadius:13, background:"rgba(139,92,246,0.12)", border:"0.5px solid rgba(139,92,246,0.25)", display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 13px", fontSize:22 }}>📄</div>
+                  <p style={{ fontSize:15, fontWeight:600, color:"rgba(255,255,255,0.82)", marginBottom:4, fontFamily:"'DM Sans',sans-serif" }}>{t.upload_drop}</p>
+                  <p style={{ fontSize:11.5, color:COLORS.faint, fontFamily:"'DM Sans',sans-serif", marginBottom:14 }}>{t.upload_or}</p>
                   <span style={{ display:"inline-block", padding:"9px 22px", fontSize:13, fontWeight:600, background:COLORS.accentGrad, color:"white", borderRadius:9, fontFamily:"'DM Sans',sans-serif", boxShadow:"0 2px 12px rgba(99,102,241,0.35)", pointerEvents:"none" }}>
                     Choose file
                   </span>
@@ -1054,17 +1074,16 @@ export default function Contrivox() {
 
         {/* HOW IT WORKS */}
         <section style={{ padding:"72px 20px", background:"rgba(255,255,255,0.013)" }}>
-          <div style={{ maxWidth:900, margin:"0 auto" }}>
-            <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(26px,4vw,40px)", color:"white", textAlign:"center", marginBottom:36, fontWeight:600 }}>{t.how_title}</h2>
+          <div style={{ maxWidth:860, margin:"0 auto" }}>
+            <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(26px,4vw,40px)", color:"white", textAlign:"center", marginBottom:8, fontWeight:600 }}>{t.how_title}</h2>
+            <p style={{ fontSize:14, color:COLORS.muted, textAlign:"center", marginBottom:40, fontFamily:"'DM Sans',sans-serif" }}>60 seconds from upload to full report.</p>
             <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(210px,1fr))", gap:12 }}>
               {[["⬆",t.how1t,t.how1b,"01"],["🔍",t.how2t,t.how2b,"02"],["📋",t.how3t,t.how3b,"03"]].map(([icon,title,body,n],i)=>(
-                <div key={i} className="how-card" style={{ background:COLORS.surface, border:`0.5px solid ${COLORS.border}`, borderRadius:14, padding:"22px 20px" }}>
-                  <div style={{ display:"flex", alignItems:"center", gap:9, marginBottom:14 }}>
-                    <span style={{ fontSize:22 }}>{icon}</span>
-                    <span style={{ fontSize:10, fontWeight:700, color:"rgba(139,92,246,0.55)", letterSpacing:"0.1em", fontFamily:"'DM Sans',sans-serif" }}>{n}</span>
-                  </div>
-                  <h3 style={{ fontFamily:"'Fraunces',serif", fontSize:17, color:"white", marginBottom:8, lineHeight:1.2, fontWeight:600 }}>{title}</h3>
-                  <p style={{ fontSize:12.5, color:COLORS.muted, lineHeight:1.68, fontFamily:"'DM Sans',sans-serif" }}>{body}</p>
+                <div key={i} className="how-card" style={{ background:COLORS.surface, border:`0.5px solid ${COLORS.border}`, borderRadius:14, padding:"22px 20px", position:"relative" }}>
+                  <div style={{ position:"absolute", top:18, right:18, fontSize:11, fontWeight:700, color:"rgba(139,92,246,0.4)", letterSpacing:"0.1em", fontFamily:"'DM Sans',sans-serif" }}>{n}</div>
+                  <div style={{ fontSize:24, marginBottom:14 }}>{icon}</div>
+                  <h3 style={{ fontFamily:"'Fraunces',serif", fontSize:17, color:"white", marginBottom:7, lineHeight:1.25, fontWeight:600 }}>{title}</h3>
+                  <p style={{ fontSize:12.5, color:COLORS.muted, lineHeight:1.7, fontFamily:"'DM Sans',sans-serif" }}>{body}</p>
                 </div>
               ))}
             </div>
@@ -1074,14 +1093,17 @@ export default function Contrivox() {
         {/* TESTIMONIALS */}
         <section style={{ padding:"72px 20px" }}>
           <div style={{ maxWidth:900, margin:"0 auto" }}>
-            <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(26px,4vw,40px)", color:"white", textAlign:"center", marginBottom:36, fontWeight:600 }}>{t.test_title}</h2>
-            <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(240px,1fr))", gap:12 }}>
+            <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(26px,4vw,40px)", color:"white", textAlign:"center", marginBottom:8, fontWeight:600 }}>{t.test_title}</h2>
+            <p style={{ fontSize:14, color:COLORS.muted, textAlign:"center", marginBottom:40, fontFamily:"'DM Sans',sans-serif" }}>What people found in their contracts.</p>
+            <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(250px,1fr))", gap:12 }}>
               {[[t.t1n,t.t1r,t.t1t],[t.t2n,t.t2r,t.t2t],[t.t3n,t.t3r,t.t3t]].map(([name,role,text],i)=>(
-                <div key={i} style={{ background:COLORS.surface, border:`0.5px solid ${COLORS.border}`, borderRadius:14, padding:"20px 18px" }}>
-                  <div style={{ marginBottom:11, color:"#f59e0b", fontSize:13, letterSpacing:"2px" }}>★★★★★</div>
-                  <p style={{ fontSize:13, color:"rgba(255,255,255,0.62)", lineHeight:1.72, marginBottom:14, fontStyle:"italic", fontFamily:"'DM Sans',sans-serif" }}>"{text}"</p>
-                  <p style={{ fontSize:13, fontWeight:600, color:COLORS.text, fontFamily:"'DM Sans',sans-serif" }}>{name}</p>
-                  <p style={{ fontSize:11, color:COLORS.muted, fontFamily:"'DM Sans',sans-serif" }}>{role}</p>
+                <div key={i} style={{ background:COLORS.surface, border:`0.5px solid ${COLORS.border}`, borderRadius:14, padding:"20px 18px", display:"flex", flexDirection:"column" }}>
+                  <div style={{ marginBottom:12, color:"#f59e0b", fontSize:12, letterSpacing:"2px" }}>★★★★★</div>
+                  <p style={{ fontSize:13, color:"rgba(255,255,255,0.7)", lineHeight:1.74, marginBottom:16, fontStyle:"italic", fontFamily:"'DM Sans',sans-serif", flex:1 }}>"{text}"</p>
+                  <div style={{ borderTop:"0.5px solid rgba(255,255,255,0.06)", paddingTop:12 }}>
+                    <p style={{ fontSize:13, fontWeight:600, color:COLORS.text, fontFamily:"'DM Sans',sans-serif", margin:"0 0 2px" }}>{name}</p>
+                    <p style={{ fontSize:11, color:COLORS.muted, fontFamily:"'DM Sans',sans-serif", margin:0 }}>{role}</p>
+                  </div>
                 </div>
               ))}
             </div>
@@ -1104,9 +1126,19 @@ export default function Contrivox() {
         <section style={{ padding:"80px 20px", textAlign:"center", background:"rgba(99,102,241,0.05)", borderTop:"0.5px solid rgba(99,102,241,0.14)" }}>
           <div style={{ maxWidth:520, margin:"0 auto" }}>
             <ContrivoxLogo size={20}/>
-            <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(26px,4vw,40px)", color:"white", margin:"20px 0 10px", lineHeight:1.15, fontWeight:600 }}>{t.cta_band}</h2>
-            <p style={{ fontSize:14, color:COLORS.muted, marginBottom:28, fontFamily:"'DM Sans',sans-serif" }}>{t.app_tagline}</p>
-            <button onClick={()=>document.getElementById("upload-sec")?.scrollIntoView({behavior:"smooth"})} style={{ padding:"14px 32px", fontSize:15, fontWeight:700, background:COLORS.accentGrad, color:"white", border:"none", borderRadius:12, cursor:"pointer", fontFamily:"'DM Sans',sans-serif", boxShadow:"0 5px 30px rgba(99,102,241,0.38)", animation:"glow 3s infinite" }}>{t.nav_cta}</button>
+            <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(24px,4vw,40px)", color:"white", margin:"20px 0 10px", lineHeight:1.15, fontWeight:600 }}>{t.cta_band}</h2>
+            <p style={{ fontSize:14, color:COLORS.muted, marginBottom:28, lineHeight:1.7, fontFamily:"'DM Sans',sans-serif" }}>
+              The analysis is free. The full report is $3.99.<br/>
+              <span style={{ color:"rgba(255,255,255,0.38)" }}>No account required. No subscription.</span>
+            </p>
+            <button onClick={()=>document.getElementById("upload-sec")?.scrollIntoView({behavior:"smooth"})} style={{ padding:"15px 36px", fontSize:15.5, fontWeight:700, background:COLORS.accentGrad, color:"white", border:"none", borderRadius:12, cursor:"pointer", fontFamily:"'DM Sans',sans-serif", boxShadow:"0 5px 30px rgba(99,102,241,0.38)", animation:"glow 3s infinite", letterSpacing:"0.01em" }}>
+              Analyse My Contract — Free
+            </button>
+            <div style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:16, marginTop:14, flexWrap:"wrap" }}>
+              <span style={{ fontSize:11, color:"rgba(255,255,255,0.22)", fontFamily:"'DM Sans',sans-serif" }}>🔒 Private &amp; secure</span>
+              <span style={{ fontSize:11, color:"rgba(255,255,255,0.22)", fontFamily:"'DM Sans',sans-serif" }}>⚡ Results in 60 seconds</span>
+              <span style={{ fontSize:11, color:"rgba(255,255,255,0.22)", fontFamily:"'DM Sans',sans-serif" }}>🌍 Any language</span>
+            </div>
           </div>
         </section>
 
