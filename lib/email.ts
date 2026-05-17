@@ -3,13 +3,9 @@ import type { ContrivoxAnalysis } from "./validation";
 
 const resend = new Resend(process.env.RESEND_API_KEY!);
 
+// Add subjects here as new output languages are enabled.
 const SUBJECTS: Record<string, string> = {
   en: "Your Contrivox Report",
-  pt: "Seu Relatório Contrivox",
-  es: "Tu Informe Contrivox",
-  fr: "Votre Rapport Contrivox",
-  de: "Ihr Contrivox-Bericht",
-  it: "Il Tuo Report Contrivox",
 };
 
 const SCORE_COLORS: Record<string, string> = {

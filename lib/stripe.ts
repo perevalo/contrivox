@@ -10,8 +10,6 @@ export const PLANS = {
   single_usd: { priceId: process.env.STRIPE_PRICE_SINGLE_USD!, credits: 1,  amount: 399  },
   bundle_usd: { priceId: process.env.STRIPE_PRICE_BUNDLE_USD!, credits: 5,  amount: 1499 },
   pro_usd:    { priceId: process.env.STRIPE_PRICE_PRO_USD!,    credits: 20, amount: 3999 },
-  single_brl: { priceId: process.env.STRIPE_PRICE_SINGLE_BRL!, credits: 1,  amount: 1990 },
-  bundle_brl: { priceId: process.env.STRIPE_PRICE_BUNDLE_BRL!, credits: 5,  amount: 4990 },
 } as const;
 
 export type PlanKey = keyof typeof PLANS;

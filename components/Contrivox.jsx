@@ -1,6 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 
 // ─── TRANSLATIONS ─────────────────────────────────────────────────────────────
+// Strings live here. To add a language: duplicate this object, translate it,
+// store it in locales/<code>.json, add the code to lib/i18n.ts, and restore
+// the locale switcher UI in the nav.
 const T = {
   en: {
     app_name: "Contrivox",
@@ -84,193 +87,7 @@ const T = {
     overall_rec: "Our recommendation", parties: "Parties", contract_type: "Contract type",
     score_label_map: { Fair:"Fair", Acceptable:"Acceptable", Concerning:"Concerning", Unfair:"Unfair", Dangerous:"Dangerous" },
   },
-  pt: {
-    app_name: "Contrivox",
-    app_tagline: "Seu contrato. Desvendado.",
-    nav_cta: "Analisar Contrato", nav_signin: "Entrar", nav_history: "Minhas Análises", signout: "Sair",
-    hero_badge: "Não assine o que você não entende",
-    hero_h1a: "Esse contrato pode", hero_h1b: "custar tudo que você tem.",
-    hero_sub: "Milhares de pessoas assinam contratos todos os dias que removem seus direitos, escondem taxas e as prendem em cláusulas que nunca souberam existir. O Contrivox lê cada palavra para que você não precise.",
-    stat1v: "91%", stat1l: "admitem assinar sem ler completamente",
-    stat2v: "68%", stat2l: "dos contratos prejudicam quem assina",
-    stat3v: "R$75k", stat3l: "custo médio de uma disputa jurídica evitável",
-    fear1t: "Cláusulas ocultas que renunciam seus direitos",
-    fear1b: "Enterradas no juridiquês estão cláusulas que anulam seu direito de processar, eliminam horas extras ou te vinculam a termos que nunca concordou verbalmente.",
-    fear2t: "Não-concorrências que te seguem por anos",
-    fear2b: "Uma assinatura pode banir você do seu setor por 1–2 anos. A maioria das pessoas só descobre isso depois de já ter assinado.",
-    fear3t: "Renovações automáticas que você desconhecia",
-    fear3b: "Contratos que cobram por anos — escondidos em subcláusulas que ninguém lê. O Contrivox encontra antes de você assinar.",
-    upload_title: "Envie seu contrato", upload_formats: "PDF · PNG · JPG · DOCX · TXT — qualquer idioma",
-    upload_drop: "Toque ou arraste seu contrato aqui", upload_or: "toque para escolher um arquivo",
-    out_lang: "Idioma da análise", analyse_btn: "Desvendar Meu Contrato",
-    contact_title: "Para onde enviamos seu relatório?",
-    contact_sub: "Enviaremos automaticamente uma cópia da análise completa para o seu e-mail.",
-    contact_email_label: "Endereço de e-mail", contact_email_ph: "seu@email.com",
-    contact_wa_label: "Número do WhatsApp", contact_wa_ph: "+55 11 90000-0000",
-    contact_wa_opt: "Opcional — receba também um resumo pelo WhatsApp",
-    contact_privacy: "Nunca compartilhamos seus dados. Usados apenas para enviar seu relatório Contrivox.",
-    contact_email_required: "E-mail é obrigatório para enviar seu relatório.",
-    contact_email_invalid: "Por favor insira um endereço de e-mail válido.",
-    auto_sent: "✓ Relatório enviado para", auto_sending: "Enviando seu relatório…",
-    analysing_msgs: ["Lendo seu contrato…","Identificando todas as cláusulas…","Detectando alertas…","Construindo seu relatório Contrivox…","Calculando equidade…","Quase pronto…"],
-    results_title: "Análise Contrivox", score_lbl: "Pontuação de equidade",
-    tab_clauses: "Cláusulas", tab_flags: "Alertas", tab_missing: "Proteções Ausentes",
-    preview_only: "Prévia", showing: "mostrando", of: "de",
-    blur_title: "Análise completa bloqueada",
-    blur_sub: "Desbloqueie todas as cláusulas, alertas, proteções ausentes, scripts de negociação e sua pontuação completa.",
-    unlock_btn: "Desbloquear Relatório Completo — R$19,90",
-    unlock_sub: "Pagamento único · acesso imediato · sem assinatura",
-    deliver_title: "Receba seu relatório completo",
-    deliver_sub: "Receba o PDF completo do Contrivox por e-mail ou WhatsApp",
-    email_placeholder: "seu@email.com", whatsapp_placeholder: "+55 11 90000-0000",
-    send_email: "Enviar por E-mail", send_wa: "Enviar pelo WhatsApp",
-    sending: "Enviando…", sent_email: "✓ Relatório enviado para seu e-mail!", sent_wa: "✓ Enviado pelo WhatsApp!",
-    send_error: "Não foi possível enviar. Tente novamente.",
-    download_pdf: "⬇ Baixar relatório em PDF",
-    rec_title: "Nossa recomendação", score_why: "Justificativa da pontuação",
-    risk_high: "Alto risco", risk_med: "Médio", risk_low: "Baixo risco",
-    challenge_btn: "Como contestar →", challenge_hide: "Ocultar",
-    not_negotiable: "Inegociável", suggested: "Abordagem sugerida",
-    none_found: "Nenhum identificado.",
-    disclaimer: "⚠️ O Contrivox não é um escritório de advocacia e não presta consultoria jurídica. Este relatório tem finalidade educacional e informativa. Sempre consulte um advogado qualificado antes de assinar.",
-    how_title: "Como o Contrivox funciona",
-    how1t: "Envie seu contrato", how1b: "Qualquer formato, qualquer idioma — PDF, imagem ou texto",
-    how2t: "IA lê cada cláusula", how2b: "IA avançada treinada em milhares de documentos jurídicos",
-    how3t: "Receba seu relatório desvendado", how3b: "Pontuações em linguagem simples, alertas e scripts de negociação",
-    test_title: "Pessoas reais. Contratos reais. Economia real.",
-    t1n: "Marcos T.", t1r: "Designer freelancer, São Paulo",
-    t1t: "Encontrei uma cláusula que daria ao meu cliente direitos sobre TODOS os meus trabalhos futuros. Evitei anos de arrependimento por R$19,90. O Contrivox se pagou mil vezes.",
-    t2n: "Priya S.", t2r: "Engenheira de software, Lisboa",
-    t2t: "Minha proposta de emprego tinha uma não-concorrência cobrindo todo o setor de tecnologia por 2 anos. Renegociei antes de assinar. Isso teria custado meu próximo emprego.",
-    t3n: "Camila R.", t3r: "Empresária, Rio de Janeiro",
-    t3t: "Cláusula de aumento automático de aluguel enterrada na página 8. O Contrivox sinalizou na hora. Meu advogado confirmou que era completamente unilateral.",
-    faq_title: "Perguntas frequentes",
-    faq1q: "Isso é consultoria jurídica?",
-    faq1a: "Não — e somos transparentes sobre isso. O Contrivox é uma ferramenta educacional que ajuda você a entender o que está assinando. Sempre consulte um advogado qualificado para decisões jurídicas.",
-    faq2q: "Quais formatos de arquivo são suportados?",
-    faq2a: "PDF, JPG, PNG, GIF, WEBP, TXT e DOCX. Contratos em qualquer idioma são suportados — nossa IA lê todos e responde no idioma que você escolher.",
-    faq3q: "O que acontece depois que eu pago?",
-    faq3a: "Você é redirecionado instantaneamente para seu relatório completo. Sem necessidade de conta. Sem assinatura. Um pagamento, um relatório completo.",
-    faq4q: "Meu contrato é mantido em sigilo?",
-    faq4a: "Seu contrato é processado em memória e nunca armazenado em nossos servidores sem seu consentimento. Levamos sua privacidade a sério.",
-    faq5q: "Posso salvar minhas análises?",
-    faq5a: "Sim — crie uma conta gratuita no Contrivox para salvar todas as suas análises e acessá-las a qualquer momento pelo seu painel.",
-    cta_band: "Saiba o que você está assinando antes que seja tarde demais.",
-    footer_copy: "© 2025 Contrivox",
-    account_title: "Minhas Análises", account_empty: "Nenhuma análise salva ainda. Envie um contrato para começar.",
-    account_date: "Analisado", account_view: "Ver relatório",
-    account_signin_prompt: "Crie uma conta gratuita para salvar e revisitar todas as suas análises.",
-    signin_title: "Bem-vindo ao Contrivox", signin_email: "Endereço de e-mail", signin_pw: "Senha",
-    signin_btn: "Entrar", signup_btn: "Criar conta gratuita", account_name: "Seu nome",
-    modal_close: "Fechar", save_prompt: "Entre para salvar esta análise na sua conta.",
-    overall_rec: "Nossa recomendação", parties: "Partes", contract_type: "Tipo de contrato",
-    score_label_map: { Fair:"Justo", Acceptable:"Aceitável", Concerning:"Preocupante", Unfair:"Injusto", Dangerous:"Perigoso" },
-  },
-  es: {
-    app_name: "Contrivox",
-    app_tagline: "Tu contrato. Descifrado.",
-    nav_cta: "Analizar Contrato", nav_signin: "Iniciar sesión", nav_history: "Mis Análisis", signout: "Cerrar sesión",
-    hero_badge: "No firmes lo que no entiendes",
-    hero_h1a: "Ese contrato puede", hero_h1b: "costarte todo.",
-    hero_sub: "Miles de personas firman contratos cada día que eliminan sus derechos, ocultan cargos y las atrapan en cláusulas que nunca supieron que existían. Contrivox lee cada palabra para que tú no tengas que hacerlo.",
-    stat1v: "91%", stat1l: "admite firmar sin leer completamente",
-    stat2v: "68%", stat2l: "de los contratos perjudican al firmante",
-    stat3v: "$12k",  stat3l: "costo promedio de una disputa legal evitable",
-    fear1t: "Cláusulas ocultas que renuncian a tus derechos",
-    fear1b: "Enterradas en el lenguaje legal hay cláusulas que anulan tu derecho a demandar, eliminan horas extra o te vinculan a términos que nunca aceptaste verbalmente.",
-    fear2t: "No-competencias que te siguen durante años",
-    fear2b: "Una firma puede prohibirte trabajar en tu industria por 1–2 años. La mayoría lo descubre solo después de haber firmado.",
-    fear3t: "Renovaciones automáticas que no conocías",
-    fear3b: "Contratos que te cobran durante años — ocultos en subcláusulas que nadie lee. Contrivox los encuentra antes de que firmes.",
-    upload_title: "Sube tu contrato", upload_formats: "PDF · PNG · JPG · DOCX · TXT — cualquier idioma",
-    upload_drop: "Toca o arrastra tu contrato aquí", upload_or: "toca para elegir un archivo",
-    out_lang: "Idioma del análisis", analyse_btn: "Descifrar Mi Contrato",
-    contact_title: "¿Dónde enviamos tu informe?",
-    contact_sub: "Te enviaremos automáticamente una copia del análisis completo a tu email.",
-    contact_email_label: "Dirección de email", contact_email_ph: "tu@email.com",
-    contact_wa_label: "Número de WhatsApp", contact_wa_ph: "+34 600 000 000",
-    contact_wa_opt: "Opcional — recibe también un resumen por WhatsApp",
-    contact_privacy: "Nunca compartimos tus datos. Solo se usan para enviarte tu informe Contrivox.",
-    contact_email_required: "El email es obligatorio para enviar tu informe.",
-    contact_email_invalid: "Por favor ingresa una dirección de email válida.",
-    auto_sent: "✓ Informe enviado a", auto_sending: "Enviando tu informe…",
-    analysing_msgs: ["Leyendo tu contrato…","Identificando todas las cláusulas…","Detectando alertas…","Construyendo tu informe Contrivox…","Calculando equidad…","Casi listo…"],
-    results_title: "Análisis Contrivox", score_lbl: "Puntuación de equidad",
-    tab_clauses: "Cláusulas", tab_flags: "Alertas", tab_missing: "Protecciones Faltantes",
-    preview_only: "Vista previa", showing: "mostrando", of: "de",
-    blur_title: "Análisis completo bloqueado",
-    blur_sub: "Desbloquea todas las cláusulas, alertas, protecciones faltantes, scripts de negociación y tu puntuación completa.",
-    unlock_btn: "Desbloquear Informe Completo — $3.99",
-    unlock_sub: "Único · acceso inmediato · sin suscripción",
-    deliver_title: "Recibe tu informe completo",
-    deliver_sub: "Obtén el PDF completo de Contrivox por email o WhatsApp",
-    email_placeholder: "tu@email.com", whatsapp_placeholder: "+34 600 000 000",
-    send_email: "Enviar por Email", send_wa: "Enviar por WhatsApp",
-    sending: "Enviando…", sent_email: "✓ ¡Informe enviado a tu email!", sent_wa: "✓ ¡Enviado por WhatsApp!",
-    send_error: "No se pudo enviar. Inténtalo de nuevo.",
-    download_pdf: "⬇ Descargar informe PDF",
-    rec_title: "Nuestra recomendación", score_why: "Justificación de puntuación",
-    risk_high: "Alto riesgo", risk_med: "Medio", risk_low: "Bajo riesgo",
-    challenge_btn: "Cómo impugnar →", challenge_hide: "Ocultar",
-    not_negotiable: "No negociable", suggested: "Enfoque sugerido",
-    none_found: "Ninguno identificado.",
-    disclaimer: "⚠️ Contrivox no es un bufete de abogados y no proporciona asesoramiento legal. Este informe es solo para fines educativos e informativos. Consulta siempre a un abogado calificado antes de firmar.",
-    how_title: "Cómo funciona Contrivox",
-    how1t: "Sube tu contrato", how1b: "Cualquier formato, cualquier idioma — PDF, imagen o texto",
-    how2t: "La IA lee cada cláusula", how2b: "IA avanzada entrenada en miles de documentos legales",
-    how3t: "Recibe tu informe descifrado", how3b: "Puntuaciones en lenguaje sencillo, alertas y scripts de negociación",
-    test_title: "Personas reales. Contratos reales. Ahorros reales.",
-    t1n: "Marcos T.", t1r: "Diseñador freelance, Ciudad de México",
-    t1t: "Encontré una cláusula que le daba a mi cliente derechos sobre TODO mi trabajo futuro. Me ahorré años de arrepentimiento por $3.99. Contrivox se pagó mil veces solo.",
-    t2n: "Priya S.", t2r: "Ingeniera de software, Madrid",
-    t2t: "Mi oferta de trabajo tenía una no-competencia que cubría toda la industria tech por 2 años. Renegocié antes de firmar. Esto habría costado mi próximo empleo.",
-    t3n: "Camila R.", t3r: "Empresaria, Buenos Aires",
-    t3t: "Cláusula de aumento automático de renta enterrada en la página 8. Contrivox la señaló al instante. Mi abogado confirmó que era completamente unilateral.",
-    faq_title: "Preguntas frecuentes",
-    faq1q: "¿Es asesoramiento legal?",
-    faq1a: "No — y somos transparentes al respecto. Contrivox es una herramienta educativa que te ayuda a entender lo que estás firmando. Consulta siempre a un abogado calificado para decisiones legales.",
-    faq2q: "¿Qué tipos de archivo son compatibles?",
-    faq2a: "PDF, JPG, PNG, GIF, WEBP, TXT y DOCX. Se admiten contratos en cualquier idioma — nuestra IA los lee todos y responde en el idioma que elijas.",
-    faq3q: "¿Qué pasa después de pagar?",
-    faq3a: "Eres redirigido a tu informe completo al instante. Sin cuenta requerida. Sin suscripción. Un pago, un informe completo.",
-    faq4q: "¿Mi contrato es privado?",
-    faq4a: "Tu contrato se procesa en memoria y nunca se almacena en nuestros servidores sin tu consentimiento. Nos tomamos tu privacidad muy en serio.",
-    faq5q: "¿Puedo guardar mis análisis?",
-    faq5a: "Sí — crea una cuenta gratuita en Contrivox para guardar todos tus análisis y acceder a ellos en cualquier momento desde tu panel.",
-    cta_band: "Sabe lo que firmas antes de que sea demasiado tarde.",
-    footer_copy: "© 2025 Contrivox",
-    account_title: "Mis Análisis", account_empty: "No hay análisis guardados aún. Sube un contrato para empezar.",
-    account_date: "Analizado", account_view: "Ver informe",
-    account_signin_prompt: "Crea una cuenta gratuita para guardar y revisar todos tus análisis.",
-    signin_title: "Bienvenido a Contrivox", signin_email: "Dirección de email", signin_pw: "Contraseña",
-    signin_btn: "Iniciar sesión", signup_btn: "Crear cuenta gratuita", account_name: "Tu nombre",
-    modal_close: "Cerrar", save_prompt: "Inicia sesión para guardar este análisis en tu cuenta.",
-    overall_rec: "Nuestra recomendación", parties: "Partes", contract_type: "Tipo de contrato",
-    score_label_map: { Fair:"Justo", Acceptable:"Aceptable", Concerning:"Preocupante", Unfair:"Injusto", Dangerous:"Peligroso" },
-  },
 };
-
-const OUT_LANGS = [
-  { code:"en", label:"English" }, { code:"pt", label:"Português (BR)" },
-  { code:"es", label:"Español" }, { code:"fr", label:"Français" },
-  { code:"de", label:"Deutsch" }, { code:"it", label:"Italiano" },
-  { code:"uk", label:"Українська" }, { code:"pl", label:"Polski" },
-  { code:"ar", label:"العربية" }, { code:"zh", label:"中文" },
-  { code:"ja", label:"日本語" }, { code:"ru", label:"Русский" },
-];
-
-const LANG_NAMES = {
-  en:"English", pt:"Brazilian Portuguese", es:"Spanish", fr:"French",
-  de:"German", it:"Italian", uk:"Ukrainian", pl:"Polish",
-  ar:"Arabic", zh:"Chinese (Simplified)", ja:"Japanese", ru:"Russian",
-};
-
-function detectLang() {
-  const l = (navigator.language||"en").toLowerCase();
-  if (l.startsWith("pt")) return "pt";
-  if (l.startsWith("es")) return "es";
-  return "en";
-}
 
 // ─── Analytics ────────────────────────────────────────────────────────────────
 const _fbq = (...a) => window.fbq && window.fbq(...a);
@@ -278,8 +95,8 @@ const _gtag = (...a) => window.gtag && window.gtag(...a);
 function track(name, params={}) { _fbq("track", name, params); _gtag("event", name, params); }
 
 // ─── Claude prompt ────────────────────────────────────────────────────────────
-function buildPrompt(langCode) {
-  const lang = LANG_NAMES[langCode] || "English";
+function buildPrompt() {
+  const lang = "English";
   return `You are Contrivox, an expert contract analyst. You MUST write EVERY word of your response in ${lang} — including all JSON field values, titles, descriptions, labels, and the disclaimer. The only exception is the score_label field which must remain one of these exact English enum values: Fair, Acceptable, Concerning, Unfair, Dangerous.
 
 Return ONLY a valid JSON object. No markdown fences, no text before or after the JSON:
@@ -359,7 +176,7 @@ async function callClaude(payload, langCode) {
   const resp = await fetch("https://api.anthropic.com/v1/messages", {
     method:"POST",
     headers:{ "Content-Type":"application/json" },
-    body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:4096, system:buildPrompt(langCode), messages }),
+    body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:4096, system:buildPrompt(), messages }),
   });
   if (!resp.ok) throw new Error(`API error ${resp.status}`);
   const d = await resp.json();
@@ -665,7 +482,7 @@ function PaywallOverlay({ t, onUnlock }) {
   );
 }
 
-function DeliveryPanel({ result, t, uiLang, pdfUri }) {
+function DeliveryPanel({ result, t, pdfUri }) {
   const [email, setEmail] = useState("");
   const [wa, setWa] = useState("");
   const [emailSt, setEmailSt] = useState("idle");
@@ -794,7 +611,6 @@ function FaqItem({ q, a }) {
 
 // ─── MAIN ─────────────────────────────────────────────────────────────────────
 export default function Contrivox() {
-  const [uiLang, setUiLang]         = useState("en");
   const [outLang, setOutLang]       = useState("en");
   const [file, setFile]             = useState(null);
   const [dragging, setDragging]     = useState(false);
@@ -816,11 +632,9 @@ export default function Contrivox() {
   const [autoSentTo, setAutoSentTo]     = useState(null);
   const fileRef    = useRef();
   const resultsRef = useRef();
-  const t = T[uiLang] || T.en;
+  const t = T.en;
 
   useEffect(()=>{
-    const l = detectLang();
-    setUiLang(l); setOutLang(l);
     setAccount(getAccount());
 
     // jsPDF
@@ -977,12 +791,6 @@ export default function Contrivox() {
           <div style={{ maxWidth:920, margin:"0 auto", display:"flex", alignItems:"center", justifyContent:"space-between", height:58 }}>
             <ContrivoxLogo size={19}/>
             <div style={{ display:"flex", alignItems:"center", gap:8 }}>
-              {/* Language toggle */}
-              <div style={{ display:"flex", gap:2, background:"rgba(255,255,255,0.05)", borderRadius:8, padding:"3px" }}>
-                {["en","pt","es"].map(l=>(
-                  <button key={l} onClick={()=>setUiLang(l)} style={{ padding:"3px 9px", fontSize:11, fontWeight:600, border:"none", cursor:"pointer", borderRadius:6, fontFamily:"'DM Sans',sans-serif", background:uiLang===l?"rgba(255,255,255,0.13)":"transparent", color:uiLang===l?"white":COLORS.muted, transition:"all .15s" }}>{l.toUpperCase()}</button>
-                ))}
-              </div>
               {account ? (
                 <>
                   <button onClick={()=>setShowHist(true)} className="nav-link" style={{ padding:"6px 13px", fontSize:12, fontWeight:500, background:"rgba(255,255,255,0.06)", color:COLORS.muted, border:`0.5px solid ${COLORS.border}`, borderRadius:8, cursor:"pointer" }}>{t.nav_history}</button>
@@ -1039,14 +847,6 @@ export default function Contrivox() {
           <div style={{ maxWidth:660, margin:"0 auto" }}>
             <div style={{ background:"rgba(255,255,255,0.024)", border:`0.5px solid ${COLORS.border}`, borderRadius:20, padding:"26px 24px", backdropFilter:"blur(12px)" }}>
               <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:20, color:"white", marginBottom:18, fontWeight:600 }}>{t.upload_title}</h2>
-
-              {/* Output language */}
-              <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:18 }}>
-                <span style={{ fontSize:12.5, color:COLORS.muted, whiteSpace:"nowrap" }}>{t.out_lang}</span>
-                <select value={outLang} onChange={e=>setOutLang(e.target.value)} style={{ flex:1, background:"rgba(255,255,255,0.06)", border:`0.5px solid ${COLORS.border}`, borderRadius:9, padding:"9px 13px", color:"white", fontSize:13, cursor:"pointer", outline:"none" }}>
-                  {OUT_LANGS.map(l=><option key={l.code} value={l.code}>{l.label}</option>)}
-                </select>
-              </div>
 
               {/* ── MOBILE-FRIENDLY FILE PICKER ── */}
               {/* Hidden real input — always present so it can be triggered programmatically */}
@@ -1211,7 +1011,7 @@ export default function Contrivox() {
               </div>
 
               {/* Delivery */}
-              <DeliveryPanel result={result} t={t} uiLang={uiLang} pdfUri={pdfUri}/>
+              <DeliveryPanel result={result} t={t} pdfUri={pdfUri}/>
 
               {/* Tabs */}
               <div style={{ display:"flex", gap:3, marginBottom:12, background:"rgba(255,255,255,0.024)", borderRadius:11, padding:"3px", border:`0.5px solid rgba(255,255,255,0.06)` }}>

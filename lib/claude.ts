@@ -6,19 +6,9 @@ const client = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY!, // server-side only
 });
 
+// Add entries here as new output languages are enabled.
 const LANG_NAMES: Record<string, string> = {
   en: "English",
-  pt: "Brazilian Portuguese",
-  es: "Spanish",
-  fr: "French",
-  de: "German",
-  it: "Italian",
-  uk: "Ukrainian",
-  pl: "Polish",
-  ar: "Arabic",
-  zh: "Chinese (Simplified)",
-  ja: "Japanese",
-  ru: "Russian",
 };
 
 export function buildContrivoxPrompt(langCode: string): string {

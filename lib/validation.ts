@@ -38,7 +38,7 @@ export const analyseInputSchema = z.object({
 
 export const checkoutInputSchema = z.object({
   plan:     z.enum(["single", "bundle", "pro"]),
-  currency: z.enum(["usd", "brl"]).default("usd"),
+  currency: z.enum(["usd"]).default("usd"),
   userId:   z.string().uuid().optional(),
 });
 
