@@ -1,11 +1,33 @@
 import { MetadataRoute } from "next";
+import { getAllPosts, getAllCategories } from "@/lib/strapi";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export const revalidate = 3600;
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const [posts, categories] = await Promise.all([
+    getAllPosts().catch(() => []),
+    getAllCategories().catch(() => []),
+  ]);
+  const base = "https://contrivox.com";
+
+  const postUrls = posts.map(p => ({
+    url: `${base}/blog/${p.attributes.slug}`,
+    lastModified: new Date(p.attributes.updatedAt),
+    changeFrequency: "weekly" as const,
+    priority: 0.8,
+  }));
+
+  const catUrls = categories.map(c => ({
+    url: `${base}/blog/category/${c.attributes.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "weekly" as const,
+    priority: 0.6,
+  }));
+
   return [
-    { url: "https://contrivox.com",                                          lastModified: new Date(), changeFrequency: "weekly",  priority: 1   },
-    { url: "https://contrivox.com/blog/non-compete-clauses-explained",       lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
-    { url: "https://contrivox.com/blog/nda-red-flags",                       lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
-    { url: "https://contrivox.com/blog/lease-clauses-to-watch",              lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
-    { url: "https://contrivox.com/blog/arbitration-clause-meaning",          lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
+    { url: base,            lastModified: new Date(), changeFrequency: "weekly", priority: 1   },
+    { url: `${base}/blog`,  lastModified: new Date(), changeFrequency: "daily",  priority: 0.9 },
+    ...postUrls,
+    ...catUrls,
   ];
 }
