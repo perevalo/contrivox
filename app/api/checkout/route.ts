@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Bad request" }, { status: 400 });
   }
 
-  const planKey = `${input.plan}_${input.currency}` as keyof typeof PLANS;
+  const planKey = `${input.plan}_usd` as keyof typeof PLANS;
   const plan = PLANS[planKey];
   if (!plan) {
     return NextResponse.json({ error: "Invalid plan" }, { status: 400 });

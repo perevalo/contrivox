@@ -23,6 +23,7 @@ export async function POST(req: NextRequest) {
   }
 
   const { email, analysis, pdfBase64, language } = input;
+  const refSource = req.headers.get("x-ref-source") ?? "direct";
 
   // Send email via Resend
   const { id, error } = await sendReportEmail({ to: email, analysis, pdfBase64, language });
@@ -37,10 +38,11 @@ export async function POST(req: NextRequest) {
   const supabase  = createSupabaseServiceClient();
 
   await supabase.from("email_log").insert({
-    email_hash: emailHash,
-    resend_id:  id,
-    status:     "sent",
+    email_hash:         emailHash,
+    resend_id:          id,
+    status:             "sent",
     language,
+    acquisition_source: refSource,
   });
 
   console.log(`[send-report] ✓ sent resend_id=${id}`);

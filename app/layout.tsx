@@ -3,22 +3,26 @@ import "./globals.css";
 import { PostHogProvider } from "@/components/PostHogProvider";
 
 export const metadata: Metadata = {
-  title: "Contrivox — Your Contract, Decoded",
+  title: "Contrivox — Read Your Contract Before It Reads You",
   description:
-    "Upload any contract in any language and get a plain-language analysis, red flags, fairness score and negotiation scripts in seconds.",
-  keywords: ["contract analysis", "legal AI", "contract review", "NDA checker", "lease analyser"],
+    "Upload any US contract — employment, NDA, lease, freelance — and get a plain-English analysis, red flags, fairness score, and negotiation scripts in 30 seconds.",
+  keywords: [
+    "contract analysis", "non-compete checker", "NDA review", "lease analyser",
+    "employment contract red flags", "contract review AI", "is my non-compete enforceable",
+    "freelance contract review", "arbitration clause explained",
+  ],
   authors: [{ name: "Contrivox" }],
   openGraph: {
-    title: "Contrivox — Your Contract, Decoded",
-    description: "Know what you're signing before it costs you everything.",
+    title: "Contrivox — Read Your Contract Before It Reads You",
+    description: "Non-competes. Arbitration clauses. Auto-renewals. We catch what you miss.",
     url: "https://contrivox.com",
     siteName: "Contrivox",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Contrivox — Your Contract, Decoded",
-    description: "Know what you're signing before it costs you everything.",
+    title: "Contrivox — Read Your Contract Before It Reads You",
+    description: "Non-competes. Arbitration clauses. Auto-renewals. We catch what you miss.",
   },
   robots: { index: true, follow: true },
   metadataBase: new URL("https://contrivox.com"),

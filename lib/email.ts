@@ -5,7 +5,7 @@ const resend = new Resend(process.env.RESEND_API_KEY!);
 
 // Add subjects here as new output languages are enabled.
 const SUBJECTS: Record<string, string> = {
-  en: "Your Contrivox Report",
+  en: "Your contract decoded — Contrivox report inside",
 };
 
 const SCORE_COLORS: Record<string, string> = {
@@ -44,11 +44,18 @@ export async function sendReportEmail({
 }
 
 function buildEmailHTML(analysis: ContrivoxAnalysis, sc: string): string {
-  const flagsHtml = (analysis.red_flags ?? []).slice(0, 3).map((f, i) => `
+  const urgencyColor: Record<string, string> = { high: "#dc2626", medium: "#d97706", low: "#6b7280" };
+  const flagsHtml = (analysis.red_flags ?? []).slice(0, 3).map((f, i) => {
+    const uc = urgencyColor[(f as { urgency?: string }).urgency ?? "medium"] ?? "#d97706";
+    return `
     <div style="border:1px solid #fecaca;background:#fff5f5;border-radius:8px;padding:12px 14px;margin-bottom:8px;">
-      <p style="font-size:13px;font-weight:600;color:#991b1b;margin:0 0 4px;">${i + 1}. ${f.issue}</p>
+      <p style="font-size:13px;font-weight:600;color:#991b1b;margin:0 0 4px;">
+        <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${uc};margin-right:6px;vertical-align:middle;"></span>
+        ${i + 1}. ${f.issue}
+      </p>
       <p style="font-size:12px;color:#6b7280;margin:0;line-height:1.6;">${f.why_it_matters}</p>
-    </div>`).join("");
+    </div>`;
+  }).join("");
 
   const moreFlags = (analysis.red_flags?.length ?? 0) > 3
     ? `<p style="font-size:12px;color:#9ca3af;margin:4px 0 20px;">+ ${(analysis.red_flags?.length ?? 0) - 3} more in the full PDF</p>`
@@ -82,7 +89,7 @@ function buildEmailHTML(analysis: ContrivoxAnalysis, sc: string): string {
       <p style="font-size:13px;color:#4b5563;margin:0;line-height:1.65;">${analysis.score_reasoning}</p>
     </div>
     <div style="background:#eff6ff;border:1px solid #bfdbfe;padding:14px;border-radius:8px;margin-bottom:22px;">
-      <p style="font-size:10px;font-weight:700;color:#1d4ed8;text-transform:uppercase;letter-spacing:0.08em;margin:0 0 5px;">💡 Recommendation</p>
+      <p style="font-size:10px;font-weight:700;color:#1d4ed8;text-transform:uppercase;letter-spacing:0.08em;margin:0 0 5px;">💡 What you should do</p>
       <p style="font-size:14px;color:#1e3a5f;margin:0;line-height:1.7;">${analysis.overall_recommendation}</p>
     </div>
     ${flagsHtml ? `<p style="font-size:11px;font-weight:700;color:#dc2626;text-transform:uppercase;letter-spacing:0.07em;margin:0 0 9px;">🔴 Red Flags (${analysis.red_flags?.length})</p>${flagsHtml}${moreFlags}` : ""}

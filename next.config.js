@@ -46,6 +46,22 @@ const nextConfig = {
         destination: "https://contrivox.com/:path*",
         permanent: true,
       },
+      // SEO keyword landing routes
+      {
+        source: "/non-compete-checker",
+        destination: "/#upload-sec",
+        permanent: false,
+      },
+      {
+        source: "/nda-review",
+        destination: "/#upload-sec",
+        permanent: false,
+      },
+      {
+        source: "/lease-analyser",
+        destination: "/#upload-sec",
+        permanent: false,
+      },
     ];
   },
 

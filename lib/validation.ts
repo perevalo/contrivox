@@ -5,17 +5,20 @@ export const ContrivoxAnalysisSchema = z.object({
   contract_type:          z.string().min(1).max(200),
   summary:                z.string().min(10).max(2000),
   parties:                z.array(z.string().max(200)).max(10),
+  governing_state:        z.string().max(50).nullable().optional(),
   key_clauses: z.array(z.object({
-    title:        z.string().max(300),
-    plain_english: z.string().max(1000),
-    risk_level:   z.enum(["low", "medium", "high"]),
-    risk_note:    z.string().max(500).nullable(),
+    title:           z.string().max(300),
+    plain_english:   z.string().max(1000),
+    risk_level:      z.enum(["low", "medium", "high"]),
+    risk_note:       z.string().max(500).nullable(),
+    us_legal_context: z.string().max(500).nullable().optional(),
   })).max(30),
   red_flags: z.array(z.object({
-    issue:            z.string().max(500),
-    why_it_matters:   z.string().max(1000),
-    challenge:        z.string().max(1000),
-    challengeable:    z.boolean(),
+    issue:          z.string().max(500),
+    why_it_matters: z.string().max(1000),
+    challenge:      z.string().max(1000),
+    challengeable:  z.boolean(),
+    urgency:        z.enum(["high", "medium", "low"]).optional(),
   })).max(20),
   missing_protections:    z.array(z.string().max(500)).max(20),
   score:                  z.number().int().min(0).max(100),
@@ -37,9 +40,8 @@ export const analyseInputSchema = z.object({
 });
 
 export const checkoutInputSchema = z.object({
-  plan:     z.enum(["single", "bundle", "pro"]),
-  currency: z.enum(["usd"]).default("usd"),
-  userId:   z.string().uuid().optional(),
+  plan:   z.enum(["starter", "bundle", "pro", "annual"]),
+  userId: z.string().uuid().optional(),
 });
 
 export const sendReportInputSchema = z.object({
