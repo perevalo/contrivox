@@ -36,9 +36,10 @@ export async function POST(req: NextRequest) {
         quantity: 1,
       }],
       metadata: {
-        user_id:  input.userId ?? "",
-        credits:  String(plan.credits),
-        plan:     planKey,
+        user_id:    input.userId ?? "",
+        credits:    String(plan.credits),
+        plan:       planKey,
+        session_id: input.sessionId ?? "",
       },
       success_url:  `${baseUrl}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url:   `${baseUrl}/#upload-sec`,

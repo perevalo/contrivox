@@ -40,8 +40,20 @@ export const analyseInputSchema = z.object({
 });
 
 export const checkoutInputSchema = z.object({
-  plan:   z.enum(["starter", "bundle", "pro", "annual"]),
-  userId: z.string().uuid().optional(),
+  plan:      z.enum(["starter", "bundle", "pro", "annual"]),
+  userId:    z.string().uuid().optional(),
+  sessionId: z.string().uuid().optional(),
+});
+
+export const contractCreateSchema = z.object({
+  fileData:  z.string().max(20_000_000).nullable(),
+  fileText:  z.string().max(500_000).nullable(),
+  fileType:  z.enum(["image", "pdf", "text"]),
+  mediaType: z.string().max(100).nullable(),
+  fileName:  z.string().max(500),
+  langCode:  z.string().length(2),
+  email:     z.string().email().max(320),
+  whatsapp:  z.string().max(20).nullable().optional(),
 });
 
 export const sendReportInputSchema = z.object({

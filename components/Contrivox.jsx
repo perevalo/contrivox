@@ -99,50 +99,6 @@ const T = {
   },
 };
 
-// ─── Claude prompt ────────────────────────────────────────────────────────────
-function buildPrompt() {
-  const lang = "English";
-  return `You are Contrivox, an expert contract analyst. You MUST write EVERY word of your response in ${lang} — including all JSON field values, titles, descriptions, labels, and the disclaimer. The only exception is the score_label field which must remain one of these exact English enum values: Fair, Acceptable, Concerning, Unfair, Dangerous.
-
-Return ONLY a valid JSON object. No markdown fences, no text before or after the JSON:
-
-{
-  "contract_type": "string — type of contract written in ${lang}",
-  "summary": "string — 3-sentence plain-language overview in ${lang} that a 16-year-old can understand",
-  "parties": ["string in ${lang} — each party name or role"],
-  "key_clauses": [
-    {
-      "title": "string in ${lang} — plain-language clause name",
-      "plain_english": "string in ${lang} — what this means for the signer in simple terms",
-      "risk_level": "low" | "medium" | "high",
-      "risk_note": "string in ${lang} explaining the risk, or null if low"
-    }
-  ],
-  "red_flags": [
-    {
-      "issue": "string in ${lang} — what the red flag is",
-      "why_it_matters": "string in ${lang} — real-world impact on the signer",
-      "challenge": "string in ${lang} — exact suggested wording or approach to negotiate this clause",
-      "challengeable": true | false
-    }
-  ],
-  "missing_protections": ["string in ${lang} — important clause this contract lacks"],
-  "score": integer 0-100,
-  "score_label": "Fair" | "Acceptable" | "Concerning" | "Unfair" | "Dangerous",
-  "score_reasoning": "string in ${lang} — 2 sentences explaining the score",
-  "overall_recommendation": "string in ${lang} — 2-3 sentences: should they sign, negotiate, or walk away?",
-  "disclaimer": "string in ${lang} — legal disclaimer stating this is not legal advice"
-}
-
-Critical rules:
-1. Every text value MUST be in ${lang}. Writing in any other language is a failure.
-2. score_label must be one of the 5 English enum values exactly — it is used for colour coding only.
-3. score below 40 for clearly one-sided contracts. score above 70 only for genuinely balanced contracts.
-4. challengeable = false only for legally required or government-mandated clauses.
-5. The challenge field must be a concrete, actionable negotiation script — not generic advice.
-6. Plain language throughout — no legalese, no jargon.`;
-}
-
 // ─── File extraction ──────────────────────────────────────────────────────────
 async function extractFile(file) {
   const ext = file.name.split(".").pop().toLowerCase();
@@ -160,33 +116,6 @@ async function extractFile(file) {
     }
     r.onerror = rej;
   });
-}
-
-// ─── Claude API ───────────────────────────────────────────────────────────────
-async function callClaude(payload, langCode) {
-  let messages;
-  if (payload.type === "image") {
-    messages = [{ role:"user", content:[
-      { type:"image", source:{ type:"base64", media_type:payload.mediaType, data:payload.data }},
-      { type:"text", text:"Analyse this contract document fully according to your instructions." }
-    ]}];
-  } else if (payload.type === "pdf") {
-    messages = [{ role:"user", content:[
-      { type:"document", source:{ type:"base64", media_type:"application/pdf", data:payload.data }},
-      { type:"text", text:"Analyse this contract document fully according to your instructions." }
-    ]}];
-  } else {
-    messages = [{ role:"user", content:`Analyse this contract:\n\n${payload.text}` }];
-  }
-  const resp = await fetch("https://api.anthropic.com/v1/messages", {
-    method:"POST",
-    headers:{ "Content-Type":"application/json" },
-    body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:4096, system:buildPrompt(), messages }),
-  });
-  if (!resp.ok) throw new Error(`API error ${resp.status}`);
-  const d = await resp.json();
-  const raw = d.content.map(b=>b.text||"").join("").replace(/```json\n?|\n?```/g,"").trim();
-  return JSON.parse(raw);
 }
 
 // ─── PDF generator ────────────────────────────────────────────────────────────
@@ -638,6 +567,8 @@ export default function Contrivox() {
   const [contactWa, setContactWa]       = useState("");
   const [contactError, setContactError] = useState(null);
   const [autoSentTo, setAutoSentTo]     = useState(null);
+  const [sessionId, setSessionId]       = useState(null);
+  const [unlockLoading, setUnlockLoading] = useState(false);
   const emailTrackedRef = useRef(false);
   const waTrackedRef    = useRef(false);
   const fileRef    = useRef();
@@ -692,10 +623,8 @@ export default function Contrivox() {
     if(!emailValid) { setContactError(t.contact_email_invalid); return; }
     setContactError(null);
 
-    setLoading(true); setError(null); setResult(null); setUnlocked(false); setPdfUri(null); setAutoSentTo(null);
-    const msgs = t.analysing_msgs;
-    let mi=0; setLoadMsg(msgs[0]);
-    const iv = setInterval(()=>{ mi=Math.min(mi+1,msgs.length-1); setLoadMsg(msgs[mi]); },2800);
+    setLoading(true); setError(null); setResult(null); setUnlocked(false); setPdfUri(null); setSessionId(null);
+    setLoadMsg("Uploading your contract…");
     try {
       const payload = await extractFile(file);
       Analytics.analysisStarted({
@@ -703,43 +632,65 @@ export default function Contrivox() {
         has_email: !!contactEmail.trim(),
         has_whatsapp: !!contactWa.trim(),
       });
-      const analysis = await callClaude(payload, outLang);
-      setResult(analysis); setTab("clauses");
-      Analytics.analysisCompleted({
-        score: analysis.score,
-        score_label: analysis.score_label,
-        contract_type: analysis.contract_type,
-        clause_count: analysis.key_clauses?.length ?? 0,
-        red_flag_count: analysis.red_flags?.length ?? 0,
-        missing_count: analysis.missing_protections?.length ?? 0,
+
+      const res = await fetch("/api/contract/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fileData:  payload.type !== "text" ? payload.data  : null,
+          fileText:  payload.type === "text"  ? payload.text : null,
+          fileType:  payload.type,
+          mediaType: payload.mediaType ?? null,
+          fileName:  file.name,
+          langCode:  outLang,
+          email:     emailTrimmed,
+          whatsapp:  contactWa.trim() || null,
+        }),
       });
-      if(account) pushHistory({ ...analysis, savedAt:Date.now(), fileName:file.name });
-
-      // Auto-send via email (mailto fallback — replace with real API in production)
-      autoSendEmail(emailTrimmed, analysis, t);
-      setAutoSentTo(emailTrimmed);
-
-      // Auto-send WhatsApp summary if number provided
-      const waTrimmed = contactWa.trim();
-      if(waTrimmed) {
-        setTimeout(()=>openWhatsApp(waTrimmed, analysis, t), 800);
+      if (!res.ok) {
+        const body = await res.json().catch(()=>({}));
+        throw new Error(body.error || `Server error ${res.status}`);
       }
+      const { sessionId: sid, dummyAnalysis } = await res.json();
 
+      setSessionId(sid);
+      setResult(dummyAnalysis);
+      setTab("clauses");
+      Analytics.analysisCompleted({
+        score:          dummyAnalysis.score,
+        score_label:    dummyAnalysis.score_label,
+        contract_type:  dummyAnalysis.contract_type,
+        clause_count:   dummyAnalysis.key_clauses?.length ?? 0,
+        red_flag_count: dummyAnalysis.red_flags?.length ?? 0,
+        missing_count:  dummyAnalysis.missing_protections?.length ?? 0,
+      });
+      if(account) pushHistory({ ...dummyAnalysis, savedAt:Date.now(), fileName:file.name });
       setTimeout(()=>resultsRef.current?.scrollIntoView({ behavior:"smooth", block:"start" }),250);
     } catch(e) {
-      setError("Analysis failed: "+e.message);
+      setError("Could not process your contract. Please try again.");
       Analytics.analysisErrored(e.message);
     } finally {
-      clearInterval(iv); setLoading(false);
+      setLoading(false);
     }
   };
 
-  const handleUnlock = () => {
+  const handleUnlock = async () => {
+    if (unlockLoading) return;
     Analytics.unlockClicked();
-    // Production: POST /api/checkout → redirect to Stripe session
-    window.open("https://buy.stripe.com/your_payment_link","_blank");
-    // DEMO: simulate unlock after redirect — remove in production
-    setTimeout(()=>{ setUnlocked(true); },2000);
+    setUnlockLoading(true);
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ plan: "starter", sessionId }),
+      });
+      if (!res.ok) throw new Error("Checkout failed");
+      const { url } = await res.json();
+      if (url) window.location.href = url;
+    } catch(e) {
+      setError("Could not start checkout. Please try again.");
+      setUnlockLoading(false);
+    }
   };
 
   function renderPaywalled(items, limit, renderFn) {
@@ -1046,9 +997,6 @@ export default function Contrivox() {
                   <p style={{ fontSize:13, lineHeight:1.72, color:"rgba(200,195,255,0.85)", fontFamily:"'DM Sans',sans-serif" }}>{result.overall_recommendation}</p>
                 </div>
               </div>
-
-              {/* Delivery */}
-              <DeliveryPanel result={result} t={t} pdfUri={pdfUri}/>
 
               {/* Tabs */}
               <div style={{ display:"flex", gap:3, marginBottom:12, background:"rgba(255,255,255,0.024)", borderRadius:11, padding:"3px", border:`0.5px solid rgba(255,255,255,0.06)` }}>
