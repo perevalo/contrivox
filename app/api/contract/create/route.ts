@@ -63,8 +63,6 @@ export async function POST(req: NextRequest) {
     file_storage_path: fileStoragePath,
     file_text:         input.fileText ?? null,
     lang_code:         input.langCode,
-    email:             input.email,
-    whatsapp:          input.whatsapp ?? null,
     status:            "pending",
     ip_hash:           ipHash,
   });

@@ -87,7 +87,8 @@ export async function POST(req: NextRequest) {
     // NOTE: On Vercel serverless, background work after response may be truncated.
     // For guaranteed execution, migrate to a Supabase DB webhook or queue trigger.
     if (contractSessionId) {
-      triggerRealAnalysis(contractSessionId).catch(e =>
+      const customerEmail = session.customer_details?.email ?? null;
+      triggerRealAnalysis(contractSessionId, customerEmail).catch(e =>
         console.error("[webhook] triggerRealAnalysis error:", e)
       );
     }
@@ -96,12 +97,12 @@ export async function POST(req: NextRequest) {
   return NextResponse.json({ received: true });
 }
 
-async function triggerRealAnalysis(contractSessionId: string): Promise<void> {
+async function triggerRealAnalysis(contractSessionId: string, customerEmail: string | null): Promise<void> {
   const supabase = createSupabaseServiceClient();
 
   const { data: contract, error: fetchError } = await supabase
     .from("contracts")
-    .select("session_id, file_type, file_storage_path, file_text, media_type, lang_code, email, whatsapp")
+    .select("session_id, file_type, file_storage_path, file_text, media_type, lang_code")
     .eq("session_id", contractSessionId)
     .single();
 
@@ -167,17 +168,16 @@ async function triggerRealAnalysis(contractSessionId: string): Promise<void> {
 
   console.log(`[analysis] ✓ real analysis done for session=${contractSessionId}`);
 
-  // Send email report directly (bypass HTTP to avoid rate limiter)
-  if (contract.email) {
+  if (customerEmail) {
     const { error: emailError } = await sendReportEmail({
-      to:       contract.email,
+      to:       customerEmail,
       analysis,
       language: contract.lang_code ?? "en",
     });
     if (emailError) {
       console.error("[analysis] email error:", emailError);
     } else {
-      console.log(`[analysis] ✓ report emailed to hashed=${contract.email.slice(0, 3)}***`);
+      console.log(`[analysis] ✓ report emailed to hashed=${customerEmail.slice(0, 3)}***`);
     }
   }
 }

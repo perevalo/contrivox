@@ -52,8 +52,6 @@ export const contractCreateSchema = z.object({
   mediaType: z.string().max(100).nullable(),
   fileName:  z.string().max(500),
   langCode:  z.string().length(2),
-  email:     z.string().email().max(320),
-  whatsapp:  z.string().max(20).nullable().optional(),
 });
 
 export const sendReportInputSchema = z.object({

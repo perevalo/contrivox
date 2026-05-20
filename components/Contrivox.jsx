@@ -562,15 +562,8 @@ export default function Contrivox() {
   const [showAuth, setShowAuth]     = useState(false);
   const [showHist, setShowHist]     = useState(false);
   const [pdfReady, setPdfReady]     = useState(false);
-  // Contact collection
-  const [contactEmail, setContactEmail] = useState("");
-  const [contactWa, setContactWa]       = useState("");
-  const [contactError, setContactError] = useState(null);
-  const [autoSentTo, setAutoSentTo]     = useState(null);
-  const [sessionId, setSessionId]       = useState(null);
+  const [sessionId, setSessionId]         = useState(null);
   const [unlockLoading, setUnlockLoading] = useState(false);
-  const emailTrackedRef = useRef(false);
-  const waTrackedRef    = useRef(false);
   const fileRef    = useRef();
   const resultsRef = useRef();
   const t = T.en;
@@ -616,21 +609,12 @@ export default function Contrivox() {
   const analyse = async () => {
     if(!file) return;
 
-    // Validate email
-    const emailTrimmed = contactEmail.trim();
-    if(!emailTrimmed) { setContactError(t.contact_email_required); return; }
-    const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailTrimmed);
-    if(!emailValid) { setContactError(t.contact_email_invalid); return; }
-    setContactError(null);
-
     setLoading(true); setError(null); setResult(null); setUnlocked(false); setPdfUri(null); setSessionId(null);
     setLoadMsg("Uploading your contract…");
     try {
       const payload = await extractFile(file);
       Analytics.analysisStarted({
         file_type: file.name.split(".").pop()?.toLowerCase() ?? "unknown",
-        has_email: !!contactEmail.trim(),
-        has_whatsapp: !!contactWa.trim(),
       });
 
       const res = await fetch("/api/contract/create", {
@@ -643,8 +627,6 @@ export default function Contrivox() {
           mediaType: payload.mediaType ?? null,
           fileName:  file.name,
           langCode:  outLang,
-          email:     emailTrimmed,
-          whatsapp:  contactWa.trim() || null,
         }),
       });
       if (!res.ok) {
@@ -886,59 +868,6 @@ export default function Contrivox() {
                   </span>
                 </div>
               )}
-
-              {/* ── CONTACT COLLECTION ── */}
-              <div style={{ background:"rgba(99,102,241,0.06)", border:"0.5px solid rgba(99,102,241,0.18)", borderRadius:13, padding:"18px 16px", marginBottom:18 }}>
-                <p style={{ fontSize:14, fontWeight:600, color:"white", margin:"0 0 4px", fontFamily:"'Fraunces',serif" }}>{t.contact_title}</p>
-                <p style={{ fontSize:12, color:COLORS.muted, margin:"0 0 14px", fontFamily:"'DM Sans',sans-serif" }}>{t.contact_sub}</p>
-
-                {/* Email — required */}
-                <label style={{ display:"block", fontSize:12, fontWeight:500, color:"rgba(255,255,255,0.6)", marginBottom:5, fontFamily:"'DM Sans',sans-serif" }}>
-                  {t.contact_email_label} <span style={{ color:"#f87171" }}>*</span>
-                </label>
-                <input
-                  type="email"
-                  inputMode="email"
-                  autoComplete="email"
-                  placeholder={t.contact_email_ph}
-                  value={contactEmail}
-                  onChange={e=>{ setContactEmail(e.target.value); setContactError(null); }}
-                  onBlur={()=>{ if(contactEmail&&!emailTrackedRef.current){ emailTrackedRef.current=true; Analytics.emailCaptured(); } }}
-                  style={{ display:"block", width:"100%", background:"rgba(255,255,255,0.06)", border:`0.5px solid ${contactError?"rgba(239,68,68,0.5)":COLORS.border}`, borderRadius:9, padding:"12px 13px", color:"white", fontSize:14, fontFamily:"'DM Sans',sans-serif", outline:"none", marginBottom: contactError ? 4 : 14, boxSizing:"border-box" }}
-                />
-                {contactError && <p style={{ fontSize:11, color:"#f87171", margin:"0 0 12px", fontFamily:"'DM Sans',sans-serif" }}>{contactError}</p>}
-
-                {/* WhatsApp — optional */}
-                <label style={{ display:"block", fontSize:12, fontWeight:500, color:"rgba(255,255,255,0.6)", marginBottom:5, fontFamily:"'DM Sans',sans-serif" }}>
-                  {t.contact_wa_label}
-                  <span style={{ marginLeft:6, fontSize:11, color:COLORS.faint, fontWeight:400 }}>{t.contact_wa_opt}</span>
-                </label>
-                <div style={{ position:"relative" }}>
-                  <span style={{ position:"absolute", left:12, top:"50%", transform:"translateY(-50%)", fontSize:16 }}>💬</span>
-                  <input
-                    type="tel"
-                    inputMode="tel"
-                    autoComplete="tel"
-                    placeholder={t.contact_wa_ph}
-                    value={contactWa}
-                    onChange={e=>setContactWa(e.target.value)}
-                    onBlur={()=>{ if(contactWa&&!waTrackedRef.current){ waTrackedRef.current=true; Analytics.whatsappCaptured(); } }}
-                    style={{ display:"block", width:"100%", background:"rgba(255,255,255,0.06)", border:`0.5px solid ${COLORS.border}`, borderRadius:9, padding:"12px 13px 12px 36px", color:"white", fontSize:14, fontFamily:"'DM Sans',sans-serif", outline:"none", boxSizing:"border-box" }}
-                  />
-                </div>
-
-                <p style={{ fontSize:11, color:"rgba(255,255,255,0.22)", margin:"10px 0 0", fontFamily:"'DM Sans',sans-serif", display:"flex", alignItems:"center", gap:5 }}>
-                  <span>🔒</span> {t.contact_privacy}
-                </p>
-
-                {/* Auto-sent confirmation */}
-                {autoSentTo && (
-                  <div style={{ marginTop:12, padding:"9px 13px", background:"rgba(34,197,94,0.1)", border:"0.5px solid rgba(34,197,94,0.3)", borderRadius:9, display:"flex", alignItems:"center", gap:8 }}>
-                    <span style={{ fontSize:14 }}>✓</span>
-                    <p style={{ fontSize:12, color:"#4ade80", margin:0, fontFamily:"'DM Sans',sans-serif" }}>{t.auto_sent} {autoSentTo}</p>
-                  </div>
-                )}
-              </div>
 
               {error && (
                 <div style={{ marginBottom:12, padding:"9px 13px", background:"rgba(239,68,68,0.09)", borderRadius:9, border:"0.5px solid rgba(239,68,68,0.2)" }}>
