@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(awk '/^const T = \\\\{/,/^};/' \"D:\\\\Alex\\\\contrivox\\\\components\\\\Contrivox.jsx\")",
+      "Bash(npx tsc *)",
+      "Bash(npx next *)",
+      "Bash(npm install *)",
+      "Bash(git push *)",
+      "Bash(Get-ChildItem *)",
+      "Bash(Select-String \"jspdf|pdf\")"
+    ]
+  }
+}

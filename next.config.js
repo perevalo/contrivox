@@ -5,22 +5,34 @@ const securityHeaders = [
   { key: "X-Frame-Options",           value: "DENY" },
   { key: "X-Content-Type-Options",    value: "nosniff" },
   { key: "Referrer-Policy",           value: "strict-origin-when-cross-origin" },
-  { key: "Permissions-Policy",        value: "camera=(), microphone=(), geolocation=()" },
+  { key: "Permissions-Policy",        value: "camera=(), microphone=(), geolocation=(), payment=()" },
   {
     key: "Strict-Transport-Security",
     value: "max-age=63072000; includeSubDomains; preload",
   },
+  // Cross-Origin policies — prevent Spectre-class attacks and data leakage
+  { key: "Cross-Origin-Opener-Policy",   value: "same-origin" },
+  { key: "Cross-Origin-Resource-Policy", value: "same-origin" },
   {
     key: "Content-Security-Policy",
     value: [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com https://www.googletagmanager.com https://connect.facebook.net",
+      // unsafe-inline required by Next.js 14 App Router hydration scripts.
+      // unsafe-eval removed — nothing in this app needs it.
+      // All third-party scripts (jsPDF, PostHog) are bundled via npm — no CDN needed.
+      "script-src 'self' 'unsafe-inline'",
+      // unsafe-inline required for inline <style> blocks used by the UI component.
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com",
       "img-src 'self' data: blob:",
-      "connect-src 'self' https://*.supabase.co https://api.anthropic.com https://api.stripe.com https://www.google-analytics.com https://us.i.posthog.com https://eu.i.posthog.com",
+      // Browser never talks to Anthropic — Claude calls are server-side only.
+      // Stripe connect-src is needed for risk signals on their hosted checkout page.
+      "connect-src 'self' https://*.supabase.co https://api.stripe.com https://us.i.posthog.com https://eu.i.posthog.com https://app.posthog.com",
       "frame-src https://js.stripe.com https://hooks.stripe.com",
-      "script-src-elem 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://js.stripe.com https://www.googletagmanager.com https://connect.facebook.net",
+      "worker-src 'none'",
+      "object-src 'none'",
+      "base-uri 'self'",
+      "form-action 'self'",
     ].join("; "),
   },
 ];

@@ -120,8 +120,7 @@ async function extractFile(file) {
 
 // ─── PDF generator ────────────────────────────────────────────────────────────
 async function generatePDF(result, t) {
-  if (!window.jspdf) throw new Error("jsPDF not loaded");
-  const { jsPDF } = window.jspdf;
+  const { jsPDF } = await import("jspdf");
   const doc = new jsPDF({ orientation:"portrait", unit:"mm", format:"a4" });
   const W=210, M=18, CW=W-M*2;
   let y=0;
@@ -561,7 +560,6 @@ export default function Contrivox() {
   const [account, setAccount]       = useState(null);
   const [showAuth, setShowAuth]     = useState(false);
   const [showHist, setShowHist]     = useState(false);
-  const [pdfReady, setPdfReady]     = useState(false);
   const [sessionId, setSessionId]         = useState(null);
   const [unlockLoading, setUnlockLoading] = useState(false);
   const fileRef    = useRef();
@@ -570,19 +568,13 @@ export default function Contrivox() {
 
   useEffect(()=>{
     setAccount(getAccount());
-
-    // jsPDF — loaded lazily so it doesn't block initial render
-    const js = document.createElement("script");
-    js.src = "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";
-    js.onload = () => setPdfReady(true);
-    document.head.appendChild(js);
   },[]);
 
-  // Build PDF whenever result is ready
+  // Build PDF whenever result is ready (jsPDF loads on demand via dynamic import)
   useEffect(()=>{
-    if(!result||!pdfReady) return;
-    generatePDF(result,t).then(setPdfUri).catch(e=>console.error("PDF error",e));
-  },[result, pdfReady]);
+    if(!result) return;
+    generatePDF(result,t).then(setPdfUri).catch(()=>{});
+  },[result]);
 
   // Fire paywall_shown once per result when paywall is visible
   useEffect(()=>{
@@ -1042,6 +1034,11 @@ export default function Contrivox() {
             <ContrivoxLogo size={14}/>
             <span style={{ color:COLORS.faint, fontSize:12, fontFamily:"'DM Sans',sans-serif" }}>·</span>
             <span style={{ fontSize:11, color:COLORS.faint, fontFamily:"'DM Sans',sans-serif" }}>{t.footer_copy}</span>
+          </div>
+          <div style={{ display:"flex", justifyContent:"center", gap:20, marginBottom:12, flexWrap:"wrap" }}>
+            <a href="/privacy" style={{ fontSize:11, color:"rgba(255,255,255,0.3)", fontFamily:"'DM Sans',sans-serif", textDecoration:"none" }}>Privacy Policy</a>
+            <a href="/terms" style={{ fontSize:11, color:"rgba(255,255,255,0.3)", fontFamily:"'DM Sans',sans-serif", textDecoration:"none" }}>Terms of Service</a>
+            <a href="mailto:legal@contrivox.com" style={{ fontSize:11, color:"rgba(255,255,255,0.3)", fontFamily:"'DM Sans',sans-serif", textDecoration:"none" }}>Legal</a>
           </div>
           <p style={{ fontSize:11, color:"rgba(255,255,255,0.18)", maxWidth:600, margin:"0 auto", lineHeight:1.6, fontFamily:"'DM Sans',sans-serif" }}>{t.disclaimer}</p>
         </footer>
