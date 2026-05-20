@@ -1035,10 +1035,20 @@ export default function Contrivox() {
             <span style={{ color:COLORS.faint, fontSize:12, fontFamily:"'DM Sans',sans-serif" }}>·</span>
             <span style={{ fontSize:11, color:COLORS.faint, fontFamily:"'DM Sans',sans-serif" }}>{t.footer_copy}</span>
           </div>
-          <div style={{ display:"flex", justifyContent:"center", gap:20, marginBottom:12, flexWrap:"wrap" }}>
-            <a href="/privacy" style={{ fontSize:11, color:"rgba(255,255,255,0.3)", fontFamily:"'DM Sans',sans-serif", textDecoration:"none" }}>Privacy Policy</a>
-            <a href="/terms" style={{ fontSize:11, color:"rgba(255,255,255,0.3)", fontFamily:"'DM Sans',sans-serif", textDecoration:"none" }}>Terms of Service</a>
-            <a href="mailto:legal@contrivox.com" style={{ fontSize:11, color:"rgba(255,255,255,0.3)", fontFamily:"'DM Sans',sans-serif", textDecoration:"none" }}>Legal</a>
+          <div style={{ display:"flex", justifyContent:"center", alignItems:"center", gap:0, marginBottom:14, flexWrap:"wrap" }}>
+            {[
+              { label:"Privacy Policy", href:"/privacy" },
+              { label:"Terms of Service", href:"/terms" },
+              { label:"legal@contrivox.com", href:"mailto:legal@contrivox.com" },
+            ].map(({ label, href }, i, arr) => (
+              <span key={href} style={{ display:"flex", alignItems:"center" }}>
+                <a href={href} style={{ fontSize:12, color:"rgba(255,255,255,0.55)", fontFamily:"'DM Sans',sans-serif", textDecoration:"none", padding:"3px 2px", transition:"color .15s" }}
+                  onMouseOver={e=>e.currentTarget.style.color="rgba(255,255,255,0.88)"}
+                  onMouseOut={e=>e.currentTarget.style.color="rgba(255,255,255,0.55)"}
+                >{label}</a>
+                {i < arr.length - 1 && <span style={{ color:"rgba(255,255,255,0.18)", fontSize:11, margin:"0 10px" }}>·</span>}
+              </span>
+            ))}
           </div>
           <p style={{ fontSize:11, color:"rgba(255,255,255,0.18)", maxWidth:600, margin:"0 auto", lineHeight:1.6, fontFamily:"'DM Sans',sans-serif" }}>{t.disclaimer}</p>
         </footer>
