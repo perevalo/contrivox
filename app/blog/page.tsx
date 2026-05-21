@@ -5,9 +5,21 @@ import { BlogCTA } from "@/components/blog/BlogCTA";
 export const revalidate = 60;
 
 export const metadata: Metadata = {
-  title: "Contract Guides & Resources",
+  title: "Contract Guides & Resources — Contrivox Blog",
   description: "Plain-English guides to understanding employment contracts, NDAs, apartment leases, non-competes, and freelance agreements.",
-  openGraph: { title: "Contrivox Blog — Contract Guides", description: "Read it before you sign it." },
+  alternates: { canonical: "https://contrivox.com/blog" },
+  openGraph: {
+    title: "Contrivox Blog — Contract Guides",
+    description: "Read it before you sign it.",
+    url: "https://contrivox.com/blog",
+    siteName: "Contrivox",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Contrivox Blog — Contract Guides",
+    description: "Read it before you sign it.",
+  },
 };
 
 export default async function BlogIndex() {
@@ -17,8 +29,18 @@ export default async function BlogIndex() {
     getAllCategories().catch(() => []),
   ]);
 
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://contrivox.com" },
+      { "@type": "ListItem", position: 2, name: "Blog", item: "https://contrivox.com/blog" },
+    ],
+  };
+
   return (
     <main style={{ maxWidth: 900, margin: "0 auto", padding: "48px 20px 80px" }}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       {/* Hero */}
       <div style={{ marginBottom: 48 }}>
         <div style={{ display: "inline-flex", alignItems: "center", gap: 7, marginBottom: 18, padding: "4px 13px", background: "rgba(239,68,68,0.1)", borderRadius: 20, border: "0.5px solid rgba(239,68,68,0.2)" }}>

@@ -1,5 +1,16 @@
 /** @type {import('next').NextConfig} */
 
+// Parse Strapi host at build/dev time so CSP and image optimizer stay in sync.
+// Falls back to localhost for local development.
+const strapiOrigin = (() => {
+  try {
+    const u = new URL(process.env.STRAPI_URL || "http://localhost:1337");
+    return `${u.protocol}//${u.host}`;
+  } catch {
+    return "http://localhost:1337";
+  }
+})();
+
 const securityHeaders = [
   { key: "X-DNS-Prefetch-Control",    value: "on" },
   { key: "X-Frame-Options",           value: "DENY" },
@@ -24,7 +35,7 @@ const securityHeaders = [
       // unsafe-inline required for inline <style> blocks used by the UI component.
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com",
-      "img-src 'self' data: blob:",
+      `img-src 'self' data: blob: ${strapiOrigin}`,
       // Browser never talks to Anthropic — Claude calls are server-side only.
       // Stripe connect-src is needed for risk signals on their hosted checkout page.
       "connect-src 'self' https://*.supabase.co https://api.stripe.com https://us.i.posthog.com https://eu.i.posthog.com https://app.posthog.com",
@@ -80,9 +91,20 @@ const nextConfig = {
   // Disable powered-by header
   poweredByHeader: false,
 
-  // Image optimisation domains
+  // Image optimisation — use remotePatterns (domains is deprecated)
   images: {
-    domains: ["contrivox.com"],
+    remotePatterns: [
+      { protocol: "https", hostname: "contrivox.com" },
+      // Strapi CMS images — hostname resolved from STRAPI_URL env var
+      (() => {
+        try {
+          const u = new URL(process.env.STRAPI_URL || "http://localhost:1337");
+          return { protocol: u.protocol.replace(":", ""), hostname: u.hostname, port: u.port || undefined };
+        } catch {
+          return { protocol: "http", hostname: "localhost", port: "1337" };
+        }
+      })(),
+    ],
   },
 };
 

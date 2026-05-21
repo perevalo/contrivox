@@ -13,9 +13,15 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   const cats = await getAllCategories();
   const cat = cats.find(c => c.attributes.slug === params.slug);
   if (!cat) return {};
+  const title = `${cat.attributes.name} — Contrivox Blog`;
+  const description = cat.attributes.description || `Plain-English guides about ${cat.attributes.name.toLowerCase()} — written for real people, not lawyers.`;
+  const url = `https://contrivox.com/blog/category/${params.slug}`;
   return {
-    title: `${cat.attributes.name} — Contrivox Blog`,
-    description: cat.attributes.description || `Guides about ${cat.attributes.name.toLowerCase()}.`,
+    title,
+    description,
+    alternates: { canonical: url },
+    openGraph: { title, description, url, siteName: "Contrivox", type: "website" },
+    twitter: { card: "summary_large_image", title, description },
   };
 }
 
