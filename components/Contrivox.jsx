@@ -1047,7 +1047,8 @@ export default function Contrivox() {
             {[
               { label:"Privacy Policy", href:"/privacy" },
               { label:"Terms of Service", href:"/terms" },
-              { label:"legal@contrivox.com", href:"mailto:legal@contrivox.com" },
+              { label:"Contact", href:"/contact" },
+              { label:"contact@contrivox.com", href:"mailto:contact@contrivox.com" },
             ].map(({ label, href }, i, arr) => (
               <span key={href} style={{ display:"flex", alignItems:"center" }}>
                 <a href={href} style={{ fontSize:12, color:COLORS.muted, fontFamily:"'DM Sans',sans-serif", textDecoration:"none", padding:"3px 2px", transition:"color .15s" }}

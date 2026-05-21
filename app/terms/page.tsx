@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 const LAST_UPDATED = "May 20, 2026";
 const CONTACT_EMAIL = "legal@contrivox.com";
-const SUPPORT_EMAIL = "support@contrivox.com";
+const SUPPORT_EMAIL = "contact@contrivox.com";
 
 export default function TermsPage() {
   return (

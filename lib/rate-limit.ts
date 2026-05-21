@@ -12,6 +12,7 @@ function buildLimiters(redis: Redis) {
     checkout:   new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(10,  "1h"), prefix: "cvx:checkout" }),
     sendReport: new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(20,  "1h"), prefix: "cvx:send-report" }),
     subscribe:  new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(5,   "1h"), prefix: "cvx:subscribe" }),
+    contact:    new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(5,   "1h"), prefix: "cvx:contact" }),
     webhook:    new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(100, "1m"), prefix: "cvx:webhook" }),
   };
 }

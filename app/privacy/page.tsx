@@ -9,6 +9,7 @@ export const metadata: Metadata = {
 
 const LAST_UPDATED = "May 20, 2026";
 const CONTACT_EMAIL = "legal@contrivox.com";
+const SUPPORT_EMAIL = "contact@contrivox.com";
 
 export default function PrivacyPage() {
   return (
@@ -185,9 +186,11 @@ export default function PrivacyPage() {
             <div style={{ background: "rgba(255,255,255,0.04)", border: "0.5px solid rgba(255,255,255,0.08)", borderRadius: 10, padding: "16px 18px", marginTop: 12 }}>
               <p style={{ fontSize: 14, color: "rgba(255,255,255,0.7)", fontFamily: "'DM Sans',sans-serif", lineHeight: 1.7 }}>
                 Contrivox<br/>
-                Email: <A href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</A>
+                Legal &amp; privacy: <A href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</A><br/>
+                General support: <A href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</A>
               </p>
             </div>
+            <P>You can also reach us via the <A href="/contact">contact form</A>.</P>
           </Section>
 
           <div style={{ marginTop: 48, paddingTop: 24, borderTop: "0.5px solid rgba(255,255,255,0.08)", display: "flex", gap: 24, flexWrap: "wrap" }}>
