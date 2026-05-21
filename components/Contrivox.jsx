@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Analytics } from "@/lib/analytics";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 // ─── TRANSLATIONS ─────────────────────────────────────────────────────────────
 // Strings live here. To add a language: duplicate this object, translate it,
@@ -292,15 +293,21 @@ const MISSING_PREVIEW = 2;
 
 // ─── UI components ────────────────────────────────────────────────────────────
 const COLORS = {
-  bg: "#07070f",
-  surface: "rgba(255,255,255,0.03)",
-  border: "rgba(255,255,255,0.08)",
-  accent: "#8b5cf6",
-  accentGrad: "linear-gradient(135deg,#7c3aed,#4f46e5)",
-  danger: "#ef4444",
-  text: "rgba(255,255,255,0.88)",
-  muted: "rgba(255,255,255,0.42)",
-  faint: "rgba(255,255,255,0.16)",
+  bg:          "var(--cvx-bg)",
+  surface:     "var(--cvx-surface)",
+  border:      "var(--cvx-border)",
+  accent:      "var(--cvx-accent)",
+  accentGrad:  "var(--cvx-accent-grad)",
+  danger:      "var(--cvx-danger)",
+  text:        "var(--cvx-text)",
+  muted:       "var(--cvx-muted)",
+  faint:       "var(--cvx-faint)",
+  heading:     "var(--cvx-heading)",
+  nav:         "var(--cvx-nav)",
+  modal:       "var(--cvx-modal)",
+  overlay:     "var(--cvx-overlay)",
+  paywallGrad: "var(--cvx-paywall-grad)",
+  inputBg:     "var(--cvx-input-bg)",
 };
 
 function ContrivoxLogo({ size=22 }) {
@@ -315,7 +322,7 @@ function ContrivoxLogo({ size=22 }) {
         <circle cx="26" cy="24" r="4" fill="#ef4444"/>
         <path d="M24.5 24l1 1 2-2" stroke="white" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
-      <span style={{ fontFamily:"'Fraunces',serif", fontSize:size, color:"white", letterSpacing:"-0.02em", fontWeight:600 }}>Contrivox</span>
+      <span style={{ fontFamily:"'Fraunces',serif", fontSize:size, color:COLORS.heading, letterSpacing:"-0.02em", fontWeight:600 }}>Contrivox</span>
     </div>
   );
 }
@@ -327,12 +334,12 @@ function ScoreRing({ score, label, t }) {
   return (
     <div style={{ display:"flex", flexDirection:"column", alignItems:"center", gap:7 }}>
       <svg width="116" height="116" viewBox="0 0 116 116">
-        <circle cx="58" cy="58" r={r} fill="none" stroke="rgba(255,255,255,0.07)" strokeWidth="9"/>
+        <circle cx="58" cy="58" r={r} fill="none" stroke="var(--cvx-faint)" strokeWidth="9"/>
         <circle cx="58" cy="58" r={r} fill="none" stroke={col} strokeWidth="9"
           strokeDasharray={`${dash} ${c}`} strokeLinecap="round" transform="rotate(-90 58 58)"
           style={{ transition:"stroke-dasharray 1.4s cubic-bezier(.4,0,.2,1)" }}/>
-        <text x="58" y="52" textAnchor="middle" fill="white" fontSize="26" fontWeight="700" fontFamily="'Fraunces',serif">{score}</text>
-        <text x="58" y="70" textAnchor="middle" fill="rgba(255,255,255,0.32)" fontSize="11" fontFamily="'DM Sans',sans-serif">/100</text>
+        <text x="58" y="52" textAnchor="middle" fill="var(--cvx-heading)" fontSize="26" fontWeight="700" fontFamily="'Fraunces',serif">{score}</text>
+        <text x="58" y="70" textAnchor="middle" fill="var(--cvx-score-sub)" fontSize="11" fontFamily="'DM Sans',sans-serif">/100</text>
       </svg>
       <span style={{ fontSize:11, fontWeight:700, color:col, letterSpacing:"0.09em", textTransform:"uppercase", fontFamily:"'DM Sans',sans-serif" }}>{translatedLabel}</span>
     </div>
@@ -361,7 +368,7 @@ function ClauseCard({ clause, t }) {
         <span style={{ color:COLORS.faint, fontSize:18, flexShrink:0 }}>{open?"−":"+"}</span>
       </button>
       {open && (
-        <div style={{ padding:"0 14px 13px", borderTop:`0.5px solid rgba(255,255,255,0.05)` }}>
+        <div style={{ padding:"0 14px 13px", borderTop:`0.5px solid ${COLORS.faint}` }}>
           <p style={{ margin:"10px 0 0", fontSize:13, lineHeight:1.72, color:COLORS.muted, fontFamily:"'DM Sans',sans-serif" }}>{clause.plain_english}</p>
           {clause.risk_note && (
             <div style={{ marginTop:8, padding:"8px 11px", background:"rgba(239,68,68,0.07)", borderLeft:"2px solid rgba(239,68,68,0.35)", borderRadius:"0 6px 6px 0" }}>
@@ -401,7 +408,7 @@ function FlagCard({ flag, t }) {
 
 function PaywallOverlay({ t, onUnlock }) {
   return (
-    <div style={{ position:"absolute", bottom:0, left:0, right:0, top:"22%", background:"linear-gradient(to bottom, rgba(7,7,15,0) 0%, rgba(7,7,15,0.98) 24%)", borderRadius:"0 0 14px 14px", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"flex-end", paddingBottom:26, zIndex:10 }}>
+    <div style={{ position:"absolute", bottom:0, left:0, right:0, top:"22%", background:COLORS.paywallGrad, borderRadius:"0 0 14px 14px", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"flex-end", paddingBottom:26, zIndex:10 }}>
       <div style={{ textAlign:"center", padding:"0 20px" }}>
         <p style={{ fontSize:16.5, fontWeight:600, color:"white", margin:"0 0 7px", fontFamily:"'Fraunces',serif" }}>{t.blur_title}</p>
         <p style={{ fontSize:12.5, color:COLORS.muted, maxWidth:280, margin:"0 auto 16px", lineHeight:1.64, fontFamily:"'DM Sans',sans-serif" }}>{t.blur_sub}</p>
@@ -424,8 +431,8 @@ function DeliveryPanel({ result, t, pdfUri }) {
   const [emailSt, setEmailSt] = useState("idle");
   const [waSt, setWaSt] = useState("idle");
 
-  const inp = { background:"rgba(255,255,255,0.055)", border:`0.5px solid ${COLORS.border}`, borderRadius:9, padding:"10px 13px", color:"white", fontSize:13, fontFamily:"'DM Sans',sans-serif", outline:"none", width:"100%", transition:"border-color .15s" };
-  const btn = (grad, disabled) => ({ padding:"10px 16px", fontSize:12.5, fontWeight:700, background:disabled?"rgba(255,255,255,0.05)":grad, color:disabled?COLORS.faint:"white", border:"none", borderRadius:9, cursor:disabled?"not-allowed":"pointer", fontFamily:"'DM Sans',sans-serif", whiteSpace:"nowrap", flexShrink:0, transition:"all .15s" });
+  const inp = { background:COLORS.inputBg, border:`0.5px solid ${COLORS.border}`, borderRadius:9, padding:"10px 13px", color:COLORS.text, fontSize:13, fontFamily:"'DM Sans',sans-serif", outline:"none", width:"100%", transition:"border-color .15s" };
+  const btn = (grad, disabled) => ({ padding:"10px 16px", fontSize:12.5, fontWeight:700, background:disabled?COLORS.surface:grad, color:disabled?COLORS.faint:COLORS.heading, border:"none", borderRadius:9, cursor:disabled?"not-allowed":"pointer", fontFamily:"'DM Sans',sans-serif", whiteSpace:"nowrap", flexShrink:0, transition:"all .15s" });
 
   const doEmail = () => {
     if(!email||emailSt==="sending") return;
@@ -474,18 +481,18 @@ function DeliveryPanel({ result, t, pdfUri }) {
 function AuthModal({ t, onClose, onAuth }) {
   const [mode, setMode] = useState("signin");
   const [name, setName] = useState(""); const [email, setEmail] = useState(""); const [pw, setPw] = useState("");
-  const inp = { display:"block", width:"100%", background:"rgba(255,255,255,0.06)", border:`0.5px solid ${COLORS.border}`, borderRadius:9, padding:"11px 13px", color:"white", fontSize:13, fontFamily:"'DM Sans',sans-serif", outline:"none", marginBottom:10 };
+  const inp = { display:"block", width:"100%", background:COLORS.inputBg, border:`0.5px solid ${COLORS.border}`, borderRadius:9, padding:"11px 13px", color:COLORS.text, fontSize:13, fontFamily:"'DM Sans',sans-serif", outline:"none", marginBottom:10 };
   const submit = () => {
     if(!email) return;
     const acc = { name:name||email.split("@")[0], email, createdAt:Date.now() };
     saveAccount(acc); onAuth(acc); onClose();
   };
   return (
-    <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.78)", zIndex:1000, display:"flex", alignItems:"center", justifyContent:"center", padding:20 }} onClick={onClose}>
-      <div onClick={e=>e.stopPropagation()} style={{ background:"#13131f", border:`0.5px solid ${COLORS.border}`, borderRadius:20, padding:"30px 26px", width:"100%", maxWidth:380, position:"relative" }}>
+    <div style={{ position:"fixed", inset:0, background:COLORS.overlay, zIndex:1000, display:"flex", alignItems:"center", justifyContent:"center", padding:20 }} onClick={onClose}>
+      <div onClick={e=>e.stopPropagation()} style={{ background:COLORS.modal, border:`0.5px solid ${COLORS.border}`, borderRadius:20, padding:"30px 26px", width:"100%", maxWidth:380, position:"relative" }}>
         <button onClick={onClose} style={{ position:"absolute", top:16, right:18, background:"none", border:"none", color:COLORS.faint, cursor:"pointer", fontSize:22, lineHeight:1 }}>×</button>
         <ContrivoxLogo size={18}/>
-        <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:20, color:"white", margin:"16px 0 20px" }}>{t.signin_title}</h2>
+        <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:20, color:COLORS.heading, margin:"16px 0 20px" }}>{t.signin_title}</h2>
         {mode==="signup" && <input style={inp} placeholder={t.account_name} value={name} onChange={e=>setName(e.target.value)}/>}
         <input style={inp} type="email" placeholder={t.signin_email} value={email} onChange={e=>setEmail(e.target.value)}/>
         <input style={inp} type="password" placeholder={t.signin_pw} value={pw} onChange={e=>setPw(e.target.value)}/>
@@ -503,11 +510,11 @@ function AuthModal({ t, onClose, onAuth }) {
 function HistoryPanel({ t, account, onClose, onLoad }) {
   const history = getHistory();
   return (
-    <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.78)", zIndex:1000, display:"flex", alignItems:"stretch", justifyContent:"flex-end" }} onClick={onClose}>
-      <div onClick={e=>e.stopPropagation()} style={{ background:"#13131f", borderLeft:`0.5px solid ${COLORS.border}`, padding:"26px 22px", width:"100%", maxWidth:420, overflowY:"auto", position:"relative", display:"flex", flexDirection:"column", gap:0 }}>
+    <div style={{ position:"fixed", inset:0, background:COLORS.overlay, zIndex:1000, display:"flex", alignItems:"stretch", justifyContent:"flex-end" }} onClick={onClose}>
+      <div onClick={e=>e.stopPropagation()} style={{ background:COLORS.modal, borderLeft:`0.5px solid ${COLORS.border}`, padding:"26px 22px", width:"100%", maxWidth:420, overflowY:"auto", position:"relative", display:"flex", flexDirection:"column", gap:0 }}>
         <button onClick={onClose} style={{ position:"absolute", top:18, right:20, background:"none", border:"none", color:COLORS.faint, cursor:"pointer", fontSize:22 }}>×</button>
         <ContrivoxLogo size={16}/>
-        <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:20, color:"white", margin:"16px 0 4px" }}>{t.account_title}</h2>
+        <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:20, color:COLORS.heading, margin:"16px 0 4px" }}>{t.account_title}</h2>
         <p style={{ fontSize:11, color:COLORS.muted, marginBottom:22, fontFamily:"'DM Sans',sans-serif" }}>{account?.email}</p>
         {history.length===0 ? (
           <p style={{ fontSize:13, color:COLORS.muted, fontFamily:"'DM Sans',sans-serif" }}>{t.account_empty}</p>
@@ -697,12 +704,12 @@ export default function Contrivox() {
         @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
         *{box-sizing:border-box;margin:0;padding:0;}
         html{scroll-behavior:smooth;}
-        body{background:${COLORS.bg};font-family:'DM Sans',sans-serif; -webkit-text-size-adjust:100%;}
+        body{background:var(--cvx-bg);font-family:'DM Sans',sans-serif; -webkit-text-size-adjust:100%;}
         ::-webkit-scrollbar{width:4px;}
-        ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:2px;}
+        ::-webkit-scrollbar-thumb{background:var(--cvx-scrollbar);border-radius:2px;}
         select,input,button{font-family:'DM Sans',sans-serif;}
-        select option{background:#1a1a2e;color:white;}
-        input::placeholder{color:rgba(255,255,255,0.26);}
+        select option{background:var(--cvx-select-bg);color:var(--cvx-heading);}
+        input::placeholder{color:var(--cvx-placeholder);}
         input:focus{border-color:rgba(139,92,246,0.45)!important;outline:none;}
         /* Mobile tap improvements */
         button,a,[role="button"]{-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
@@ -721,9 +728,9 @@ export default function Contrivox() {
         .fear-card{transition:border-color .2s,transform .2s;}
         .fear-card:hover{border-color:rgba(239,68,68,0.32)!important;transform:translateY(-2px);}
         .how-card{transition:background .2s,transform .2s;}
-        .how-card:hover{background:rgba(255,255,255,0.05)!important;transform:translateY(-2px);}
+        .how-card:hover{background:var(--cvx-surface)!important;transform:translateY(-2px);}
         .nav-link{transition:color .15s;}
-        .nav-link:hover{color:white!important;}
+        .nav-link:hover{color:var(--cvx-heading)!important;}
       `}</style>
 
       {showAuth && <AuthModal t={t} onClose={()=>setShowAuth(false)} onAuth={acc=>{ setAccount(acc); Analytics.signUpCompleted(acc.email); }}/>}
@@ -732,18 +739,19 @@ export default function Contrivox() {
       <div style={{ minHeight:"100vh", background:COLORS.bg, backgroundImage:"radial-gradient(ellipse 65% 38% at 50% -4%, rgba(109,40,217,0.22) 0%, transparent 55%), radial-gradient(ellipse 35% 25% at 90% 90%, rgba(239,68,68,0.07) 0%, transparent 50%)" }}>
 
         {/* NAV */}
-        <nav style={{ position:"sticky", top:0, zIndex:90, backdropFilter:"blur(18px)", background:"rgba(7,7,15,0.84)", borderBottom:`0.5px solid ${COLORS.border}`, padding:"0 20px" }}>
+        <nav style={{ position:"sticky", top:0, zIndex:90, backdropFilter:"blur(18px)", background:COLORS.nav, borderBottom:`0.5px solid ${COLORS.border}`, padding:"0 20px" }}>
           <div style={{ maxWidth:920, margin:"0 auto", display:"flex", alignItems:"center", justifyContent:"space-between", height:58 }}>
             <ContrivoxLogo size={19}/>
             <div style={{ display:"flex", alignItems:"center", gap:8 }}>
+              <ThemeToggle />
               {account ? (
                 <>
-                  <button onClick={()=>setShowHist(true)} className="nav-link" style={{ padding:"6px 13px", fontSize:12, fontWeight:500, background:"rgba(255,255,255,0.06)", color:COLORS.muted, border:`0.5px solid ${COLORS.border}`, borderRadius:8, cursor:"pointer" }}>{t.nav_history}</button>
-                  <button onClick={()=>{ Analytics.signedOut(); saveAccount(null); setAccount(null); }} className="nav-link" style={{ padding:"6px 10px", fontSize:12, background:"none", color:"rgba(255,255,255,0.3)", border:"none", cursor:"pointer" }}>{t.signout}</button>
+                  <button onClick={()=>setShowHist(true)} className="nav-link" style={{ padding:"6px 13px", fontSize:12, fontWeight:500, background:COLORS.inputBg, color:COLORS.muted, border:`0.5px solid ${COLORS.border}`, borderRadius:8, cursor:"pointer" }}>{t.nav_history}</button>
+                  <button onClick={()=>{ Analytics.signedOut(); saveAccount(null); setAccount(null); }} className="nav-link" style={{ padding:"6px 10px", fontSize:12, background:"none", color:COLORS.faint, border:"none", cursor:"pointer" }}>{t.signout}</button>
                 </>
               ) : (
                 <>
-                  <button onClick={()=>{ Analytics.signInClicked(); setShowAuth(true); }} className="nav-link" style={{ padding:"6px 13px", fontSize:12, fontWeight:500, background:"rgba(255,255,255,0.06)", color:COLORS.muted, border:`0.5px solid ${COLORS.border}`, borderRadius:8, cursor:"pointer" }}>{t.nav_signin}</button>
+                  <button onClick={()=>{ Analytics.signInClicked(); setShowAuth(true); }} className="nav-link" style={{ padding:"6px 13px", fontSize:12, fontWeight:500, background:COLORS.inputBg, color:COLORS.muted, border:`0.5px solid ${COLORS.border}`, borderRadius:8, cursor:"pointer" }}>{t.nav_signin}</button>
                   <button onClick={()=>{ Analytics.ctaClicked("nav"); document.getElementById("upload-sec")?.scrollIntoView({behavior:"smooth"}); }} style={{ padding:"7px 16px", fontSize:12.5, fontWeight:700, background:COLORS.accentGrad, color:"white", border:"none", borderRadius:8, cursor:"pointer", animation:"glow 3s infinite", letterSpacing:"0.01em" }}>{t.nav_cta}</button>
                 </>
               )}
@@ -758,14 +766,14 @@ export default function Contrivox() {
               <span style={{ width:5, height:5, borderRadius:"50%", background:COLORS.danger, animation:"pulse 2s infinite", flexShrink:0 }}/>
               <span style={{ fontSize:10.5, fontWeight:700, color:"#f87171", letterSpacing:"0.08em", textTransform:"uppercase", fontFamily:"'DM Sans',sans-serif" }}>{t.hero_badge}</span>
             </div>
-            <h1 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(36px,7vw,66px)", color:"white", lineHeight:1.07, marginBottom:20, fontWeight:600 }}>
+            <h1 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(36px,7vw,66px)", color:COLORS.heading, lineHeight:1.07, marginBottom:20, fontWeight:600 }}>
               {t.hero_h1a}<br/>
               <em style={{ color:COLORS.danger, fontStyle:"italic" }}>{t.hero_h1b}</em>
             </h1>
             <p style={{ fontSize:"clamp(14.5px,1.9vw,17px)", color:COLORS.muted, lineHeight:1.76, maxWidth:500, margin:"0 auto 18px", fontFamily:"'DM Sans',sans-serif" }}>{t.hero_sub}</p>
             {/* Micro social proof */}
-            <p style={{ fontSize:12, color:"rgba(255,255,255,0.28)", marginBottom:36, fontFamily:"'DM Sans',sans-serif" }}>
-              Used by <span style={{ color:"rgba(255,255,255,0.5)", fontWeight:600 }}>12,400+</span> professionals to review contracts before signing
+            <p style={{ fontSize:12, color:COLORS.faint, marginBottom:36, fontFamily:"'DM Sans',sans-serif" }}>
+              Used by <span style={{ color:COLORS.muted, fontWeight:600 }}>12,400+</span> professionals to review contracts before signing
             </p>
             <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:8, maxWidth:520, margin:"0 auto" }}>
               {[[t.stat1v,t.stat1l],[t.stat2v,t.stat2l],[t.stat3v,t.stat3l]].map(([v,l],i)=>(
@@ -784,7 +792,7 @@ export default function Contrivox() {
             {[[t.fear1t,t.fear1b,"⚠️"],[t.fear2t,t.fear2b,"🔗"],[t.fear3t,t.fear3b,"🔄"]].map(([title,body,icon],i)=>(
               <div key={i} className="fear-card" style={{ background:"rgba(239,68,68,0.04)", border:"0.5px solid rgba(239,68,68,0.13)", borderRadius:14, padding:"22px 20px" }}>
                 <div style={{ fontSize:24, marginBottom:12 }}>{icon}</div>
-                <h3 style={{ fontFamily:"'Fraunces',serif", fontSize:17.5, color:"white", marginBottom:10, lineHeight:1.2, fontWeight:600 }}>{title}</h3>
+                <h3 style={{ fontFamily:"'Fraunces',serif", fontSize:17.5, color:COLORS.heading, marginBottom:10, lineHeight:1.2, fontWeight:600 }}>{title}</h3>
                 <p style={{ fontSize:13, color:COLORS.muted, lineHeight:1.7, fontFamily:"'DM Sans',sans-serif" }}>{body}</p>
               </div>
             ))}
@@ -794,10 +802,10 @@ export default function Contrivox() {
         {/* TRUST STRIP */}
         <section style={{ padding:"0 20px 52px" }}>
           <div style={{ maxWidth:820, margin:"0 auto" }}>
-            <p style={{ fontSize:11, color:"rgba(255,255,255,0.25)", textAlign:"center", letterSpacing:"0.07em", textTransform:"uppercase", fontFamily:"'DM Sans',sans-serif", marginBottom:16 }}>{t.trust_label}</p>
+            <p style={{ fontSize:11, color:COLORS.faint, textAlign:"center", letterSpacing:"0.07em", textTransform:"uppercase", fontFamily:"'DM Sans',sans-serif", marginBottom:16 }}>{t.trust_label}</p>
             <div style={{ display:"flex", flexWrap:"wrap", justifyContent:"center", gap:"8px 14px" }}>
               {t.trust_items.map((item,i)=>(
-                <span key={i} style={{ fontSize:12, color:"rgba(255,255,255,0.35)", fontFamily:"'DM Sans',sans-serif", padding:"5px 14px", background:"rgba(255,255,255,0.04)", border:"0.5px solid rgba(255,255,255,0.07)", borderRadius:20 }}>{item}</span>
+                <span key={i} style={{ fontSize:12, color:COLORS.muted, fontFamily:"'DM Sans',sans-serif", padding:"5px 14px", background:COLORS.surface, border:`0.5px solid ${COLORS.border}`, borderRadius:20 }}>{item}</span>
               ))}
             </div>
           </div>
@@ -807,7 +815,7 @@ export default function Contrivox() {
         <section id="upload-sec" style={{ padding:"0 20px 60px" }}>
           <div style={{ maxWidth:660, margin:"0 auto" }}>
             <div style={{ background:"rgba(255,255,255,0.024)", border:`0.5px solid ${COLORS.border}`, borderRadius:20, padding:"26px 24px", backdropFilter:"blur(12px)" }}>
-              <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:22, color:"white", marginBottom:4, fontWeight:600 }}>{t.upload_title}</h2>
+              <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:22, color:COLORS.heading, marginBottom:4, fontWeight:600 }}>{t.upload_title}</h2>
               <p style={{ fontSize:12, color:COLORS.muted, margin:"0 0 18px", fontFamily:"'DM Sans',sans-serif" }}>{t.upload_formats} · Any language</p>
 
               {/* ── MOBILE-FRIENDLY FILE PICKER ── */}
@@ -853,7 +861,7 @@ export default function Contrivox() {
                   }}
                 >
                   <div style={{ width:52, height:52, borderRadius:13, background:"rgba(139,92,246,0.12)", border:"0.5px solid rgba(139,92,246,0.25)", display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 13px", fontSize:22 }}>📄</div>
-                  <p style={{ fontSize:15, fontWeight:600, color:"rgba(255,255,255,0.82)", marginBottom:4, fontFamily:"'DM Sans',sans-serif" }}>{t.upload_drop}</p>
+                  <p style={{ fontSize:15, fontWeight:600, color:COLORS.text, marginBottom:4, fontFamily:"'DM Sans',sans-serif" }}>{t.upload_drop}</p>
                   <p style={{ fontSize:11.5, color:COLORS.faint, fontFamily:"'DM Sans',sans-serif", marginBottom:14 }}>{t.upload_or}</p>
                   <span style={{ display:"inline-block", padding:"9px 22px", fontSize:13, fontWeight:600, background:COLORS.accentGrad, color:"white", borderRadius:9, fontFamily:"'DM Sans',sans-serif", boxShadow:"0 2px 12px rgba(99,102,241,0.35)", pointerEvents:"none" }}>
                     Choose file
@@ -906,7 +914,7 @@ export default function Contrivox() {
                     ))}
                   </div>
                   <p style={{ fontSize:13, lineHeight:1.72, color:COLORS.muted, marginBottom:8, fontFamily:"'DM Sans',sans-serif" }}>{result.summary}</p>
-                  <p style={{ fontSize:12, color:"rgba(255,255,255,0.3)", fontStyle:"italic", fontFamily:"'DM Sans',sans-serif" }}>{result.score_reasoning}</p>
+                  <p style={{ fontSize:12, color:COLORS.faint, fontStyle:"italic", fontFamily:"'DM Sans',sans-serif" }}>{result.score_reasoning}</p>
                 </div>
               </div>
 
@@ -915,7 +923,7 @@ export default function Contrivox() {
                 <span style={{ fontSize:18, flexShrink:0 }}>💡</span>
                 <div>
                   <p style={{ fontSize:10, fontWeight:700, color:"#818cf8", letterSpacing:"0.09em", textTransform:"uppercase", marginBottom:5, fontFamily:"'DM Sans',sans-serif" }}>{t.rec_title}</p>
-                  <p style={{ fontSize:13, lineHeight:1.72, color:"rgba(200,195,255,0.85)", fontFamily:"'DM Sans',sans-serif" }}>{result.overall_recommendation}</p>
+                  <p style={{ fontSize:13, lineHeight:1.72, color:"var(--cvx-rec-text)", fontFamily:"'DM Sans',sans-serif" }}>{result.overall_recommendation}</p>
                 </div>
               </div>
 
@@ -953,7 +961,7 @@ export default function Contrivox() {
                   </div>
                 ))}
               </div>
-              <p style={{ marginTop:12, fontSize:11, color:"rgba(255,255,255,0.18)", textAlign:"center", fontFamily:"'DM Sans',sans-serif", lineHeight:1.6 }}>{result.disclaimer}</p>
+              <p style={{ marginTop:12, fontSize:11, color:COLORS.faint, textAlign:"center", fontFamily:"'DM Sans',sans-serif", lineHeight:1.6 }}>{result.disclaimer}</p>
             </div>
           </section>
         )}
@@ -961,14 +969,14 @@ export default function Contrivox() {
         {/* HOW IT WORKS */}
         <section style={{ padding:"72px 20px", background:"rgba(255,255,255,0.013)" }}>
           <div style={{ maxWidth:860, margin:"0 auto" }}>
-            <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(26px,4vw,40px)", color:"white", textAlign:"center", marginBottom:8, fontWeight:600 }}>{t.how_title}</h2>
+            <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(26px,4vw,40px)", color:COLORS.heading, textAlign:"center", marginBottom:8, fontWeight:600 }}>{t.how_title}</h2>
             <p style={{ fontSize:14, color:COLORS.muted, textAlign:"center", marginBottom:40, fontFamily:"'DM Sans',sans-serif" }}>60 seconds from upload to full report.</p>
             <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(210px,1fr))", gap:12 }}>
               {[["⬆",t.how1t,t.how1b,"01"],["🔍",t.how2t,t.how2b,"02"],["📋",t.how3t,t.how3b,"03"]].map(([icon,title,body,n],i)=>(
                 <div key={i} className="how-card" style={{ background:COLORS.surface, border:`0.5px solid ${COLORS.border}`, borderRadius:14, padding:"22px 20px", position:"relative" }}>
                   <div style={{ position:"absolute", top:18, right:18, fontSize:11, fontWeight:700, color:"rgba(139,92,246,0.4)", letterSpacing:"0.1em", fontFamily:"'DM Sans',sans-serif" }}>{n}</div>
                   <div style={{ fontSize:24, marginBottom:14 }}>{icon}</div>
-                  <h3 style={{ fontFamily:"'Fraunces',serif", fontSize:17, color:"white", marginBottom:7, lineHeight:1.25, fontWeight:600 }}>{title}</h3>
+                  <h3 style={{ fontFamily:"'Fraunces',serif", fontSize:17, color:COLORS.heading, marginBottom:7, lineHeight:1.25, fontWeight:600 }}>{title}</h3>
                   <p style={{ fontSize:12.5, color:COLORS.muted, lineHeight:1.7, fontFamily:"'DM Sans',sans-serif" }}>{body}</p>
                 </div>
               ))}
@@ -979,14 +987,14 @@ export default function Contrivox() {
         {/* TESTIMONIALS */}
         <section style={{ padding:"72px 20px" }}>
           <div style={{ maxWidth:900, margin:"0 auto" }}>
-            <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(26px,4vw,40px)", color:"white", textAlign:"center", marginBottom:8, fontWeight:600 }}>{t.test_title}</h2>
+            <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(26px,4vw,40px)", color:COLORS.heading, textAlign:"center", marginBottom:8, fontWeight:600 }}>{t.test_title}</h2>
             <p style={{ fontSize:14, color:COLORS.muted, textAlign:"center", marginBottom:40, fontFamily:"'DM Sans',sans-serif" }}>What people found in their contracts.</p>
             <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(250px,1fr))", gap:12 }}>
               {[[t.t1n,t.t1r,t.t1t],[t.t2n,t.t2r,t.t2t],[t.t3n,t.t3r,t.t3t]].map(([name,role,text],i)=>(
                 <div key={i} style={{ background:COLORS.surface, border:`0.5px solid ${COLORS.border}`, borderRadius:14, padding:"20px 18px", display:"flex", flexDirection:"column" }}>
                   <div style={{ marginBottom:12, color:"#f59e0b", fontSize:12, letterSpacing:"2px" }}>★★★★★</div>
-                  <p style={{ fontSize:13, color:"rgba(255,255,255,0.7)", lineHeight:1.74, marginBottom:16, fontStyle:"italic", fontFamily:"'DM Sans',sans-serif", flex:1 }}>"{text}"</p>
-                  <div style={{ borderTop:"0.5px solid rgba(255,255,255,0.06)", paddingTop:12 }}>
+                  <p style={{ fontSize:13, color:COLORS.text, lineHeight:1.74, marginBottom:16, fontStyle:"italic", fontFamily:"'DM Sans',sans-serif", flex:1 }}>"{text}"</p>
+                  <div style={{ borderTop:`0.5px solid ${COLORS.border}`, paddingTop:12 }}>
                     <p style={{ fontSize:13, fontWeight:600, color:COLORS.text, fontFamily:"'DM Sans',sans-serif", margin:"0 0 2px" }}>{name}</p>
                     <p style={{ fontSize:11, color:COLORS.muted, fontFamily:"'DM Sans',sans-serif", margin:0 }}>{role}</p>
                   </div>
@@ -999,7 +1007,7 @@ export default function Contrivox() {
         {/* FAQ */}
         <section style={{ padding:"72px 20px", background:"rgba(255,255,255,0.013)" }}>
           <div style={{ maxWidth:620, margin:"0 auto" }}>
-            <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(26px,4vw,38px)", color:"white", textAlign:"center", marginBottom:36, fontWeight:600 }}>{t.faq_title}</h2>
+            <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(26px,4vw,38px)", color:COLORS.heading, textAlign:"center", marginBottom:36, fontWeight:600 }}>{t.faq_title}</h2>
             <FaqItem q={t.faq1q} a={t.faq1a}/>
             <FaqItem q={t.faq2q} a={t.faq2a}/>
             <FaqItem q={t.faq3q} a={t.faq3a}/>
@@ -1012,18 +1020,18 @@ export default function Contrivox() {
         <section style={{ padding:"80px 20px", textAlign:"center", background:"rgba(99,102,241,0.05)", borderTop:"0.5px solid rgba(99,102,241,0.14)" }}>
           <div style={{ maxWidth:520, margin:"0 auto" }}>
             <ContrivoxLogo size={20}/>
-            <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(24px,4vw,40px)", color:"white", margin:"20px 0 10px", lineHeight:1.15, fontWeight:600 }}>{t.cta_band}</h2>
+            <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(24px,4vw,40px)", color:COLORS.heading, margin:"20px 0 10px", lineHeight:1.15, fontWeight:600 }}>{t.cta_band}</h2>
             <p style={{ fontSize:14, color:COLORS.muted, marginBottom:28, lineHeight:1.7, fontFamily:"'DM Sans',sans-serif" }}>
               The analysis is free. The full report is $3.99.<br/>
-              <span style={{ color:"rgba(255,255,255,0.38)" }}>No account required. No subscription.</span>
+              <span style={{ color:COLORS.faint }}>No account required. No subscription.</span>
             </p>
             <button onClick={()=>{ Analytics.ctaClicked("cta_band"); document.getElementById("upload-sec")?.scrollIntoView({behavior:"smooth"}); }} style={{ padding:"15px 36px", fontSize:15.5, fontWeight:700, background:COLORS.accentGrad, color:"white", border:"none", borderRadius:12, cursor:"pointer", fontFamily:"'DM Sans',sans-serif", boxShadow:"0 5px 30px rgba(99,102,241,0.38)", animation:"glow 3s infinite", letterSpacing:"0.01em" }}>
               Analyse My Contract — Free
             </button>
             <div style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:16, marginTop:14, flexWrap:"wrap" }}>
-              <span style={{ fontSize:11, color:"rgba(255,255,255,0.22)", fontFamily:"'DM Sans',sans-serif" }}>🔒 Private &amp; secure</span>
-              <span style={{ fontSize:11, color:"rgba(255,255,255,0.22)", fontFamily:"'DM Sans',sans-serif" }}>⚡ Results in 60 seconds</span>
-              <span style={{ fontSize:11, color:"rgba(255,255,255,0.22)", fontFamily:"'DM Sans',sans-serif" }}>🌍 Any language</span>
+              <span style={{ fontSize:11, color:COLORS.faint, fontFamily:"'DM Sans',sans-serif" }}>🔒 Private &amp; secure</span>
+              <span style={{ fontSize:11, color:COLORS.faint, fontFamily:"'DM Sans',sans-serif" }}>⚡ Results in 60 seconds</span>
+              <span style={{ fontSize:11, color:COLORS.faint, fontFamily:"'DM Sans',sans-serif" }}>🌍 Any language</span>
             </div>
           </div>
         </section>
@@ -1042,15 +1050,15 @@ export default function Contrivox() {
               { label:"legal@contrivox.com", href:"mailto:legal@contrivox.com" },
             ].map(({ label, href }, i, arr) => (
               <span key={href} style={{ display:"flex", alignItems:"center" }}>
-                <a href={href} style={{ fontSize:12, color:"rgba(255,255,255,0.55)", fontFamily:"'DM Sans',sans-serif", textDecoration:"none", padding:"3px 2px", transition:"color .15s" }}
-                  onMouseOver={e=>e.currentTarget.style.color="rgba(255,255,255,0.88)"}
-                  onMouseOut={e=>e.currentTarget.style.color="rgba(255,255,255,0.55)"}
+                <a href={href} style={{ fontSize:12, color:COLORS.muted, fontFamily:"'DM Sans',sans-serif", textDecoration:"none", padding:"3px 2px", transition:"color .15s" }}
+                  onMouseOver={e=>e.currentTarget.style.color="var(--cvx-heading)"}
+                  onMouseOut={e=>e.currentTarget.style.color="var(--cvx-muted)"}
                 >{label}</a>
                 {i < arr.length - 1 && <span style={{ color:"rgba(255,255,255,0.18)", fontSize:11, margin:"0 10px" }}>·</span>}
               </span>
             ))}
           </div>
-          <p style={{ fontSize:11, color:"rgba(255,255,255,0.18)", maxWidth:600, margin:"0 auto", lineHeight:1.6, fontFamily:"'DM Sans',sans-serif" }}>{t.disclaimer}</p>
+          <p style={{ fontSize:11, color:COLORS.faint, maxWidth:600, margin:"0 auto", lineHeight:1.6, fontFamily:"'DM Sans',sans-serif" }}>{t.disclaimer}</p>
         </footer>
       </div>
     </>

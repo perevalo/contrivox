@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { PostHogProvider } from "@/components/PostHogProvider";
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 const SITE = "https://contrivox.com";
 
@@ -65,15 +66,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" data-theme="dark" suppressHydrationWarning>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <link rel="icon" href="/favicon.ico" />
+        {/* Prevent theme flash: runs synchronously before first paint */}
+        <script dangerouslySetInnerHTML={{ __html: `try{var t=localStorage.getItem('cvx_theme');if(!t)t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t);}catch(e){}` }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareSchema) }} />
       </head>
       <body>
-        <PostHogProvider>{children}</PostHogProvider>
+        <ThemeProvider>
+          <PostHogProvider>{children}</PostHogProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

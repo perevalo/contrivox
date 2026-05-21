@@ -56,8 +56,8 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       {/* Breadcrumb */}
-      <nav style={{ fontSize: 12, color: "rgba(255,255,255,0.35)", marginBottom: 24 }}>
-        <a href="/blog" style={{ color: "rgba(255,255,255,0.35)", textDecoration: "none" }}>Blog</a>
+      <nav style={{ fontSize: 12, color: "var(--cvx-faint)", marginBottom: 24 }}>
+        <a href="/blog" style={{ color: "var(--cvx-faint)", textDecoration: "none" }}>Blog</a>
         {post.category && (
           <>
             <span style={{ margin: "0 6px" }}>›</span>
@@ -67,7 +67,7 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
           </>
         )}
         <span style={{ margin: "0 6px" }}>›</span>
-        <span style={{ color: "rgba(255,255,255,0.6)" }}>{post.title}</span>
+        <span style={{ color: "var(--cvx-muted)" }}>{post.title}</span>
       </nav>
 
       {/* Header */}
@@ -76,16 +76,16 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
           {post.category.name}
         </span>
       )}
-      <h1 style={{ fontFamily: "'Fraunces',serif", fontSize: "clamp(28px,5vw,44px)", color: "white", lineHeight: 1.1, margin: "12px 0 18px" }}>
+      <h1 style={{ fontFamily: "'Fraunces',serif", fontSize: "clamp(28px,5vw,44px)", color: "var(--cvx-heading)", lineHeight: 1.1, margin: "12px 0 18px" }}>
         {post.title}
       </h1>
-      <p style={{ fontSize: 17, color: "rgba(255,255,255,0.55)", lineHeight: 1.7, marginBottom: 24 }}>
+      <p style={{ fontSize: 17, color: "var(--cvx-muted)", lineHeight: 1.7, marginBottom: 24 }}>
         {post.excerpt}
       </p>
 
       {/* Meta */}
-      <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 32, paddingBottom: 24, borderBottom: "0.5px solid rgba(255,255,255,0.08)", fontSize: 13, color: "rgba(255,255,255,0.4)" }}>
-        <span style={{ fontWeight: 600, color: "rgba(255,255,255,0.7)" }}>Contrivox</span>
+      <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 32, paddingBottom: 24, borderBottom: "0.5px solid var(--cvx-border)", fontSize: 13, color: "var(--cvx-faint)" }}>
+        <span style={{ fontWeight: 600, color: "var(--cvx-text)" }}>Contrivox</span>
         <span>{formatDate(post.publishedAt)}</span>
         <span>·</span>
         <span>{post.readingTime} min read</span>
