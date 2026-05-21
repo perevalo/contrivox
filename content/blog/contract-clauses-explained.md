@@ -20,6 +20,9 @@ relatedArticles:
   - indemnification-clause-explained
   - what-is-an-nda
   - non-compete-clause-explained
+publishedAt: "2026-05-21"
+updatedAt: "2026-05-21"
+featured: false
 ctaPlacements:
   - After introduction
   - After force majeure section

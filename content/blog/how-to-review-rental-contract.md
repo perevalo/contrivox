@@ -17,6 +17,9 @@ suggestedFeaturedImage: "Person sitting at a table reviewing documents with a la
 relatedArticles:
   - termination-clause-explained
   - contract-clauses-explained
+publishedAt: "2026-05-19"
+updatedAt: "2026-05-19"
+featured: true
 ctaPlacements:
   - After introduction
   - After early termination section

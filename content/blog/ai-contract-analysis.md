@@ -19,6 +19,9 @@ relatedArticles:
   - contract-clauses-explained
   - employment-contract-red-flags
   - how-to-review-rental-contract
+publishedAt: "2026-05-21"
+updatedAt: "2026-05-21"
+featured: true
 ctaPlacements:
   - After introduction
   - After "How Contrivox Works" section

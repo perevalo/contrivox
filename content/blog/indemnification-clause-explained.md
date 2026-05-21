@@ -19,6 +19,9 @@ relatedArticles:
   - what-is-an-nda
   - contract-clauses-explained
   - service-agreement-review
+publishedAt: "2026-05-21"
+updatedAt: "2026-05-21"
+featured: false
 ctaPlacements:
   - After introduction
   - After red flags table

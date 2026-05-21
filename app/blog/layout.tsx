@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
-import { getAllCategories } from "@/lib/strapi";
+import { getAllCategories } from "@/lib/blog";
 
 export const metadata: Metadata = {
   title: { template: "%s — Contrivox Blog", default: "Contrivox Blog" },
   description: "Plain-English guides to employment contracts, NDAs, apartment leases, and freelance agreements.",
 };
 
-export default async function BlogLayout({ children }: { children: React.ReactNode }) {
-  const categories = await getAllCategories().catch(() => []);
+export default function BlogLayout({ children }: { children: React.ReactNode }) {
+  const categories = getAllCategories();
   return (
     <div style={{ minHeight: "100vh", background: "#07070f" }}>
       <nav style={{
@@ -23,8 +23,8 @@ export default async function BlogLayout({ children }: { children: React.ReactNo
           <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" as const }}>
             <a href="/blog" style={{ fontSize: 13, color: "rgba(255,255,255,0.6)", textDecoration: "none" }}>Blog</a>
             {categories.slice(0, 4).map(c => (
-              <a key={c.id} href={`/blog/category/${c.attributes.slug}`} style={{ fontSize: 12, color: "rgba(255,255,255,0.4)", textDecoration: "none" }}>
-                {c.attributes.name}
+              <a key={c.slug} href={`/blog/category/${c.slug}`} style={{ fontSize: 12, color: "rgba(255,255,255,0.4)", textDecoration: "none" }}>
+                {c.name}
               </a>
             ))}
             <a href="/#upload-sec" style={{ padding: "6px 14px", fontSize: 12, fontWeight: 700, background: "linear-gradient(135deg,#7c3aed,#4f46e5)", color: "white", borderRadius: 8, textDecoration: "none" }}>

@@ -19,6 +19,9 @@ relatedArticles:
   - employment-contract-red-flags
   - what-is-an-nda
   - contract-clauses-explained
+publishedAt: "2026-05-20"
+updatedAt: "2026-05-20"
+featured: false
 ctaPlacements:
   - After introduction
   - After "Can You Negotiate" section

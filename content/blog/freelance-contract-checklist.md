@@ -19,6 +19,9 @@ relatedArticles:
   - service-agreement-review
   - indemnification-clause-explained
   - termination-clause-explained
+publishedAt: "2026-05-21"
+updatedAt: "2026-05-21"
+featured: false
 ctaPlacements:
   - After introduction
   - After change orders section

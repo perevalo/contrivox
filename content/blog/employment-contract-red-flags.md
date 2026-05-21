@@ -18,6 +18,9 @@ relatedArticles:
   - non-compete-clause-explained
   - indemnification-clause-explained
   - contract-clauses-explained
+publishedAt: "2026-05-19"
+updatedAt: "2026-05-19"
+featured: true
 ctaPlacements:
   - After introduction
   - After arbitration section

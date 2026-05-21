@@ -19,6 +19,9 @@ relatedArticles:
   - termination-clause-explained
   - indemnification-clause-explained
   - freelance-contract-checklist
+publishedAt: "2026-05-20"
+updatedAt: "2026-05-20"
+featured: false
 ctaPlacements:
   - After introduction
   - After IP ownership section

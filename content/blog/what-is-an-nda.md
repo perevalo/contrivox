@@ -19,6 +19,9 @@ relatedArticles:
   - employment-contract-red-flags
   - indemnification-clause-explained
   - contract-clauses-explained
+publishedAt: "2026-05-20"
+updatedAt: "2026-05-20"
+featured: false
 ctaPlacements:
   - After introduction
   - After NDA red flags table

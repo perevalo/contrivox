@@ -7,7 +7,10 @@
       "Bash(npm install *)",
       "Bash(git push *)",
       "Bash(Get-ChildItem *)",
-      "Bash(Select-String \"jspdf|pdf\")"
+      "Bash(Select-String \"jspdf|pdf\")",
+      "Bash(node -e \"require\\('gray-matter'\\); require\\('marked'\\); console.log\\('OK'\\)\")",
+      "Bash(where pnpm *)",
+      "Bash(where yarn *)"
     ]
   }
 }
