@@ -408,16 +408,16 @@ function FlagCard({ flag, t }) {
 
 function PaywallOverlay({ t, onUnlock }) {
   return (
-    <div style={{ position:"absolute", bottom:0, left:0, right:0, top:"22%", background:COLORS.paywallGrad, borderRadius:"0 0 14px 14px", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"flex-end", paddingBottom:26, zIndex:10 }}>
-      <div style={{ textAlign:"center", padding:"0 20px" }}>
-        <p style={{ fontSize:16.5, fontWeight:600, color:"white", margin:"0 0 7px", fontFamily:"'Fraunces',serif" }}>{t.blur_title}</p>
-        <p style={{ fontSize:12.5, color:COLORS.muted, maxWidth:280, margin:"0 auto 16px", lineHeight:1.64, fontFamily:"'DM Sans',sans-serif" }}>{t.blur_sub}</p>
-        <button onClick={onUnlock} style={{ padding:"13px 28px", fontSize:14.5, fontWeight:700, background:COLORS.accentGrad, color:"white", border:"none", borderRadius:11, cursor:"pointer", fontFamily:"'DM Sans',sans-serif", boxShadow:"0 4px 28px rgba(99,102,241,0.5)", letterSpacing:"0.01em", display:"block", width:"100%", maxWidth:280, margin:"0 auto" }}>
+    <div style={{ position:"absolute", bottom:0, left:0, right:0, top:"8%", background:COLORS.paywallGrad, borderRadius:"0 0 14px 14px", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"flex-end", paddingBottom:26, zIndex:10 }}>
+      <div style={{ textAlign:"center", padding:"0 20px", background:"rgba(7,7,20,0.72)", borderRadius:16, margin:"0 12px 0", backdropFilter:"blur(8px)", border:"0.5px solid rgba(124,58,237,0.25)", padding:"22px 24px" }}>
+        <p style={{ fontSize:17, fontWeight:700, color:"white", margin:"0 0 7px", fontFamily:"'Fraunces',serif" }}>{t.blur_title}</p>
+        <p style={{ fontSize:12.5, color:"rgba(255,255,255,0.65)", maxWidth:290, margin:"0 auto 18px", lineHeight:1.64, fontFamily:"'DM Sans',sans-serif" }}>{t.blur_sub}</p>
+        <button onClick={onUnlock} style={{ padding:"14px 32px", fontSize:15, fontWeight:700, background:COLORS.accentGrad, color:"white", border:"none", borderRadius:11, cursor:"pointer", fontFamily:"'DM Sans',sans-serif", boxShadow:"0 4px 32px rgba(99,102,241,0.65)", letterSpacing:"0.01em", display:"block", width:"100%", maxWidth:300, margin:"0 auto" }}>
           {t.unlock_btn}
         </button>
-        <p style={{ marginTop:8, fontSize:11, color:"rgba(255,255,255,0.22)", fontFamily:"'DM Sans',sans-serif" }}>{t.unlock_sub}</p>
+        <p style={{ marginTop:9, fontSize:11, color:"rgba(255,255,255,0.35)", fontFamily:"'DM Sans',sans-serif" }}>{t.unlock_sub}</p>
         <div style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:14, marginTop:10 }}>
-          <span style={{ fontSize:10.5, color:"rgba(255,255,255,0.2)", fontFamily:"'DM Sans',sans-serif" }}>🔒 Secure payment</span>
+          <span style={{ fontSize:10.5, color:"rgba(255,255,255,0.28)", fontFamily:"'DM Sans',sans-serif" }}>🔒 Secure payment</span>
           <span style={{ fontSize:10.5, color:"rgba(255,255,255,0.2)", fontFamily:"'DM Sans',sans-serif" }}>⚡ Instant access</span>
         </div>
       </div>
@@ -942,7 +942,7 @@ export default function Contrivox() {
                     <span style={{ fontSize:11, color:COLORS.faint, fontFamily:"'DM Sans',sans-serif" }}>
                       {t.showing} {
                         tab==="clauses"?Math.min(CLAUSE_PREVIEW,result.key_clauses?.length||0):
-                        tab==="flags"?Math.min(FLAG_PREVIEW,result.red_flags?.length||0):
+                        tab==="flags"?(result.red_flags||[]).filter(f=>f.urgency!=="high").length:
                         Math.min(MISSING_PREVIEW,result.missing_protections?.length||0)
                       } {t.of} {
                         tab==="clauses"?result.key_clauses?.length:
@@ -953,7 +953,14 @@ export default function Contrivox() {
                   </div>
                 )}
                 {tab==="clauses" && renderPaywalled(result.key_clauses, CLAUSE_PREVIEW,  (c,i) => <ClauseCard key={i} clause={c} t={t}/>)}
-                {tab==="flags"   && renderPaywalled(result.red_flags,   FLAG_PREVIEW,    (f,i) => <FlagCard   key={i} flag={f}   t={t}/>)}
+                {tab==="flags"   && (()=>{
+                  const sorted = [...(result.red_flags||[])].sort((a,b)=>{
+                    const o={high:2,medium:1,low:0};
+                    return (o[a.urgency]??1)-(o[b.urgency]??1);
+                  });
+                  const freeCount = sorted.filter(f=>f.urgency!=="high").length;
+                  return renderPaywalled(sorted, freeCount, (f,i)=><FlagCard key={i} flag={f} t={t}/>);
+                })()}
                 {tab==="missing" && renderPaywalled(result.missing_protections, MISSING_PREVIEW, (m,i) => (
                   <div key={i} style={{ display:"flex", gap:9, padding:"10px 12px", marginBottom:7, background:"rgba(245,158,11,0.05)", border:"0.5px solid rgba(245,158,11,0.15)", borderRadius:9 }}>
                     <span style={{ color:"#fbbf24", flexShrink:0 }}>⚠</span>

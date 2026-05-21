@@ -41,8 +41,8 @@ export const analyseInputSchema = z.object({
 
 export const checkoutInputSchema = z.object({
   plan:      z.enum(["starter", "bundle", "pro", "annual"]),
-  userId:    z.string().uuid().optional(),
-  sessionId: z.string().uuid().optional(),
+  userId:    z.string().uuid().nullish(),
+  sessionId: z.string().uuid().nullish(),
 });
 
 export const contractCreateSchema = z.object({
