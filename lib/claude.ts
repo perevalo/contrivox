@@ -103,9 +103,12 @@ export async function previewContract(payload: FilePayload): Promise<ContractPre
     userContent = `Scan this contract and return ONLY this JSON:\n{"contract_type":"type in plain English e.g. Employment Agreement","high_risk_count":<integer: non-competes + mandatory arbitration + broad IP assignment + clawback + unilateral modification>,"flagged_count":<integer: other clauses worth reviewing>,"page_estimate":<integer: estimated pages 1-50>}\n\nContract:\n${payload.text.slice(0, 60000)}`;
   }
 
+  // PDFs need sonnet — haiku misreads them and returns error strings as contract_type
+  const model = payload.type === "pdf" ? "claude-sonnet-4-6" : "claude-haiku-4-5-20251001";
+
   try {
     const message = await client.messages.create({
-      model: "claude-haiku-4-5-20251001",
+      model,
       max_tokens: 256,
       system: PREVIEW_SYSTEM,
       messages: [{ role: "user", content: userContent }],
@@ -118,8 +121,13 @@ export async function previewContract(payload: FilePayload): Promise<ContractPre
       .trim();
 
     const parsed = JSON.parse(raw);
+
+    const rawType = String(parsed.contract_type || "").toLowerCase();
+    const badType = /unable|cannot|corrupt|encrypt|error|unknown|n\/a|not (a |be |determine)/i.test(rawType);
+    const contract_type = badType || !rawType ? "Contract" : String(parsed.contract_type).slice(0, 200);
+
     return {
-      contract_type:   String(parsed.contract_type  || "Contract").slice(0, 200),
+      contract_type,
       high_risk_count: Math.max(0, Math.min(20, parseInt(String(parsed.high_risk_count)) || 0)),
       flagged_count:   Math.max(0, Math.min(20, parseInt(String(parsed.flagged_count))   || 0)),
       page_estimate:   Math.max(1, Math.min(50, parseInt(String(parsed.page_estimate))   || 1)),
