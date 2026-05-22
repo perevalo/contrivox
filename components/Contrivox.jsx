@@ -368,18 +368,13 @@ const IconDownload = ({size=13,color="currentColor"}) => (
 // ─── Logo ─────────────────────────────────────────────────────────────────────
 function ContrivoxLogo({ size=22 }) {
   return (
-    <div style={{ display:"flex", alignItems:"center", gap:8 }}>
-      <svg width={size*1.4} height={size*1.4} viewBox="0 0 36 36" fill="none" aria-hidden="true">
-        <rect width="36" height="36" rx="9" fill="url(#lg)"/>
-        <defs><linearGradient id="lg" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#7c3aed"/><stop offset="100%" stopColor="#4f46e5"/>
-        </linearGradient></defs>
-        <path d="M10 12h16M10 18h10M10 24h13" stroke="white" strokeWidth="2.2" strokeLinecap="round"/>
-        <circle cx="26" cy="24" r="4" fill="#ef4444"/>
-        <path d="M24.5 24l1 1 2-2" stroke="white" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
-      </svg>
-      <span style={{ fontFamily:"'Fraunces',serif", fontSize:size, color:COLORS.heading, letterSpacing:"-0.02em", fontWeight:600 }}>Contrivox</span>
-    </div>
+    <img
+      src="/logo.png"
+      alt="Contrivox"
+      width={Math.round(size * 5)}
+      height={Math.round(size * 1.4)}
+      style={{ height: size * 1.4, width: "auto", display: "block" }}
+    />
   );
 }
 

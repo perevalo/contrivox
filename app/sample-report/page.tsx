@@ -201,8 +201,9 @@ export default function SampleReportPage() {
         padding: "0 24px",
       }}>
         <div style={{ maxWidth: 1100, margin: "0 auto", height: 60, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <Link href="/" style={{ fontWeight: 800, fontSize: 20, letterSpacing: -0.5, color: "var(--fg)", textDecoration: "none" }}>
-            Contrivox
+          <Link href="/" style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logo.png" alt="Contrivox" style={{ height: 28, width: "auto" }} />
           </Link>
           <Link href="/" style={{
             padding: "8px 20px",
