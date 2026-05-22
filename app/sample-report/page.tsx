@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Logo } from "@/components/Logo";
 
 export const metadata: Metadata = {
   title: "Sample Contract Analysis Report — Contrivox",
@@ -177,8 +178,7 @@ export default function SampleReportPage() {
       }}>
         <div style={{ maxWidth: 1100, margin: "0 auto", height: 60, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <Link href="/" style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/logo.png" alt="Contrivox" style={{ height: 26, width: "auto" }} />
+            <Logo height={26} />
           </Link>
           <Link href="/" style={{
             padding: "9px 20px",
