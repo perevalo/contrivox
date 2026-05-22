@@ -104,7 +104,7 @@ export async function previewContract(payload: FilePayload): Promise<ContractPre
   }
 
   // PDFs need sonnet — haiku misreads them and returns error strings as contract_type
-  const model = payload.type === "pdf" ? "claude-sonnet-4-6" : "claude-haiku-4-5-20251001";
+  const model = payload.type === "pdf" ? "claude-sonnet-4-20250514" : "claude-haiku-4-5-20251001";
 
   try {
     const message = await client.messages.create({
@@ -132,7 +132,8 @@ export async function previewContract(payload: FilePayload): Promise<ContractPre
       flagged_count:   Math.max(0, Math.min(20, parseInt(String(parsed.flagged_count))   || 0)),
       page_estimate:   Math.max(1, Math.min(50, parseInt(String(parsed.page_estimate))   || 1)),
     };
-  } catch {
+  } catch (err) {
+    console.error("[previewContract] error:", err instanceof Error ? err.message : String(err));
     return { contract_type: "Contract", high_risk_count: 0, flagged_count: 0, page_estimate: 1 };
   }
 }
