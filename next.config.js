@@ -20,14 +20,14 @@ const securityHeaders = [
       // unsafe-inline required by Next.js 14 App Router hydration scripts.
       // unsafe-eval removed — nothing in this app needs it.
       // All third-party scripts (jsPDF, PostHog) are bundled via npm — no CDN needed.
-      "script-src 'self' 'unsafe-inline'",
+      "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com",
       // unsafe-inline required for inline <style> blocks used by the UI component.
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com",
       "img-src 'self' data: blob:",
       // Browser never talks to Anthropic — Claude calls are server-side only.
       // Stripe connect-src is needed for risk signals on their hosted checkout page.
-      "connect-src 'self' https://*.supabase.co https://api.stripe.com https://us.i.posthog.com https://eu.i.posthog.com https://app.posthog.com",
+      "connect-src 'self' https://*.supabase.co https://api.stripe.com https://us.i.posthog.com https://eu.i.posthog.com https://app.posthog.com https://www.google-analytics.com https://analytics.google.com https://region1.google-analytics.com",
       "frame-src https://js.stripe.com https://hooks.stripe.com",
       "worker-src 'none'",
       "object-src 'none'",
