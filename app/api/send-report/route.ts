@@ -45,6 +45,5 @@ export async function POST(req: NextRequest) {
     acquisition_source: refSource,
   });
 
-  console.log(`[send-report] ✓ sent resend_id=${id}`);
   return NextResponse.json({ ok: true });
 }

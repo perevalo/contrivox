@@ -44,7 +44,6 @@ export async function POST(req: NextRequest) {
       success_url:  `${baseUrl}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url:   `${baseUrl}/#upload-sec`,
       allow_promotion_codes: true,
-      automatic_tax: { enabled: true },
       customer_creation: "always",
     });
 

@@ -1,4 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
+import { ZodError } from "zod";
 import { ContrivoxAnalysisSchema, type ContrivoxAnalysis } from "./validation";
 
 // Singleton — instantiated once, reused across requests
@@ -128,12 +129,6 @@ export async function analyseContract(
       messages: [{ role: "user", content: userContent }],
     });
 
-    // Log token usage for cost tracking (no content logged)
-    console.log("[claude] tokens:", {
-      input: message.usage.input_tokens,
-      output: message.usage.output_tokens,
-    });
-
     const raw = message.content
       .map((b) => (b.type === "text" ? b.text : ""))
       .join("")
@@ -148,7 +143,7 @@ export async function analyseContract(
       if (err.status === 529) throw new AppError("overloaded", 503);
       throw new AppError("api_error", 502);
     }
-    if (err instanceof SyntaxError) throw new AppError("parse_error", 502);
+    if (err instanceof SyntaxError || err instanceof ZodError) throw new AppError("parse_error", 502);
     throw new AppError("unknown", 500);
   }
 }

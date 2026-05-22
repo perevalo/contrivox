@@ -1,9 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createSupabaseServiceClient } from "@/lib/supabase/server";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 
 export async function GET(req: NextRequest) {
+  const limited = await checkRateLimit(req, "contractStatus");
+  if (limited) return limited;
+
   const stripeSession = req.nextUrl.searchParams.get("stripe_session");
   if (!stripeSession) {
     return NextResponse.json({ error: "Missing stripe_session" }, { status: 400 });

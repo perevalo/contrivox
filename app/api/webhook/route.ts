@@ -63,7 +63,6 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    console.log(`[webhook] ✓ payment recorded session=${session.id} credits=${credits}`);
 
     const ph = getPostHogServer();
     const distinctId = userId ?? session.customer_details?.email ?? session.id;
@@ -166,8 +165,6 @@ async function triggerRealAnalysis(contractSessionId: string, customerEmail: str
     console.error("[analysis] db update error:", updateError.message);
   }
 
-  console.log(`[analysis] ✓ real analysis done for session=${contractSessionId}`);
-
   if (customerEmail) {
     const { error: emailError } = await sendReportEmail({
       to:       customerEmail,
@@ -176,8 +173,6 @@ async function triggerRealAnalysis(contractSessionId: string, customerEmail: str
     });
     if (emailError) {
       console.error("[analysis] email error:", emailError);
-    } else {
-      console.log(`[analysis] ✓ report emailed to hashed=${customerEmail.slice(0, 3)}***`);
     }
   }
 }

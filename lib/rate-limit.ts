@@ -7,9 +7,10 @@ let _limiters: ReturnType<typeof buildLimiters> | null = null;
 
 function buildLimiters(redis: Redis) {
   return {
-    analyse:        new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(5,   "1h"), prefix: "cvx:analyse" }),
-    contractCreate: new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(5,   "1h"), prefix: "cvx:contract-create" }),
-    checkout:   new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(10,  "1h"), prefix: "cvx:checkout" }),
+    analyse:        new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(5,   "1h"),  prefix: "cvx:analyse" }),
+    contractCreate: new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(5,   "1h"),  prefix: "cvx:contract-create" }),
+    contractStatus: new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(60,  "1h"),  prefix: "cvx:contract-status" }),
+    checkout:       new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(10,  "1h"),  prefix: "cvx:checkout" }),
     sendReport: new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(20,  "1h"), prefix: "cvx:send-report" }),
     subscribe:  new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(5,   "1h"), prefix: "cvx:subscribe" }),
     contact:    new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(5,   "1h"), prefix: "cvx:contact" }),
@@ -51,7 +52,5 @@ export async function checkRateLimit(
     );
   }
 
-  // Allow — attach remaining header for debugging
-  console.log(`[rate-limit] ${key} ip=${ip} remaining=${remaining}`);
   return null;
 }
