@@ -10,7 +10,9 @@
       "Bash(Select-String \"jspdf|pdf\")",
       "Bash(node -e \"require\\('gray-matter'\\); require\\('marked'\\); console.log\\('OK'\\)\")",
       "Bash(where pnpm *)",
-      "Bash(where yarn *)"
+      "Bash(where yarn *)",
+      "Bash(node *)",
+      "Bash(Select-Object -ExpandProperty FullName)"
     ]
   }
 }
