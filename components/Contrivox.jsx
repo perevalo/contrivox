@@ -56,7 +56,7 @@ const T = {
     send_email: "Send to Email", send_wa: "Send via WhatsApp",
     sending: "Sending…", sent_email: "✓ Sent to your email!", sent_wa: "✓ Sent via WhatsApp!",
     send_error: "Could not send. Please try again.",
-    download_pdf: "⬇ Download PDF",
+    download_pdf: "Download PDF",
     rec_title: "Our recommendation", score_why: "Why this score",
     risk_high: "High risk", risk_med: "Medium risk", risk_low: "Low risk",
     challenge_btn: "How to negotiate this →", challenge_hide: "Hide",
@@ -310,6 +310,81 @@ const COLORS = {
   inputBg:     "var(--cvx-input-bg)",
 };
 
+// ─── SVG Icons ────────────────────────────────────────────────────────────────
+const IconAlertTriangle = ({size=20,color="currentColor"}) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+    <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+  </svg>
+);
+const IconShieldOff = ({size=20,color="currentColor"}) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M19.69 14a6.9 6.9 0 0 0 .31-2V5l-8-3-3.16 1.18"/>
+    <path d="M4.73 4.73L4 5v7c0 6 8 10 8 10a20.29 20.29 0 0 0 5.62-4.38"/>
+    <line x1="1" y1="1" x2="23" y2="23"/>
+  </svg>
+);
+const IconClock = ({size=20,color="currentColor"}) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+  </svg>
+);
+const IconUpload = ({size=20,color="currentColor"}) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+    <polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+  </svg>
+);
+const IconSearch = ({size=20,color="currentColor"}) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+  </svg>
+);
+const IconClipboard = ({size=20,color="currentColor"}) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+    <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+    <line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="15" y2="16"/>
+  </svg>
+);
+const IconFileDoc = ({size=24,color="currentColor"}) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+    <polyline points="14 2 14 8 20 8"/>
+    <line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+    <polyline points="10 9 9 9 8 9"/>
+  </svg>
+);
+const IconLightbulb = ({size=16,color="currentColor"}) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/>
+    <path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/>
+  </svg>
+);
+const IconLock = ({size=13,color="currentColor"}) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+  </svg>
+);
+const IconZap = ({size=13,color="currentColor"}) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+  </svg>
+);
+const IconGlobe = ({size=13,color="currentColor"}) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/>
+    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+  </svg>
+);
+const IconDownload = ({size=13,color="currentColor"}) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+    <polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+  </svg>
+);
+
 function ContrivoxLogo({ size=22 }) {
   return (
     <div style={{ display:"flex", alignItems:"center", gap:8 }}>
@@ -417,8 +492,8 @@ function PaywallOverlay({ t, onUnlock }) {
         </button>
         <p style={{ marginTop:9, fontSize:11, color:"rgba(255,255,255,0.35)", fontFamily:"'DM Sans',sans-serif" }}>{t.unlock_sub}</p>
         <div style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:14, marginTop:10 }}>
-          <span style={{ fontSize:10.5, color:"rgba(255,255,255,0.28)", fontFamily:"'DM Sans',sans-serif" }}>🔒 Secure payment</span>
-          <span style={{ fontSize:10.5, color:"rgba(255,255,255,0.2)", fontFamily:"'DM Sans',sans-serif" }}>⚡ Instant access</span>
+          <span style={{ display:"flex", alignItems:"center", gap:4, fontSize:10.5, color:"rgba(255,255,255,0.28)", fontFamily:"'DM Sans',sans-serif" }}><IconLock size={10} color="currentColor"/> Secure payment</span>
+          <span style={{ display:"flex", alignItems:"center", gap:4, fontSize:10.5, color:"rgba(255,255,255,0.2)", fontFamily:"'DM Sans',sans-serif" }}><IconZap size={10} color="currentColor"/> Instant access</span>
         </div>
       </div>
     </div>
@@ -471,7 +546,7 @@ function DeliveryPanel({ result, t, pdfUri }) {
       </div>
       {pdfUri && (
         <a href={pdfUri} download="Contrivox-Report.pdf" onClick={()=>Analytics.pdfDownloaded()} style={{ display:"inline-flex", alignItems:"center", gap:5, marginTop:13, fontSize:12, color:"rgba(167,139,250,0.75)", fontFamily:"'DM Sans',sans-serif", textDecoration:"underline" }}>
-          {t.download_pdf}
+          <IconDownload size={12} color="currentColor"/> {t.download_pdf}
         </a>
       )}
     </div>
@@ -789,13 +864,22 @@ export default function Contrivox() {
         {/* FEAR SECTION */}
         <section style={{ padding:"0 20px 72px" }}>
           <div style={{ maxWidth:900, margin:"0 auto", display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(250px,1fr))", gap:12 }}>
-            {[[t.fear1t,t.fear1b,"⚠️"],[t.fear2t,t.fear2b,"🔗"],[t.fear3t,t.fear3b,"🔄"]].map(([title,body,icon],i)=>(
-              <div key={i} className="fear-card" style={{ background:"rgba(239,68,68,0.04)", border:"0.5px solid rgba(239,68,68,0.13)", borderRadius:14, padding:"22px 20px" }}>
-                <div style={{ fontSize:24, marginBottom:12 }}>{icon}</div>
-                <h3 style={{ fontFamily:"'Fraunces',serif", fontSize:17.5, color:COLORS.heading, marginBottom:10, lineHeight:1.2, fontWeight:600 }}>{title}</h3>
-                <p style={{ fontSize:13, color:COLORS.muted, lineHeight:1.7, fontFamily:"'DM Sans',sans-serif" }}>{body}</p>
-              </div>
-            ))}
+            {[[t.fear1t,t.fear1b],[t.fear2t,t.fear2b],[t.fear3t,t.fear3b]].map(([title,body],i)=>{
+              const fearIcons = [
+                <IconAlertTriangle size={18} color="#f87171"/>,
+                <IconShieldOff size={18} color="#f87171"/>,
+                <IconClock size={18} color="#f87171"/>,
+              ];
+              return (
+                <div key={i} className="fear-card" style={{ background:"rgba(239,68,68,0.04)", border:"0.5px solid rgba(239,68,68,0.13)", borderRadius:14, padding:"22px 20px" }}>
+                  <div style={{ width:38, height:38, borderRadius:9, background:"rgba(239,68,68,0.09)", border:"0.5px solid rgba(239,68,68,0.18)", display:"flex", alignItems:"center", justifyContent:"center", marginBottom:16 }}>
+                    {fearIcons[i]}
+                  </div>
+                  <h3 style={{ fontFamily:"'Fraunces',serif", fontSize:17.5, color:COLORS.heading, marginBottom:10, lineHeight:1.2, fontWeight:600 }}>{title}</h3>
+                  <p style={{ fontSize:13, color:COLORS.muted, lineHeight:1.7, fontFamily:"'DM Sans',sans-serif" }}>{body}</p>
+                </div>
+              );
+            })}
           </div>
         </section>
 
@@ -831,13 +915,15 @@ export default function Contrivox() {
               {file ? (
                 /* File chosen — show file card */
                 <div style={{ background:"rgba(34,197,94,0.06)", border:"0.5px solid rgba(34,197,94,0.3)", borderRadius:13, padding:"18px 16px", display:"flex", alignItems:"center", gap:14, marginBottom:18 }}>
-                  <div style={{ fontSize:32, flexShrink:0 }}>📄</div>
+                  <div style={{ width:44, height:44, borderRadius:10, background:"rgba(34,197,94,0.1)", border:"0.5px solid rgba(34,197,94,0.2)", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
+                    <IconFileDoc size={20} color="#4ade80"/>
+                  </div>
                   <div style={{ flex:1, minWidth:0 }}>
                     <p style={{ fontSize:14, fontWeight:600, color:"#4ade80", margin:"0 0 3px", fontFamily:"'DM Sans',sans-serif", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{file.name}</p>
                     <p style={{ fontSize:11, color:COLORS.muted, margin:0, fontFamily:"'DM Sans',sans-serif" }}>{(file.size/1024).toFixed(0)} KB · {file.name.split(".").pop().toUpperCase()}</p>
                   </div>
                   <button
-                    onClick={()=>{ setFile(null); setResult(null); setAutoSentTo(null); }}
+                    onClick={()=>{ setFile(null); setResult(null); }}
                     style={{ background:"rgba(239,68,68,0.12)", border:"0.5px solid rgba(239,68,68,0.25)", color:"#f87171", borderRadius:8, padding:"6px 12px", fontSize:12, cursor:"pointer", fontFamily:"'DM Sans',sans-serif", flexShrink:0 }}
                   >✕</button>
                 </div>
@@ -860,7 +946,9 @@ export default function Contrivox() {
                     touchAction:"manipulation", userSelect:"none",
                   }}
                 >
-                  <div style={{ width:52, height:52, borderRadius:13, background:"rgba(139,92,246,0.12)", border:"0.5px solid rgba(139,92,246,0.25)", display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 13px", fontSize:22 }}>📄</div>
+                  <div style={{ width:52, height:52, borderRadius:13, background:"rgba(139,92,246,0.12)", border:"0.5px solid rgba(139,92,246,0.25)", display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 13px" }}>
+                    <IconFileDoc size={24} color="rgba(167,139,250,0.85)"/>
+                  </div>
                   <p style={{ fontSize:15, fontWeight:600, color:COLORS.text, marginBottom:4, fontFamily:"'DM Sans',sans-serif" }}>{t.upload_drop}</p>
                   <p style={{ fontSize:11.5, color:COLORS.faint, fontFamily:"'DM Sans',sans-serif", marginBottom:14 }}>{t.upload_or}</p>
                   <span style={{ display:"inline-block", padding:"9px 22px", fontSize:13, fontWeight:600, background:COLORS.accentGrad, color:"white", borderRadius:9, fontFamily:"'DM Sans',sans-serif", boxShadow:"0 2px 12px rgba(99,102,241,0.35)", pointerEvents:"none" }}>
@@ -920,7 +1008,9 @@ export default function Contrivox() {
 
               {/* Recommendation */}
               <div style={{ background:"rgba(99,102,241,0.07)", border:"0.5px solid rgba(99,102,241,0.2)", borderRadius:13, padding:"15px 17px", marginBottom:12, display:"flex", gap:12, alignItems:"flex-start" }}>
-                <span style={{ fontSize:18, flexShrink:0 }}>💡</span>
+                <div style={{ width:30, height:30, borderRadius:7, background:"rgba(99,102,241,0.14)", border:"0.5px solid rgba(99,102,241,0.22)", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
+                  <IconLightbulb size={14} color="#818cf8"/>
+                </div>
                 <div>
                   <p style={{ fontSize:10, fontWeight:700, color:"#818cf8", letterSpacing:"0.09em", textTransform:"uppercase", marginBottom:5, fontFamily:"'DM Sans',sans-serif" }}>{t.rec_title}</p>
                   <p style={{ fontSize:13, lineHeight:1.72, color:"var(--cvx-rec-text)", fontFamily:"'DM Sans',sans-serif" }}>{result.overall_recommendation}</p>
@@ -963,7 +1053,7 @@ export default function Contrivox() {
                 })()}
                 {tab==="missing" && renderPaywalled(result.missing_protections, MISSING_PREVIEW, (m,i) => (
                   <div key={i} style={{ display:"flex", gap:9, padding:"10px 12px", marginBottom:7, background:"rgba(245,158,11,0.05)", border:"0.5px solid rgba(245,158,11,0.15)", borderRadius:9 }}>
-                    <span style={{ color:"#fbbf24", flexShrink:0 }}>⚠</span>
+                    <span style={{ color:"#fbbf24", flexShrink:0, display:"flex", paddingTop:1 }}><IconAlertTriangle size={14} color="#fbbf24"/></span>
                     <p style={{ fontSize:13, color:"rgba(255,255,255,0.68)", lineHeight:1.65, margin:0, fontFamily:"'DM Sans',sans-serif" }}>{m}</p>
                   </div>
                 ))}
@@ -979,14 +1069,23 @@ export default function Contrivox() {
             <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(26px,4vw,40px)", color:COLORS.heading, textAlign:"center", marginBottom:8, fontWeight:600 }}>{t.how_title}</h2>
             <p style={{ fontSize:14, color:COLORS.muted, textAlign:"center", marginBottom:40, fontFamily:"'DM Sans',sans-serif" }}>60 seconds from upload to full report.</p>
             <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(210px,1fr))", gap:12 }}>
-              {[["⬆",t.how1t,t.how1b,"01"],["🔍",t.how2t,t.how2b,"02"],["📋",t.how3t,t.how3b,"03"]].map(([icon,title,body,n],i)=>(
-                <div key={i} className="how-card" style={{ background:COLORS.surface, border:`0.5px solid ${COLORS.border}`, borderRadius:14, padding:"22px 20px", position:"relative" }}>
-                  <div style={{ position:"absolute", top:18, right:18, fontSize:11, fontWeight:700, color:"rgba(139,92,246,0.4)", letterSpacing:"0.1em", fontFamily:"'DM Sans',sans-serif" }}>{n}</div>
-                  <div style={{ fontSize:24, marginBottom:14 }}>{icon}</div>
-                  <h3 style={{ fontFamily:"'Fraunces',serif", fontSize:17, color:COLORS.heading, marginBottom:7, lineHeight:1.25, fontWeight:600 }}>{title}</h3>
-                  <p style={{ fontSize:12.5, color:COLORS.muted, lineHeight:1.7, fontFamily:"'DM Sans',sans-serif" }}>{body}</p>
-                </div>
-              ))}
+              {[[t.how1t,t.how1b,"01"],[t.how2t,t.how2b,"02"],[t.how3t,t.how3b,"03"]].map(([title,body,n],i)=>{
+                const howIcons = [
+                  <IconUpload size={18} color="rgba(167,139,250,0.9)"/>,
+                  <IconSearch size={18} color="rgba(167,139,250,0.9)"/>,
+                  <IconClipboard size={18} color="rgba(167,139,250,0.9)"/>,
+                ];
+                return (
+                  <div key={i} className="how-card" style={{ background:COLORS.surface, border:`0.5px solid ${COLORS.border}`, borderRadius:14, padding:"22px 20px", position:"relative" }}>
+                    <div style={{ position:"absolute", top:18, right:18, fontSize:11, fontWeight:700, color:"rgba(139,92,246,0.4)", letterSpacing:"0.1em", fontFamily:"'DM Sans',sans-serif" }}>{n}</div>
+                    <div style={{ width:38, height:38, borderRadius:9, background:"rgba(139,92,246,0.1)", border:"0.5px solid rgba(139,92,246,0.2)", display:"flex", alignItems:"center", justifyContent:"center", marginBottom:16 }}>
+                      {howIcons[i]}
+                    </div>
+                    <h3 style={{ fontFamily:"'Fraunces',serif", fontSize:17, color:COLORS.heading, marginBottom:7, lineHeight:1.25, fontWeight:600 }}>{title}</h3>
+                    <p style={{ fontSize:12.5, color:COLORS.muted, lineHeight:1.7, fontFamily:"'DM Sans',sans-serif" }}>{body}</p>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </section>
@@ -1036,9 +1135,9 @@ export default function Contrivox() {
               Analyse My Contract — Free
             </button>
             <div style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:16, marginTop:14, flexWrap:"wrap" }}>
-              <span style={{ fontSize:11, color:COLORS.faint, fontFamily:"'DM Sans',sans-serif" }}>🔒 Private &amp; secure</span>
-              <span style={{ fontSize:11, color:COLORS.faint, fontFamily:"'DM Sans',sans-serif" }}>⚡ Results in 60 seconds</span>
-              <span style={{ fontSize:11, color:COLORS.faint, fontFamily:"'DM Sans',sans-serif" }}>🌍 Any language</span>
+              <span style={{ display:"flex", alignItems:"center", gap:5, fontSize:11, color:COLORS.faint, fontFamily:"'DM Sans',sans-serif" }}><IconLock size={11} color="currentColor"/> Private &amp; secure</span>
+              <span style={{ display:"flex", alignItems:"center", gap:5, fontSize:11, color:COLORS.faint, fontFamily:"'DM Sans',sans-serif" }}><IconZap size={11} color="currentColor"/> Results in 60 seconds</span>
+              <span style={{ display:"flex", alignItems:"center", gap:5, fontSize:11, color:COLORS.faint, fontFamily:"'DM Sans',sans-serif" }}><IconGlobe size={11} color="currentColor"/> Any language</span>
             </div>
           </div>
         </section>
