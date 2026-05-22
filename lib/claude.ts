@@ -77,6 +77,58 @@ export type FilePayload =
   | { type: "pdf";   data: string }
   | { type: "text";  text: string };
 
+export type ContractPreview = {
+  contract_type: string;
+  high_risk_count: number;
+  flagged_count: number;
+  page_estimate: number;
+};
+
+const PREVIEW_SYSTEM = `You are a contract classifier. Return ONLY a valid JSON object — no markdown, no preamble, nothing else.`;
+
+export async function previewContract(payload: FilePayload): Promise<ContractPreview> {
+  let userContent: Anthropic.MessageParam["content"];
+
+  if (payload.type === "image") {
+    userContent = [
+      { type: "image", source: { type: "base64", media_type: payload.mediaType as "image/jpeg" | "image/png" | "image/gif" | "image/webp", data: payload.data } },
+      { type: "text", text: `Scan this contract and return ONLY this JSON:\n{"contract_type":"type in plain English e.g. Employment Agreement","high_risk_count":<integer: non-competes + mandatory arbitration + broad IP assignment + clawback + unilateral modification>,"flagged_count":<integer: other clauses worth reviewing>,"page_estimate":<integer: estimated pages 1-50>}` },
+    ];
+  } else if (payload.type === "pdf") {
+    userContent = [
+      { type: "document", source: { type: "base64", media_type: "application/pdf", data: payload.data } },
+      { type: "text", text: `Scan this contract and return ONLY this JSON:\n{"contract_type":"type in plain English e.g. Employment Agreement","high_risk_count":<integer: non-competes + mandatory arbitration + broad IP assignment + clawback + unilateral modification>,"flagged_count":<integer: other clauses worth reviewing>,"page_estimate":<integer: estimated pages 1-50>}` },
+    ];
+  } else {
+    userContent = `Scan this contract and return ONLY this JSON:\n{"contract_type":"type in plain English e.g. Employment Agreement","high_risk_count":<integer: non-competes + mandatory arbitration + broad IP assignment + clawback + unilateral modification>,"flagged_count":<integer: other clauses worth reviewing>,"page_estimate":<integer: estimated pages 1-50>}\n\nContract:\n${payload.text.slice(0, 60000)}`;
+  }
+
+  try {
+    const message = await client.messages.create({
+      model: "claude-haiku-4-5-20251001",
+      max_tokens: 256,
+      system: PREVIEW_SYSTEM,
+      messages: [{ role: "user", content: userContent }],
+    });
+
+    const raw = message.content
+      .map((b) => (b.type === "text" ? b.text : ""))
+      .join("")
+      .replace(/```json\n?|\n?```/g, "")
+      .trim();
+
+    const parsed = JSON.parse(raw);
+    return {
+      contract_type:   String(parsed.contract_type  || "Contract").slice(0, 200),
+      high_risk_count: Math.max(0, Math.min(20, parseInt(String(parsed.high_risk_count)) || 0)),
+      flagged_count:   Math.max(0, Math.min(20, parseInt(String(parsed.flagged_count))   || 0)),
+      page_estimate:   Math.max(1, Math.min(50, parseInt(String(parsed.page_estimate))   || 1)),
+    };
+  } catch {
+    return { contract_type: "Contract", high_risk_count: 0, flagged_count: 0, page_estimate: 1 };
+  }
+}
+
 export class AppError extends Error {
   constructor(
     public code: string,

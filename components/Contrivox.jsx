@@ -3,17 +3,15 @@ import { Analytics } from "@/lib/analytics";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
 // ─── TRANSLATIONS ─────────────────────────────────────────────────────────────
-// Strings live here. To add a language: duplicate this object, translate it,
-// store it in locales/<code>.json, add the code to lib/i18n.ts, and restore
-// the locale switcher UI in the nav.
 const T = {
   en: {
     app_name: "Contrivox",
     app_tagline: "AI contract analysis. Plain language. Instant.",
-    nav_cta: "Analyse Free", nav_signin: "Sign In", nav_history: "My Analyses", signout: "Sign out",
-    hero_badge: "Most people sign contracts they don't understand",
+    nav_cta: "Check My Contract", nav_signin: "Sign In", nav_history: "My Analyses", signout: "Sign out",
+    hero_badge: "91% of Americans sign contracts they don't fully understand",
     hero_h1a: "Your employer, landlord, or client", hero_h1b: "wrote that contract to protect themselves.",
-    hero_sub: "Non-competes that ban you from your industry. Arbitration clauses that take away your right to sue. Auto-renewals that charge you for years. Contrivox reads every word — in 30 seconds — so you know exactly what you're agreeing to.",
+    hero_sub: "Non-competes that ban you from your industry. Arbitration clauses that take away your right to sue. Auto-renewals that charge you for years. Contrivox reads every word — in 60 seconds — so you know exactly what you're agreeing to.",
+    hero_social: "Join thousands of professionals who checked before they signed.",
     stat1v: "91%", stat1l: "of Americans sign contracts without fully reading them",
     stat2v: "1 in 5", stat2l: "US workers are bound by a non-compete they don't understand",
     stat3v: "$18k", stat3l: "average cost of a US employment dispute that could have been avoided",
@@ -25,7 +23,17 @@ const T = {
     fear3b: "Leases, service agreements, and freelance contracts that lock you in automatically. The clause is always there. It's always small print. It always costs more than you expect.",
     upload_title: "Drop your contract. Get your report.", upload_formats: "PDF · PNG · JPG · DOCX · TXT",
     upload_drop: "Tap to choose your contract", upload_or: "or drag and drop",
-    out_lang: "Report language", analyse_btn: "Check My Contract — Starting at $9",
+    out_lang: "Report language", analyse_btn: "Check My Contract — $9 · 60 seconds",
+    analyse_trust: "Secure payment via Stripe. No subscription. Cancel anytime.",
+    sample_btn: "See a Sample Report →",
+    privacy_note: "Your contract is encrypted in transit, analyzed privately, and never stored after your report is delivered.",
+    risk_stats_title: "What's hiding in your contract?",
+    preview_scanned: "Contract Scanned",
+    preview_pages: "pages scanned",
+    preview_high_risk: "high-risk clauses detected",
+    preview_flagged: "clauses flagged for review",
+    unlock_btn: "Unlock Full Report — $9",
+    unlock_trust: "Secure payment via Stripe · One-time · No subscription",
     contact_title: "Where should we send your full report?",
     contact_sub: "Enter your email and we'll send the complete analysis automatically.",
     contact_email_label: "Email address", contact_email_ph: "your@email.com",
@@ -35,21 +43,9 @@ const T = {
     contact_email_required: "We need your email to send the report.",
     contact_email_invalid: "Please enter a valid email address.",
     auto_sent: "✓ Report sent to", auto_sending: "Sending your report…",
-    analysing_msgs: [
-      "Reading your contract…",
-      "Scanning for non-compete clauses…",
-      "Checking arbitration language…",
-      "Flagging auto-renewal traps…",
-      "Calculating your fairness score…",
-      "Building your report…",
-    ],
     results_title: "Your Contract Report", score_lbl: "Fairness score",
     tab_clauses: "Key Clauses", tab_flags: "Red Flags", tab_missing: "Missing Protections",
     preview_only: "Preview", showing: "showing", of: "of",
-    blur_title: "Unlock your full report",
-    blur_sub: "See every clause, all red flags, missing protections, negotiation scripts, and your complete fairness score.",
-    unlock_btn: "Unlock Full Report — $9",
-    unlock_sub: "One-time payment · instant access · no subscription",
     deliver_title: "Get your full report",
     deliver_sub: "Send the complete PDF to your email or WhatsApp",
     email_placeholder: "your@email.com", whatsapp_placeholder: "+1 555 000 0000",
@@ -77,17 +73,21 @@ const T = {
     t3n: "James R.", t3r: "Renter, Los Angeles",
     t3t: "Auto rent-increase clause on page 8 — 8% every year, no cap. Contrivox caught it in seconds. I negotiated it out before signing the lease.",
     faq_title: "Questions",
-    faq1q: "Is this actual legal advice?",
-    faq1a: "No. Contrivox is an educational tool that helps you understand what you're signing. We are not a law firm. Always consult a licensed attorney — especially before refusing to sign or renegotiating an employment agreement.",
+    faq1q: "Is this legal advice?",
+    faq1a: "No. Contrivox identifies clauses and explains them in plain English. Always consult a qualified attorney before signing any contract — especially before refusing terms or renegotiating an offer.",
     faq2q: "What file types can I upload?",
     faq2a: "PDF, JPG, PNG, GIF, WEBP, TXT, and DOCX. Works on any contract in any language — the report comes back in English.",
-    faq3q: "What do I get for $3.99?",
-    faq3a: "The complete analysis: every clause explained, all red flags detailed, missing protections listed, negotiation scripts for each issue, and your full fairness score. Instant delivery — no subscription.",
+    faq3q: "What do I get for $9?",
+    faq3a: "The complete analysis: every clause explained in plain English, all red flags with real-world impact, missing protections listed, word-for-word negotiation scripts, and your full fairness score with reasoning. Instant delivery — one-time payment, no subscription.",
     faq4q: "Is my contract private?",
-    faq4a: "Yes. Your contract is analysed in memory and never stored on our servers. We don't keep your document after the session ends.",
+    faq4a: "Yes. Your document is encrypted in transit, processed privately in memory, and deleted after your report is generated. We never sell or share your contract data. See our privacy policy for full details.",
     faq5q: "How is this different from asking ChatGPT?",
-    faq5a: "Contrivox uses a purpose-built legal analysis prompt trained on US contract patterns. It gives you a structured report with a fairness score, categorised red flags, and word-for-word negotiation scripts — not a generic summary.",
+    faq5a: "Contrivox is trained specifically on US contract language. It knows which clauses are standard, which are aggressive, and what negotiation leverage you have. ChatGPT gives general answers — Contrivox gives clause-by-clause analysis with a fairness score and ready-to-use negotiation scripts.",
+    faq6q: "What contract types do you support?",
+    faq6a: "Employment agreements, NDAs and non-disclosure agreements, freelance and independent contractor contracts, service agreements, and residential leases. Contract types are detected automatically — just upload.",
     cta_band: "Know exactly what you're signing.",
+    cta_urgency: "The average employment dispute costs $18,000. A $9 report takes 60 seconds.",
+    cta_trust: "Secure payment via Stripe · No subscription · No account required",
     footer_copy: "© 2025 Contrivox",
     account_title: "My Analyses", account_empty: "No saved analyses yet. Upload a contract to get started.",
     account_date: "Analysed", account_view: "View report",
@@ -98,6 +98,30 @@ const T = {
     overall_rec: "Our recommendation", parties: "Parties", contract_type: "Contract type",
     score_label_map: { Fair:"Fair", Acceptable:"Acceptable", Concerning:"Concerning", Unfair:"Unfair", Dangerous:"Dangerous" },
   },
+};
+
+// ─── Risk statistics by contract type ────────────────────────────────────────
+const RISK_STATS = {
+  employment: [
+    { stat: "67%", desc: "of employment contracts contain non-competes broader than legally enforceable" },
+    { stat: "81%", desc: "include mandatory arbitration clauses that waive your right to sue in court" },
+    { stat: "43%", desc: "have IP assignment clauses that may cover your personal projects" },
+  ],
+  nda: [
+    { stat: "58%", desc: "of NDAs have overly broad definitions of confidential information" },
+    { stat: "71%", desc: "include indefinite duration clauses that courts often limit or void" },
+    { stat: "39%", desc: "are one-sided — only one party is bound by confidentiality obligations" },
+  ],
+  lease: [
+    { stat: "62%", desc: "of leases include auto-renewal clauses that activate without notice" },
+    { stat: "44%", desc: "contain late fee provisions above state-permitted maximums" },
+    { stat: "51%", desc: "assign maintenance duties that exceed what tenants legally owe" },
+  ],
+  freelance: [
+    { stat: "73%", desc: "of freelance contracts assign all IP to the client — including pre-existing work" },
+    { stat: "55%", desc: "include kill fees well below the industry standard of 25–50%" },
+    { stat: "48%", desc: "allow unilateral scope changes without additional compensation" },
+  ],
 };
 
 // ─── File extraction ──────────────────────────────────────────────────────────
@@ -145,10 +169,8 @@ async function generatePDF(result, t) {
     nl(3);
   };
 
-  // Cover
   doc.setFillColor(9,9,20); doc.rect(0,0,W,42,"F");
   doc.setFillColor(...sc); doc.rect(0,38,W,4,"F");
-  // Logo area
   doc.setFillColor(120,60,220); doc.roundedRect(M, 8, 24, 24, 4, 4, "F");
   doc.setFontSize(16); doc.setFont("helvetica","bold"); doc.setTextColor(255,255,255);
   doc.text("CV", M+6, 23);
@@ -156,7 +178,6 @@ async function generatePDF(result, t) {
   doc.text("Contrivox", M+28, 23);
   doc.setFontSize(10); doc.setFont("helvetica","normal"); doc.setTextColor(180,160,255);
   doc.text(t.app_tagline, M+28, 31);
-  // Score top right
   const scoreStr = `${result.score}/100 — ${t.score_label_map?.[result.score_label]||result.score_label}`;
   doc.setFontSize(12); doc.setFont("helvetica","bold"); doc.setTextColor(...sc);
   doc.text(scoreStr, W-M, 20, { align:"right" });
@@ -165,24 +186,20 @@ async function generatePDF(result, t) {
 
   y = 54;
 
-  // Summary
   section(t.results_title);
   txt(result.summary, 10.5, false, [50,50,65]);
   nl(2);
   if(result.parties?.length) txt(`${t.parties}: ${result.parties.join(" · ")}`, 9, false, [110,100,130]);
 
-  // Score box
   nl(6);
   doc.setFillColor(245,243,255); doc.roundedRect(M-3, y-4, CW+6, 26, 3, 3, "F");
   txt(t.score_why, 9, true, [90,70,170]);
   txt(result.score_reasoning, 10, false, [50,50,65]);
   nl(3);
 
-  // Recommendation
   section(t.overall_rec);
   txt(result.overall_recommendation, 10.5, false, [50,50,65]);
 
-  // Key clauses
   section(t.tab_clauses);
   (result.key_clauses||[]).forEach((c,i) => {
     if(y>258){ doc.addPage(); y=20; }
@@ -195,11 +212,10 @@ async function generatePDF(result, t) {
     doc.text(titleLines, M+18, y);
     y += Math.max(5, titleLines.length*4);
     txt(c.plain_english, 9.5, false, [65,65,80]);
-    if(c.risk_note){ txt(`⚠ ${c.risk_note}`, 9, false, [180,55,55]); }
+    if(c.risk_note){ txt(`! ${c.risk_note}`, 9, false, [180,55,55]); }
     nl(3);
   });
 
-  // Red flags
   section(t.tab_flags);
   (result.red_flags||[]).forEach((f,i) => {
     if(y>258){ doc.addPage(); y=20; }
@@ -215,13 +231,11 @@ async function generatePDF(result, t) {
     nl(4);
   });
 
-  // Missing
   if(result.missing_protections?.length){
     section(t.tab_missing);
     result.missing_protections.forEach(m => { txt(`• ${m}`, 9.5, false, [65,65,80]); nl(1); });
   }
 
-  // Footer on each page
   const pages = doc.getNumberOfPages();
   for(let i=1;i<=pages;i++){
     doc.setPage(i);
@@ -240,43 +254,15 @@ async function generatePDF(result, t) {
 function openWhatsApp(phone, result, t) {
   const num = phone.replace(/\D/g,"");
   const score_translated = t.score_label_map?.[result.score_label] || result.score_label;
-  const msg = `📋 *${t.app_name} — ${t.results_title}*\n\n` +
-    `📄 ${result.contract_type}\n` +
-    `⚖️ ${t.score_lbl}: *${result.score}/100 — ${score_translated}*\n\n` +
-    `💡 ${result.overall_recommendation}\n\n` +
-    `🔴 ${t.tab_flags}: ${result.red_flags?.length||0}\n` +
-    `📌 ${t.tab_clauses}: ${result.key_clauses?.length||0}\n\n` +
+  const msg = `*${t.app_name} — ${t.results_title}*\n\n` +
+    `${result.contract_type}\n` +
+    `${t.score_lbl}: *${result.score}/100 — ${score_translated}*\n\n` +
+    `${result.overall_recommendation}\n\n` +
+    `${t.tab_flags}: ${result.red_flags?.length||0}\n` +
+    `${t.tab_clauses}: ${result.key_clauses?.length||0}\n\n` +
     `_${t.disclaimer}_`;
   window.open(`https://wa.me/${num}?text=${encodeURIComponent(msg)}`, "_blank");
 }
-
-// ─── Auto email send ──────────────────────────────────────────────────────────
-// In production: POST to your /api/send-report { email, analysis, pdfBase64 }
-// using SendGrid / Resend / AWS SES to send a branded HTML email with PDF attached.
-// This demo opens mailto as a fallback so the flow is visible without a backend.
-function autoSendEmail(email, result, t) {
-  try {
-    const subject = encodeURIComponent(`Contrivox — ${result.contract_type}`);
-    const score_label = t.score_label_map?.[result.score_label] || result.score_label;
-    const body = encodeURIComponent(
-      `${t.results_title}\n` +
-      `${"─".repeat(40)}\n\n` +
-      `${t.contract_type}: ${result.contract_type}\n` +
-      `${t.score_lbl}: ${result.score}/100 — ${score_label}\n\n` +
-      `${t.score_why}:\n${result.score_reasoning}\n\n` +
-      `${t.overall_rec}:\n${result.overall_recommendation}\n\n` +
-      `${t.tab_flags}:\n` +
-      (result.red_flags||[]).map((f,i)=>`${i+1}. ${f.issue}\n   ${f.why_it_matters}`).join("\n\n") +
-      `\n\n${t.tab_missing}:\n` +
-      (result.missing_protections||[]).map((m,i)=>`${i+1}. ${m}`).join("\n") +
-      `\n\n${result.disclaimer}`
-    );
-    window.open(`mailto:${email}?subject=${subject}&body=${body}`, "_blank");
-  } catch(e) {
-    console.error("Email send error:", e);
-  }
-}
-
 
 const getAccount = () => { try{ return JSON.parse(localStorage.getItem("cvx_acc")||"null"); }catch{ return null; }};
 const saveAccount = a => localStorage.setItem("cvx_acc", JSON.stringify(a));
@@ -286,12 +272,7 @@ const pushHistory = entry => {
   localStorage.setItem("cvx_hist", JSON.stringify(h.slice(0,25)));
 };
 
-// ─── Paywall limits ───────────────────────────────────────────────────────────
-const CLAUSE_PREVIEW  = 2;
-const FLAG_PREVIEW    = 1;
-const MISSING_PREVIEW = 2;
-
-// ─── UI components ────────────────────────────────────────────────────────────
+// ─── UI constants ─────────────────────────────────────────────────────────────
 const COLORS = {
   bg:          "var(--cvx-bg)",
   surface:     "var(--cvx-surface)",
@@ -306,7 +287,6 @@ const COLORS = {
   nav:         "var(--cvx-nav)",
   modal:       "var(--cvx-modal)",
   overlay:     "var(--cvx-overlay)",
-  paywallGrad: "var(--cvx-paywall-grad)",
   inputBg:     "var(--cvx-input-bg)",
 };
 
@@ -385,6 +365,7 @@ const IconDownload = ({size=13,color="currentColor"}) => (
   </svg>
 );
 
+// ─── Logo ─────────────────────────────────────────────────────────────────────
 function ContrivoxLogo({ size=22 }) {
   return (
     <div style={{ display:"flex", alignItems:"center", gap:8 }}>
@@ -402,6 +383,7 @@ function ContrivoxLogo({ size=22 }) {
   );
 }
 
+// ─── Score ring ───────────────────────────────────────────────────────────────
 function ScoreRing({ score, label, t }) {
   const r=46, c=2*Math.PI*r, dash=(score/100)*c;
   const col = score>=70?"#22c55e":score>=50?"#eab308":score>=30?"#f97316":"#ef4444";
@@ -481,25 +463,67 @@ function FlagCard({ flag, t }) {
   );
 }
 
-function PaywallOverlay({ t, onUnlock }) {
+// ─── Preview card (shown after upload, before payment) ────────────────────────
+function PreviewCard({ preview, onUnlock, unlockLoading, t }) {
+  const locked = [
+    "Fairness Score (0–100)",
+    "Full clause-by-clause breakdown",
+    "Negotiation scripts for each red flag",
+    "Missing legal protections",
+  ];
   return (
-    <div style={{ position:"absolute", bottom:0, left:0, right:0, top:"8%", background:COLORS.paywallGrad, borderRadius:"0 0 14px 14px", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"flex-end", paddingBottom:26, zIndex:10 }}>
-      <div style={{ textAlign:"center", padding:"0 20px", background:"rgba(7,7,20,0.72)", borderRadius:16, margin:"0 12px 0", backdropFilter:"blur(8px)", border:"0.5px solid rgba(124,58,237,0.25)", padding:"22px 24px" }}>
-        <p style={{ fontSize:17, fontWeight:700, color:"white", margin:"0 0 7px", fontFamily:"'Fraunces',serif" }}>{t.blur_title}</p>
-        <p style={{ fontSize:12.5, color:"rgba(255,255,255,0.65)", maxWidth:290, margin:"0 auto 18px", lineHeight:1.64, fontFamily:"'DM Sans',sans-serif" }}>{t.blur_sub}</p>
-        <button onClick={onUnlock} style={{ padding:"14px 32px", fontSize:15, fontWeight:700, background:COLORS.accentGrad, color:"white", border:"none", borderRadius:11, cursor:"pointer", fontFamily:"'DM Sans',sans-serif", boxShadow:"0 4px 32px rgba(99,102,241,0.65)", letterSpacing:"0.01em", display:"block", width:"100%", maxWidth:300, margin:"0 auto" }}>
-          {t.unlock_btn}
-        </button>
-        <p style={{ marginTop:9, fontSize:11, color:"rgba(255,255,255,0.35)", fontFamily:"'DM Sans',sans-serif" }}>{t.unlock_sub}</p>
-        <div style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:14, marginTop:10 }}>
-          <span style={{ display:"flex", alignItems:"center", gap:4, fontSize:10.5, color:"rgba(255,255,255,0.28)", fontFamily:"'DM Sans',sans-serif" }}><IconLock size={10} color="currentColor"/> Secure payment</span>
-          <span style={{ display:"flex", alignItems:"center", gap:4, fontSize:10.5, color:"rgba(255,255,255,0.2)", fontFamily:"'DM Sans',sans-serif" }}><IconZap size={10} color="currentColor"/> Instant access</span>
+    <div style={{ background:"rgba(255,255,255,0.024)", border:`0.5px solid ${COLORS.border}`, borderRadius:20, overflow:"hidden", animation:"fadeUp .5s ease" }}>
+      {/* Header */}
+      <div style={{ background:"rgba(255,255,255,0.03)", borderBottom:`0.5px solid ${COLORS.border}`, padding:"18px 22px", display:"flex", alignItems:"center", justifyContent:"space-between", flexWrap:"wrap", gap:8 }}>
+        <div>
+          <p style={{ fontSize:10, fontWeight:700, color:"rgba(167,139,250,0.8)", letterSpacing:"0.1em", textTransform:"uppercase", fontFamily:"'DM Sans',sans-serif", marginBottom:3 }}>{t.preview_scanned}</p>
+          <p style={{ fontSize:16, fontWeight:600, color:COLORS.heading, fontFamily:"'Fraunces',serif", margin:0 }}>{preview.contract_type}</p>
         </div>
+        <span style={{ fontSize:11, color:COLORS.muted, fontFamily:"'DM Sans',sans-serif" }}>{preview.page_estimate} {preview.page_estimate === 1 ? "page" : "pages"} {t.preview_pages}</span>
+      </div>
+
+      {/* Counts */}
+      <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", borderBottom:`0.5px solid ${COLORS.border}` }}>
+        <div style={{ padding:"24px 22px", textAlign:"center", borderRight:`0.5px solid ${COLORS.border}` }}>
+          <div style={{ fontSize:44, fontWeight:700, color:COLORS.danger, fontFamily:"'Fraunces',serif", lineHeight:1 }}>{preview.high_risk_count}</div>
+          <div style={{ fontSize:12, color:COLORS.muted, fontFamily:"'DM Sans',sans-serif", marginTop:7, lineHeight:1.5 }}>{t.preview_high_risk}</div>
+        </div>
+        <div style={{ padding:"24px 22px", textAlign:"center" }}>
+          <div style={{ fontSize:44, fontWeight:700, color:"#fbbf24", fontFamily:"'Fraunces',serif", lineHeight:1 }}>{preview.flagged_count}</div>
+          <div style={{ fontSize:12, color:COLORS.muted, fontFamily:"'DM Sans',sans-serif", marginTop:7, lineHeight:1.5 }}>{t.preview_flagged}</div>
+        </div>
+      </div>
+
+      {/* Locked rows */}
+      <div style={{ padding:"0 22px" }}>
+        {locked.map((label, i) => (
+          <div key={i} style={{ display:"flex", alignItems:"center", justifyContent:"space-between", padding:"13px 0", borderBottom: i < locked.length - 1 ? `0.5px solid ${COLORS.faint}` : "none" }}>
+            <span style={{ fontSize:13, color:COLORS.muted, fontFamily:"'DM Sans',sans-serif" }}>{label}</span>
+            <span style={{ display:"flex", alignItems:"center", gap:4, fontSize:10, fontWeight:700, color:COLORS.faint, letterSpacing:"0.06em", fontFamily:"'DM Sans',sans-serif" }}>
+              <IconLock size={10} color="currentColor"/> LOCKED
+            </span>
+          </div>
+        ))}
+      </div>
+
+      {/* CTA */}
+      <div style={{ padding:"20px 22px 24px" }}>
+        <button
+          onClick={onUnlock}
+          disabled={unlockLoading}
+          style={{ width:"100%", padding:"16px", fontSize:15, fontWeight:700, background:unlockLoading?COLORS.surface:COLORS.accentGrad, color:unlockLoading?COLORS.faint:"white", border:"none", borderRadius:12, cursor:unlockLoading?"not-allowed":"pointer", fontFamily:"'DM Sans',sans-serif", boxShadow:unlockLoading?"none":"0 4px 28px rgba(99,102,241,0.5)", letterSpacing:"0.01em", transition:"all .2s", marginBottom:10 }}
+        >
+          {unlockLoading ? "Redirecting to checkout…" : t.unlock_btn}
+        </button>
+        <p style={{ textAlign:"center", fontSize:11, color:COLORS.faint, fontFamily:"'DM Sans',sans-serif", display:"flex", alignItems:"center", justifyContent:"center", gap:5, margin:0 }}>
+          <IconLock size={10} color="currentColor"/> {t.unlock_trust}
+        </p>
       </div>
     </div>
   );
 }
 
+// ─── Delivery panel (for history loads) ───────────────────────────────────────
 function DeliveryPanel({ result, t, pdfUri }) {
   const [email, setEmail] = useState("");
   const [wa, setWa] = useState("");
@@ -629,67 +653,56 @@ function FaqItem({ q, a }) {
 
 // ─── MAIN ─────────────────────────────────────────────────────────────────────
 export default function Contrivox() {
-  const [outLang, setOutLang]       = useState("en");
-  const [file, setFile]             = useState(null);
-  const [dragging, setDragging]     = useState(false);
-  const [loading, setLoading]       = useState(false);
-  const [loadMsg, setLoadMsg]       = useState("");
-  const [result, setResult]         = useState(null);
-  const [tab, setTab]               = useState("clauses");
-  const [error, setError]           = useState(null);
-  const [unlocked, setUnlocked]     = useState(false);
-  const [pdfUri, setPdfUri]         = useState(null);
-  const [account, setAccount]       = useState(null);
-  const [showAuth, setShowAuth]     = useState(false);
-  const [showHist, setShowHist]     = useState(false);
+  const [outLang, setOutLang]             = useState("en");
+  const [file, setFile]                   = useState(null);
+  const [dragging, setDragging]           = useState(false);
+  const [loading, setLoading]             = useState(false);
+  const [loadMsg, setLoadMsg]             = useState("");
+  const [preview, setPreview]             = useState(null);
+  const [result, setResult]               = useState(null);   // history loads only
+  const [tab, setTab]                     = useState("clauses");
+  const [detectedType, setDetectedType]   = useState("employment");
+  const [error, setError]                 = useState(null);
+  const [pdfUri, setPdfUri]               = useState(null);
+  const [account, setAccount]             = useState(null);
+  const [showAuth, setShowAuth]           = useState(false);
+  const [showHist, setShowHist]           = useState(false);
   const [sessionId, setSessionId]         = useState(null);
   const [unlockLoading, setUnlockLoading] = useState(false);
   const fileRef    = useRef();
   const resultsRef = useRef();
   const t = T.en;
 
-  useEffect(()=>{
-    setAccount(getAccount());
-  },[]);
+  useEffect(() => { setAccount(getAccount()); }, []);
 
-  // Build PDF whenever result is ready (jsPDF loads on demand via dynamic import)
-  useEffect(()=>{
-    if(!result) return;
-    generatePDF(result,t).then(setPdfUri).catch(()=>{});
-  },[result]);
+  useEffect(() => {
+    if (!result) return;
+    generatePDF(result, t).then(setPdfUri).catch(() => {});
+  }, [result]);
 
-  // Fire paywall_shown once per result when paywall is visible
-  useEffect(()=>{
-    if(!result||unlocked) return;
-    const hidden =
-      (result.key_clauses?.length ?? 0) - CLAUSE_PREVIEW +
-      (result.red_flags?.length ?? 0) - FLAG_PREVIEW +
-      (result.missing_protections?.length ?? 0) - MISSING_PREVIEW;
-    if(hidden > 0) Analytics.paywallShown({ tab, items_hidden: hidden });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[result]);
-
-  const handleFile = useCallback((f)=>{
-    if(!f) return;
+  const handleFile = useCallback((f) => {
+    if (!f) return;
     const ext = f.name.split(".").pop().toLowerCase();
-    if(!["pdf","png","jpg","jpeg","gif","webp","txt","doc","docx"].includes(ext)){ setError("Unsupported file type."); return; }
-    if(f.size>20*1024*1024){ setError("File too large. Max 20MB."); return; }
-    setFile(f); setError(null); setResult(null); setUnlocked(false); setPdfUri(null);
+    if (!["pdf","png","jpg","jpeg","gif","webp","txt","doc","docx"].includes(ext)) { setError("Unsupported file type."); return; }
+    if (f.size > 20*1024*1024) { setError("File too large. Max 20MB."); return; }
+    setFile(f); setError(null); setPreview(null); setResult(null);
     Analytics.contractUploaded({ file_type: ext, file_size_kb: Math.round(f.size / 1024) });
-  },[]);
+  }, []);
 
-  const onDrop = useCallback((e)=>{ e.preventDefault(); setDragging(false); handleFile(e.dataTransfer.files[0]); },[handleFile]);
+  const onDrop = useCallback((e) => { e.preventDefault(); setDragging(false); handleFile(e.dataTransfer.files[0]); }, [handleFile]);
 
   const analyse = async () => {
-    if(!file) return;
+    if (!file) return;
+    setLoading(true); setError(null); setPreview(null); setResult(null); setPdfUri(null); setSessionId(null);
 
-    setLoading(true); setError(null); setResult(null); setUnlocked(false); setPdfUri(null); setSessionId(null);
-    setLoadMsg("Uploading your contract…");
+    const msgs = ["Uploading your contract…", "Scanning clause types…", "Detecting risk patterns…", "Building your preview…"];
+    let mi = 0;
+    setLoadMsg(msgs[0]);
+    const interval = setInterval(() => { mi = (mi + 1) % msgs.length; setLoadMsg(msgs[mi]); }, 1800);
+
     try {
       const payload = await extractFile(file);
-      Analytics.analysisStarted({
-        file_type: file.name.split(".").pop()?.toLowerCase() ?? "unknown",
-      });
+      Analytics.analysisStarted({ file_type: file.name.split(".").pop()?.toLowerCase() ?? "unknown" });
 
       const res = await fetch("/api/contract/create", {
         method: "POST",
@@ -703,29 +716,35 @@ export default function Contrivox() {
           langCode:  outLang,
         }),
       });
+
       if (!res.ok) {
-        const body = await res.json().catch(()=>({}));
+        const body = await res.json().catch(() => ({}));
         throw new Error(body.error || `Server error ${res.status}`);
       }
-      const { sessionId: sid, dummyAnalysis } = await res.json();
 
+      const { sessionId: sid, preview: prev } = await res.json();
       setSessionId(sid);
-      setResult(dummyAnalysis);
-      setTab("clauses");
-      Analytics.analysisCompleted({
-        score:          dummyAnalysis.score,
-        score_label:    dummyAnalysis.score_label,
-        contract_type:  dummyAnalysis.contract_type,
-        clause_count:   dummyAnalysis.key_clauses?.length ?? 0,
-        red_flag_count: dummyAnalysis.red_flags?.length ?? 0,
-        missing_count:  dummyAnalysis.missing_protections?.length ?? 0,
-      });
-      if(account) pushHistory({ ...dummyAnalysis, savedAt:Date.now(), fileName:file.name });
-      setTimeout(()=>resultsRef.current?.scrollIntoView({ behavior:"smooth", block:"start" }),250);
-    } catch(e) {
+      setPreview(prev);
+
+      // Detect type for risk stats
+      const typeStr = (prev?.contract_type ?? "").toLowerCase();
+      if (typeStr.includes("nda") || typeStr.includes("non-disclosure") || typeStr.includes("confidential")) {
+        setDetectedType("nda");
+      } else if (typeStr.includes("lease") || typeStr.includes("rental") || typeStr.includes("tenancy")) {
+        setDetectedType("lease");
+      } else if (typeStr.includes("freelance") || typeStr.includes("independent") || typeStr.includes("service")) {
+        setDetectedType("freelance");
+      } else {
+        setDetectedType("employment");
+      }
+
+      Analytics.previewShown({ contract_type: prev?.contract_type ?? "unknown", high_risk_count: prev?.high_risk_count ?? 0 });
+      setTimeout(() => resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 250);
+    } catch (e) {
       setError("Could not process your contract. Please try again.");
       Analytics.analysisErrored(e.message);
     } finally {
+      clearInterval(interval);
       setLoading(false);
     }
   };
@@ -743,35 +762,22 @@ export default function Contrivox() {
       if (!res.ok) throw new Error("Checkout failed");
       const { url } = await res.json();
       if (url) window.location.href = url;
-    } catch(e) {
+    } catch (e) {
       setError("Could not start checkout. Please try again.");
       setUnlockLoading(false);
     }
   };
 
-  function renderPaywalled(items, limit, renderFn) {
-    if(!items?.length) return <p style={{ color:COLORS.muted, fontSize:13, textAlign:"center", padding:"20px 0", fontFamily:"'DM Sans',sans-serif" }}>{t.none_found}</p>;
-    const preview = items.slice(0, limit);
-    const locked  = items.slice(limit);
-    return (
-      <div>
-        {preview.map((item,i) => renderFn(item,i))}
-        {!unlocked && locked.length > 0 && (
-          <div style={{ position:"relative", minHeight:220 }}>
-            <div style={{ filter:"blur(5px)", pointerEvents:"none", userSelect:"none", opacity:0.5 }}>
-              {locked.map((item,i) => renderFn(item, i+limit))}
-            </div>
-            <PaywallOverlay t={t} onUnlock={handleUnlock}/>
-          </div>
-        )}
-        {unlocked && locked.map((item,i) => renderFn(item, i+limit))}
-      </div>
-    );
-  }
+  const scrollToUpload = () => {
+    Analytics.ctaClicked("nav");
+    document.getElementById("upload-sec")?.scrollIntoView({ behavior: "smooth" });
+  };
 
   const tabBtn = (k, label) => (
-    <button key={k} onClick={()=>{ if(k!==tab){ Analytics.tabSwitched({ from:tab, to:k }); } setTab(k); }} style={{ flex:1, padding:"7px 6px", fontSize:12, fontWeight:500, cursor:"pointer", borderRadius:9, border:"none", fontFamily:"'DM Sans',sans-serif", background:tab===k?"rgba(255,255,255,0.1)":"transparent", color:tab===k?COLORS.text:COLORS.muted, transition:"all .15s" }}>{label}</button>
+    <button key={k} onClick={() => setTab(k)} style={{ flex:1, padding:"7px 6px", fontSize:12, fontWeight:500, cursor:"pointer", borderRadius:9, border:"none", fontFamily:"'DM Sans',sans-serif", background:tab===k?"rgba(255,255,255,0.1)":"transparent", color:tab===k?COLORS.text:COLORS.muted, transition:"all .15s" }}>{label}</button>
   );
+
+  const currentStats = RISK_STATS[detectedType] ?? RISK_STATS.employment;
 
   return (
     <>
@@ -779,22 +785,24 @@ export default function Contrivox() {
         @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
         *{box-sizing:border-box;margin:0;padding:0;}
         html{scroll-behavior:smooth;}
-        body{background:var(--cvx-bg);font-family:'DM Sans',sans-serif; -webkit-text-size-adjust:100%;}
+        body{background:var(--cvx-bg);font-family:'DM Sans',sans-serif;-webkit-text-size-adjust:100%;}
         ::-webkit-scrollbar{width:4px;}
         ::-webkit-scrollbar-thumb{background:var(--cvx-scrollbar);border-radius:2px;}
         select,input,button{font-family:'DM Sans',sans-serif;}
         select option{background:var(--cvx-select-bg);color:var(--cvx-heading);}
         input::placeholder{color:var(--cvx-placeholder);}
         input:focus{border-color:rgba(139,92,246,0.45)!important;outline:none;}
-        /* Mobile tap improvements */
         button,a,[role="button"]{-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
         @media(max-width:640px){
           nav{padding:0 14px!important;}
+          .nav-links{display:none!important;}
           section{padding-left:14px!important;padding-right:14px!important;}
           .hero-stats{grid-template-columns:1fr 1fr!important;}
           .fear-grid{grid-template-columns:1fr!important;}
           .how-grid{grid-template-columns:1fr!important;}
           .test-grid{grid-template-columns:1fr!important;}
+          .risk-stats-grid{grid-template-columns:1fr!important;}
+          button{min-height:48px;}
         }
         @keyframes spin{to{transform:rotate(360deg);}}
         @keyframes fadeUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
@@ -809,14 +817,19 @@ export default function Contrivox() {
       `}</style>
 
       {showAuth && <AuthModal t={t} onClose={()=>setShowAuth(false)} onAuth={acc=>{ setAccount(acc); Analytics.signUpCompleted(acc.email); }}/>}
-      {showHist && <HistoryPanel t={t} account={account} onClose={()=>setShowHist(false)} onLoad={r=>{ setResult(r); setUnlocked(true); setTab("clauses"); setTimeout(()=>resultsRef.current?.scrollIntoView({behavior:"smooth"}),200); }}/>}
+      {showHist && <HistoryPanel t={t} account={account} onClose={()=>setShowHist(false)} onLoad={r=>{ setResult(r); setPreview(null); setTab("clauses"); setTimeout(()=>resultsRef.current?.scrollIntoView({behavior:"smooth"}),200); }}/>}
 
       <div style={{ minHeight:"100vh", background:COLORS.bg, backgroundImage:"radial-gradient(ellipse 65% 38% at 50% -4%, rgba(109,40,217,0.22) 0%, transparent 55%), radial-gradient(ellipse 35% 25% at 90% 90%, rgba(239,68,68,0.07) 0%, transparent 50%)" }}>
 
         {/* NAV */}
         <nav style={{ position:"sticky", top:0, zIndex:90, backdropFilter:"blur(18px)", background:COLORS.nav, borderBottom:`0.5px solid ${COLORS.border}`, padding:"0 20px" }}>
-          <div style={{ maxWidth:920, margin:"0 auto", display:"flex", alignItems:"center", justifyContent:"space-between", height:58 }}>
+          <div style={{ maxWidth:980, margin:"0 auto", display:"flex", alignItems:"center", justifyContent:"space-between", height:58 }}>
             <ContrivoxLogo size={19}/>
+            <div className="nav-links" style={{ display:"flex", alignItems:"center", gap:2 }}>
+              <a href="#how" className="nav-link" style={{ padding:"6px 12px", fontSize:12.5, color:COLORS.muted, textDecoration:"none", fontFamily:"'DM Sans',sans-serif" }}>How It Works</a>
+              <a href="/sample-report" target="_blank" className="nav-link" style={{ padding:"6px 12px", fontSize:12.5, color:COLORS.muted, textDecoration:"none", fontFamily:"'DM Sans',sans-serif" }}>Sample Report</a>
+              <a href="#faq" className="nav-link" style={{ padding:"6px 12px", fontSize:12.5, color:COLORS.muted, textDecoration:"none", fontFamily:"'DM Sans',sans-serif" }}>FAQ</a>
+            </div>
             <div style={{ display:"flex", alignItems:"center", gap:8 }}>
               <ThemeToggle />
               {account ? (
@@ -827,7 +840,7 @@ export default function Contrivox() {
               ) : (
                 <>
                   <button onClick={()=>{ Analytics.signInClicked(); setShowAuth(true); }} className="nav-link" style={{ padding:"6px 13px", fontSize:12, fontWeight:500, background:COLORS.inputBg, color:COLORS.muted, border:`0.5px solid ${COLORS.border}`, borderRadius:8, cursor:"pointer" }}>{t.nav_signin}</button>
-                  <button onClick={()=>{ Analytics.ctaClicked("nav"); document.getElementById("upload-sec")?.scrollIntoView({behavior:"smooth"}); }} style={{ padding:"7px 16px", fontSize:12.5, fontWeight:700, background:COLORS.accentGrad, color:"white", border:"none", borderRadius:8, cursor:"pointer", animation:"glow 3s infinite", letterSpacing:"0.01em" }}>{t.nav_cta}</button>
+                  <button onClick={scrollToUpload} style={{ padding:"7px 16px", fontSize:12.5, fontWeight:700, background:COLORS.accentGrad, color:"white", border:"none", borderRadius:8, cursor:"pointer", animation:"glow 3s infinite", letterSpacing:"0.01em", minHeight:36 }}>{t.nav_cta}</button>
                 </>
               )}
             </div>
@@ -845,12 +858,14 @@ export default function Contrivox() {
               {t.hero_h1a}<br/>
               <em style={{ color:COLORS.danger, fontStyle:"italic" }}>{t.hero_h1b}</em>
             </h1>
-            <p style={{ fontSize:"clamp(14.5px,1.9vw,17px)", color:COLORS.muted, lineHeight:1.76, maxWidth:500, margin:"0 auto 18px", fontFamily:"'DM Sans',sans-serif" }}>{t.hero_sub}</p>
-            {/* Micro social proof */}
-            <p style={{ fontSize:12, color:COLORS.faint, marginBottom:36, fontFamily:"'DM Sans',sans-serif" }}>
-              Used by <span style={{ color:COLORS.muted, fontWeight:600 }}>12,400+</span> professionals to review contracts before signing
+            <p style={{ fontSize:"clamp(14.5px,1.9vw,17px)", color:COLORS.muted, lineHeight:1.76, maxWidth:500, margin:"0 auto 14px", fontFamily:"'DM Sans',sans-serif" }}>{t.hero_sub}</p>
+            <p style={{ fontSize:13, color:COLORS.muted, marginBottom:10, fontFamily:"'DM Sans',sans-serif" }}>{t.hero_social}</p>
+            <p style={{ fontSize:12, color:COLORS.faint, marginBottom:32, fontFamily:"'DM Sans',sans-serif" }}>
+              Trusted by <span style={{ color:COLORS.muted, fontWeight:600 }}>12,400+</span> professionals in 40+ countries
             </p>
-            <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:8, maxWidth:520, margin:"0 auto" }}>
+
+            {/* Stats */}
+            <div className="hero-stats" style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:8, maxWidth:520, margin:"0 auto 28px" }}>
               {[[t.stat1v,t.stat1l],[t.stat2v,t.stat2l],[t.stat3v,t.stat3l]].map(([v,l],i)=>(
                 <div key={i} style={{ background:COLORS.surface, border:`0.5px solid ${COLORS.border}`, borderRadius:12, padding:"13px 10px" }}>
                   <div style={{ fontSize:"clamp(19px,3.2vw,28px)", fontWeight:600, color:COLORS.danger, fontFamily:"'Fraunces',serif", marginBottom:4 }}>{v}</div>
@@ -858,12 +873,17 @@ export default function Contrivox() {
                 </div>
               ))}
             </div>
+
+            {/* Sample report CTA */}
+            <a href="/sample-report" target="_blank" onClick={()=>Analytics.ctaClicked("hero")} style={{ display:"inline-flex", alignItems:"center", gap:6, fontSize:13, color:"rgba(167,139,250,0.85)", fontFamily:"'DM Sans',sans-serif", textDecoration:"none", padding:"8px 18px", border:"0.5px solid rgba(139,92,246,0.3)", borderRadius:8, background:"rgba(139,92,246,0.06)", transition:"all .15s" }}>
+              {t.sample_btn}
+            </a>
           </div>
         </section>
 
         {/* FEAR SECTION */}
         <section style={{ padding:"0 20px 72px" }}>
-          <div style={{ maxWidth:900, margin:"0 auto", display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(250px,1fr))", gap:12 }}>
+          <div className="fear-grid" style={{ maxWidth:900, margin:"0 auto", display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(250px,1fr))", gap:12 }}>
             {[[t.fear1t,t.fear1b],[t.fear2t,t.fear2b],[t.fear3t,t.fear3b]].map(([title,body],i)=>{
               const fearIcons = [
                 <IconAlertTriangle size={18} color="#f87171"/>,
@@ -884,7 +904,7 @@ export default function Contrivox() {
         </section>
 
         {/* TRUST STRIP */}
-        <section style={{ padding:"0 20px 52px" }}>
+        <section style={{ padding:"0 20px 40px" }}>
           <div style={{ maxWidth:820, margin:"0 auto" }}>
             <p style={{ fontSize:11, color:COLORS.faint, textAlign:"center", letterSpacing:"0.07em", textTransform:"uppercase", fontFamily:"'DM Sans',sans-serif", marginBottom:16 }}>{t.trust_label}</p>
             <div style={{ display:"flex", flexWrap:"wrap", justifyContent:"center", gap:"8px 14px" }}>
@@ -895,15 +915,35 @@ export default function Contrivox() {
           </div>
         </section>
 
-        {/* UPLOAD + CONTACT COLLECTION */}
+        {/* RISK STATS */}
+        <section style={{ padding:"0 20px 60px" }}>
+          <div style={{ maxWidth:820, margin:"0 auto" }}>
+            <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(22px,3.5vw,32px)", color:COLORS.heading, textAlign:"center", marginBottom:8, fontWeight:600 }}>{t.risk_stats_title}</h2>
+            <p style={{ fontSize:13, color:COLORS.muted, textAlign:"center", marginBottom:28, fontFamily:"'DM Sans',sans-serif" }}>
+              Based on{" "}
+              <span style={{ color:COLORS.text, fontWeight:500 }}>
+                {{ employment:"employment contracts", nda:"NDAs", lease:"lease agreements", freelance:"freelance contracts" }[detectedType]}
+              </span>
+              {preview ? " — detected from your upload." : "."}
+            </p>
+            <div className="risk-stats-grid" style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:12 }}>
+              {currentStats.map(({stat,desc},i)=>(
+                <div key={i} style={{ background:"rgba(239,68,68,0.04)", border:"0.5px solid rgba(239,68,68,0.13)", borderRadius:14, padding:"20px 18px", textAlign:"center" }}>
+                  <div style={{ fontSize:"clamp(28px,4vw,42px)", fontWeight:700, color:COLORS.danger, fontFamily:"'Fraunces',serif", marginBottom:8, lineHeight:1 }}>{stat}</div>
+                  <div style={{ fontSize:12, color:COLORS.muted, lineHeight:1.6, fontFamily:"'DM Sans',sans-serif" }}>{desc}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* UPLOAD */}
         <section id="upload-sec" style={{ padding:"0 20px 60px" }}>
           <div style={{ maxWidth:660, margin:"0 auto" }}>
             <div style={{ background:"rgba(255,255,255,0.024)", border:`0.5px solid ${COLORS.border}`, borderRadius:20, padding:"26px 24px", backdropFilter:"blur(12px)" }}>
               <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:22, color:COLORS.heading, marginBottom:4, fontWeight:600 }}>{t.upload_title}</h2>
               <p style={{ fontSize:12, color:COLORS.muted, margin:"0 0 18px", fontFamily:"'DM Sans',sans-serif" }}>{t.upload_formats} · Any language</p>
 
-              {/* ── MOBILE-FRIENDLY FILE PICKER ── */}
-              {/* Hidden real input — always present so it can be triggered programmatically */}
               <input
                 ref={fileRef}
                 type="file"
@@ -913,7 +953,6 @@ export default function Contrivox() {
               />
 
               {file ? (
-                /* File chosen — show file card */
                 <div style={{ background:"rgba(34,197,94,0.06)", border:"0.5px solid rgba(34,197,94,0.3)", borderRadius:13, padding:"18px 16px", display:"flex", alignItems:"center", gap:14, marginBottom:18 }}>
                   <div style={{ width:44, height:44, borderRadius:10, background:"rgba(34,197,94,0.1)", border:"0.5px solid rgba(34,197,94,0.2)", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
                     <IconFileDoc size={20} color="#4ade80"/>
@@ -923,12 +962,11 @@ export default function Contrivox() {
                     <p style={{ fontSize:11, color:COLORS.muted, margin:0, fontFamily:"'DM Sans',sans-serif" }}>{(file.size/1024).toFixed(0)} KB · {file.name.split(".").pop().toUpperCase()}</p>
                   </div>
                   <button
-                    onClick={()=>{ setFile(null); setResult(null); }}
+                    onClick={()=>{ setFile(null); setPreview(null); setResult(null); }}
                     style={{ background:"rgba(239,68,68,0.12)", border:"0.5px solid rgba(239,68,68,0.25)", color:"#f87171", borderRadius:8, padding:"6px 12px", fontSize:12, cursor:"pointer", fontFamily:"'DM Sans',sans-serif", flexShrink:0 }}
                   >✕</button>
                 </div>
               ) : (
-                /* Drop / tap zone — whole area is clickable, large touch target */
                 <div
                   onDragOver={e=>{e.preventDefault();setDragging(true);}}
                   onDragLeave={()=>setDragging(false)}
@@ -938,13 +976,7 @@ export default function Contrivox() {
                   tabIndex={0}
                   onKeyDown={e=>e.key==="Enter"&&fileRef.current.click()}
                   aria-label={t.upload_drop}
-                  style={{
-                    border:`1.5px dashed ${dragging?"rgba(139,92,246,0.7)":COLORS.faint}`,
-                    borderRadius:13, padding:"36px 20px", textAlign:"center",
-                    cursor:"pointer", background:dragging?"rgba(139,92,246,0.05)":"rgba(255,255,255,0.015)",
-                    transition:"all .2s", marginBottom:18, WebkitTapHighlightColor:"transparent",
-                    touchAction:"manipulation", userSelect:"none",
-                  }}
+                  style={{ border:`1.5px dashed ${dragging?"rgba(139,92,246,0.7)":COLORS.faint}`, borderRadius:13, padding:"36px 20px", textAlign:"center", cursor:"pointer", background:dragging?"rgba(139,92,246,0.05)":"rgba(255,255,255,0.015)", transition:"all .2s", marginBottom:18, WebkitTapHighlightColor:"transparent", touchAction:"manipulation", userSelect:"none" }}
                 >
                   <div style={{ width:52, height:52, borderRadius:13, background:"rgba(139,92,246,0.12)", border:"0.5px solid rgba(139,92,246,0.25)", display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 13px" }}>
                     <IconFileDoc size={24} color="rgba(167,139,250,0.85)"/>
@@ -963,17 +995,10 @@ export default function Contrivox() {
                 </div>
               )}
 
-              {!account && (
-                <p style={{ fontSize:12, color:COLORS.faint, textAlign:"center", fontFamily:"'DM Sans',sans-serif", marginBottom:12 }}>
-                  {t.account_signin_prompt}{" "}
-                  <button onClick={()=>setShowAuth(true)} style={{ background:"none", border:"none", color:"rgba(167,139,250,0.7)", cursor:"pointer", fontSize:12, textDecoration:"underline", fontFamily:"'DM Sans',sans-serif" }}>{t.nav_signin}</button>
-                </p>
-              )}
-
               <button
                 onClick={analyse}
                 disabled={!file||loading}
-                style={{ width:"100%", padding:"15px", fontSize:15, fontWeight:700, borderRadius:12, border:"none", cursor:file&&!loading?"pointer":"not-allowed", background:file&&!loading?COLORS.accentGrad:"rgba(255,255,255,0.05)", color:file&&!loading?"white":"rgba(255,255,255,0.18)", transition:"all .2s", letterSpacing:"0.02em", touchAction:"manipulation", WebkitTapHighlightColor:"transparent" }}
+                style={{ width:"100%", padding:"16px", fontSize:15, fontWeight:700, borderRadius:12, border:"none", cursor:file&&!loading?"pointer":"not-allowed", background:file&&!loading?COLORS.accentGrad:"rgba(255,255,255,0.05)", color:file&&!loading?"white":"rgba(255,255,255,0.18)", transition:"all .2s", letterSpacing:"0.02em", touchAction:"manipulation", WebkitTapHighlightColor:"transparent", minHeight:52 }}
               >
                 {loading ? (
                   <span style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:10 }}>
@@ -982,16 +1007,34 @@ export default function Contrivox() {
                   </span>
                 ) : t.analyse_btn}
               </button>
+              <p style={{ textAlign:"center", fontSize:11, color:COLORS.faint, fontFamily:"'DM Sans',sans-serif", marginTop:10 }}>{t.analyse_trust}</p>
+            </div>
+
+            {/* Privacy note */}
+            <div style={{ marginTop:14, display:"flex", alignItems:"flex-start", gap:8, padding:"12px 16px", background:"rgba(255,255,255,0.02)", border:`0.5px solid ${COLORS.border}`, borderRadius:10 }}>
+              <IconLock size={12} color={COLORS.faint} style={{ flexShrink:0, marginTop:1 }}/>
+              <p style={{ fontSize:11.5, color:COLORS.faint, fontFamily:"'DM Sans',sans-serif", lineHeight:1.6, margin:0 }}>
+                {t.privacy_note}{" "}
+                <a href="/privacy" style={{ color:"rgba(167,139,250,0.6)", textDecoration:"underline" }}>Privacy Policy</a>
+              </p>
             </div>
           </div>
         </section>
 
-        {/* RESULTS */}
-        {result && (
+        {/* PREVIEW CARD (shown after upload, before payment) */}
+        {preview && !result && (
           <section ref={resultsRef} style={{ padding:"0 20px 80px", animation:"fadeUp .5s ease" }}>
             <div style={{ maxWidth:660, margin:"0 auto" }}>
+              <PreviewCard preview={preview} onUnlock={handleUnlock} unlockLoading={unlockLoading} t={t}/>
+            </div>
+          </section>
+        )}
 
-              {/* Score card */}
+        {/* FULL RESULT (history loads only — always unlocked) */}
+        {result && (
+          <section ref={!preview ? resultsRef : undefined} style={{ padding:"0 20px 80px", animation:"fadeUp .5s ease" }}>
+            <div style={{ maxWidth:660, margin:"0 auto" }}>
+
               <div style={{ background:"rgba(255,255,255,0.024)", border:`0.5px solid ${COLORS.border}`, borderRadius:20, padding:"22px 22px", marginBottom:12, display:"flex", alignItems:"center", gap:22, flexWrap:"wrap" }}>
                 <ScoreRing score={result.score} label={result.score_label} t={t}/>
                 <div style={{ flex:1, minWidth:190 }}>
@@ -1006,7 +1049,6 @@ export default function Contrivox() {
                 </div>
               </div>
 
-              {/* Recommendation */}
               <div style={{ background:"rgba(99,102,241,0.07)", border:"0.5px solid rgba(99,102,241,0.2)", borderRadius:13, padding:"15px 17px", marginBottom:12, display:"flex", gap:12, alignItems:"flex-start" }}>
                 <div style={{ width:30, height:30, borderRadius:7, background:"rgba(99,102,241,0.14)", border:"0.5px solid rgba(99,102,241,0.22)", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
                   <IconLightbulb size={14} color="#818cf8"/>
@@ -1017,58 +1059,44 @@ export default function Contrivox() {
                 </div>
               </div>
 
-              {/* Tabs */}
-              <div style={{ display:"flex", gap:3, marginBottom:12, background:"rgba(255,255,255,0.024)", borderRadius:11, padding:"3px", border:`0.5px solid rgba(255,255,255,0.06)` }}>
+              <div style={{ display:"flex", gap:3, marginBottom:12, background:"rgba(255,255,255,0.024)", borderRadius:11, padding:"3px", border:"0.5px solid rgba(255,255,255,0.06)" }}>
                 {tabBtn("clauses", `${t.tab_clauses} (${result.key_clauses?.length||0})`)}
                 {tabBtn("flags",   `${t.tab_flags} (${result.red_flags?.length||0})`)}
                 {tabBtn("missing", `${t.tab_missing} (${result.missing_protections?.length||0})`)}
               </div>
 
-              {/* Tab content */}
-              <div style={{ background:"rgba(255,255,255,0.018)", border:`0.5px solid rgba(255,255,255,0.06)`, borderRadius:14, padding:16, position:"relative", overflow:"hidden" }}>
-                {!unlocked && (
-                  <div style={{ display:"flex", alignItems:"center", gap:6, marginBottom:13 }}>
-                    <span style={{ background:"rgba(239,68,68,0.13)", color:"#f87171", fontSize:10, fontWeight:700, padding:"2px 8px", borderRadius:20, letterSpacing:"0.05em", fontFamily:"'DM Sans',sans-serif" }}>{t.preview_only}</span>
-                    <span style={{ fontSize:11, color:COLORS.faint, fontFamily:"'DM Sans',sans-serif" }}>
-                      {t.showing} {
-                        tab==="clauses"?Math.min(CLAUSE_PREVIEW,result.key_clauses?.length||0):
-                        tab==="flags"?(result.red_flags||[]).filter(f=>f.urgency!=="high").length:
-                        Math.min(MISSING_PREVIEW,result.missing_protections?.length||0)
-                      } {t.of} {
-                        tab==="clauses"?result.key_clauses?.length:
-                        tab==="flags"?result.red_flags?.length:
-                        result.missing_protections?.length
-                      }
-                    </span>
-                  </div>
+              <div style={{ background:"rgba(255,255,255,0.018)", border:"0.5px solid rgba(255,255,255,0.06)", borderRadius:14, padding:16, marginBottom:12 }}>
+                {tab==="clauses" && (result.key_clauses?.length
+                  ? result.key_clauses.map((c,i)=><ClauseCard key={i} clause={c} t={t}/>)
+                  : <p style={{ color:COLORS.muted, fontSize:13, textAlign:"center", padding:"20px 0", fontFamily:"'DM Sans',sans-serif" }}>{t.none_found}</p>
                 )}
-                {tab==="clauses" && renderPaywalled(result.key_clauses, CLAUSE_PREVIEW,  (c,i) => <ClauseCard key={i} clause={c} t={t}/>)}
-                {tab==="flags"   && (()=>{
-                  const sorted = [...(result.red_flags||[])].sort((a,b)=>{
-                    const o={high:2,medium:1,low:0};
-                    return (o[a.urgency]??1)-(o[b.urgency]??1);
-                  });
-                  const freeCount = sorted.filter(f=>f.urgency!=="high").length;
-                  return renderPaywalled(sorted, freeCount, (f,i)=><FlagCard key={i} flag={f} t={t}/>);
-                })()}
-                {tab==="missing" && renderPaywalled(result.missing_protections, MISSING_PREVIEW, (m,i) => (
-                  <div key={i} style={{ display:"flex", gap:9, padding:"10px 12px", marginBottom:7, background:"rgba(245,158,11,0.05)", border:"0.5px solid rgba(245,158,11,0.15)", borderRadius:9 }}>
-                    <span style={{ color:"#fbbf24", flexShrink:0, display:"flex", paddingTop:1 }}><IconAlertTriangle size={14} color="#fbbf24"/></span>
-                    <p style={{ fontSize:13, color:"rgba(255,255,255,0.68)", lineHeight:1.65, margin:0, fontFamily:"'DM Sans',sans-serif" }}>{m}</p>
-                  </div>
-                ))}
+                {tab==="flags" && (result.red_flags?.length
+                  ? result.red_flags.map((f,i)=><FlagCard key={i} flag={f} t={t}/>)
+                  : <p style={{ color:COLORS.muted, fontSize:13, textAlign:"center", padding:"20px 0", fontFamily:"'DM Sans',sans-serif" }}>{t.none_found}</p>
+                )}
+                {tab==="missing" && (result.missing_protections?.length
+                  ? result.missing_protections.map((m,i)=>(
+                    <div key={i} style={{ display:"flex", gap:9, padding:"10px 12px", marginBottom:7, background:"rgba(245,158,11,0.05)", border:"0.5px solid rgba(245,158,11,0.15)", borderRadius:9 }}>
+                      <span style={{ color:"#fbbf24", flexShrink:0, display:"flex", paddingTop:1 }}><IconAlertTriangle size={14} color="#fbbf24"/></span>
+                      <p style={{ fontSize:13, color:"rgba(255,255,255,0.68)", lineHeight:1.65, margin:0, fontFamily:"'DM Sans',sans-serif" }}>{m}</p>
+                    </div>
+                  ))
+                  : <p style={{ color:COLORS.muted, fontSize:13, textAlign:"center", padding:"20px 0", fontFamily:"'DM Sans',sans-serif" }}>{t.none_found}</p>
+                )}
               </div>
-              <p style={{ marginTop:12, fontSize:11, color:COLORS.faint, textAlign:"center", fontFamily:"'DM Sans',sans-serif", lineHeight:1.6 }}>{result.disclaimer}</p>
+
+              <DeliveryPanel result={result} t={t} pdfUri={pdfUri}/>
+              <p style={{ marginTop:8, fontSize:11, color:COLORS.faint, textAlign:"center", fontFamily:"'DM Sans',sans-serif", lineHeight:1.6 }}>{result.disclaimer}</p>
             </div>
           </section>
         )}
 
         {/* HOW IT WORKS */}
-        <section style={{ padding:"72px 20px", background:"rgba(255,255,255,0.013)" }}>
+        <section id="how" style={{ padding:"72px 20px", background:"rgba(255,255,255,0.013)" }}>
           <div style={{ maxWidth:860, margin:"0 auto" }}>
             <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(26px,4vw,40px)", color:COLORS.heading, textAlign:"center", marginBottom:8, fontWeight:600 }}>{t.how_title}</h2>
             <p style={{ fontSize:14, color:COLORS.muted, textAlign:"center", marginBottom:40, fontFamily:"'DM Sans',sans-serif" }}>60 seconds from upload to full report.</p>
-            <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(210px,1fr))", gap:12 }}>
+            <div className="how-grid" style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(210px,1fr))", gap:12 }}>
               {[[t.how1t,t.how1b,"01"],[t.how2t,t.how2b,"02"],[t.how3t,t.how3b,"03"]].map(([title,body,n],i)=>{
                 const howIcons = [
                   <IconUpload size={18} color="rgba(167,139,250,0.9)"/>,
@@ -1095,7 +1123,7 @@ export default function Contrivox() {
           <div style={{ maxWidth:900, margin:"0 auto" }}>
             <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(26px,4vw,40px)", color:COLORS.heading, textAlign:"center", marginBottom:8, fontWeight:600 }}>{t.test_title}</h2>
             <p style={{ fontSize:14, color:COLORS.muted, textAlign:"center", marginBottom:40, fontFamily:"'DM Sans',sans-serif" }}>What people found in their contracts.</p>
-            <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(250px,1fr))", gap:12 }}>
+            <div className="test-grid" style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(250px,1fr))", gap:12 }}>
               {[[t.t1n,t.t1r,t.t1t],[t.t2n,t.t2r,t.t2t],[t.t3n,t.t3r,t.t3t]].map(([name,role,text],i)=>(
                 <div key={i} style={{ background:COLORS.surface, border:`0.5px solid ${COLORS.border}`, borderRadius:14, padding:"20px 18px", display:"flex", flexDirection:"column" }}>
                   <div style={{ marginBottom:12, color:"#f59e0b", fontSize:12, letterSpacing:"2px" }}>★★★★★</div>
@@ -1111,7 +1139,7 @@ export default function Contrivox() {
         </section>
 
         {/* FAQ */}
-        <section style={{ padding:"72px 20px", background:"rgba(255,255,255,0.013)" }}>
+        <section id="faq" style={{ padding:"72px 20px", background:"rgba(255,255,255,0.013)" }}>
           <div style={{ maxWidth:620, margin:"0 auto" }}>
             <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(26px,4vw,38px)", color:COLORS.heading, textAlign:"center", marginBottom:36, fontWeight:600 }}>{t.faq_title}</h2>
             <FaqItem q={t.faq1q} a={t.faq1a}/>
@@ -1119,6 +1147,7 @@ export default function Contrivox() {
             <FaqItem q={t.faq3q} a={t.faq3a}/>
             <FaqItem q={t.faq4q} a={t.faq4a}/>
             <FaqItem q={t.faq5q} a={t.faq5a}/>
+            <FaqItem q={t.faq6q} a={t.faq6a}/>
           </div>
         </section>
 
@@ -1127,13 +1156,13 @@ export default function Contrivox() {
           <div style={{ maxWidth:520, margin:"0 auto" }}>
             <ContrivoxLogo size={20}/>
             <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(24px,4vw,40px)", color:COLORS.heading, margin:"20px 0 10px", lineHeight:1.15, fontWeight:600 }}>{t.cta_band}</h2>
-            <p style={{ fontSize:14, color:COLORS.muted, marginBottom:28, lineHeight:1.7, fontFamily:"'DM Sans',sans-serif" }}>
-              The analysis is free. The full report is $3.99.<br/>
-              <span style={{ color:COLORS.faint }}>No account required. No subscription.</span>
+            <p style={{ fontSize:14, color:COLORS.muted, marginBottom:10, lineHeight:1.7, fontFamily:"'DM Sans',sans-serif" }}>
+              {t.cta_urgency}
             </p>
-            <button onClick={()=>{ Analytics.ctaClicked("cta_band"); document.getElementById("upload-sec")?.scrollIntoView({behavior:"smooth"}); }} style={{ padding:"15px 36px", fontSize:15.5, fontWeight:700, background:COLORS.accentGrad, color:"white", border:"none", borderRadius:12, cursor:"pointer", fontFamily:"'DM Sans',sans-serif", boxShadow:"0 5px 30px rgba(99,102,241,0.38)", animation:"glow 3s infinite", letterSpacing:"0.01em" }}>
-              Analyse My Contract — Free
+            <button onClick={()=>{ Analytics.ctaClicked("cta_band"); document.getElementById("upload-sec")?.scrollIntoView({behavior:"smooth"}); }} style={{ padding:"16px 40px", fontSize:15.5, fontWeight:700, background:COLORS.accentGrad, color:"white", border:"none", borderRadius:12, cursor:"pointer", fontFamily:"'DM Sans',sans-serif", boxShadow:"0 5px 30px rgba(99,102,241,0.38)", animation:"glow 3s infinite", letterSpacing:"0.01em", minHeight:52, marginTop:10 }}>
+              Check My Contract — $9
             </button>
+            <p style={{ marginTop:12, fontSize:11.5, color:COLORS.faint, fontFamily:"'DM Sans',sans-serif" }}>{t.cta_trust}</p>
             <div style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:16, marginTop:14, flexWrap:"wrap" }}>
               <span style={{ display:"flex", alignItems:"center", gap:5, fontSize:11, color:COLORS.faint, fontFamily:"'DM Sans',sans-serif" }}><IconLock size={11} color="currentColor"/> Private &amp; secure</span>
               <span style={{ display:"flex", alignItems:"center", gap:5, fontSize:11, color:COLORS.faint, fontFamily:"'DM Sans',sans-serif" }}><IconZap size={11} color="currentColor"/> Results in 60 seconds</span>

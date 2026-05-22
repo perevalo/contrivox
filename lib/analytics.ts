@@ -13,8 +13,6 @@ export const Analytics = {
 
   analysisStarted: (props: {
     file_type: string;
-    has_email: boolean;
-    has_whatsapp: boolean;
   }) => posthog.capture("analysis_started", props),
 
   analysisCompleted: (props: {
@@ -34,11 +32,11 @@ export const Analytics = {
   whatsappCaptured: () => posthog.capture("whatsapp_captured"),
 
   // ── Paywall ───────────────────────────────────────────────────────────────
-  paywallShown: (props: { tab: string; items_hidden: number }) =>
-    posthog.capture("paywall_shown", props),
+  previewShown: (props: { contract_type: string; high_risk_count: number }) =>
+    posthog.capture("preview_shown", props),
 
   unlockClicked: () =>
-    posthog.capture("unlock_clicked", { value: 3.99, currency: "USD" }),
+    posthog.capture("unlock_clicked", { value: 9, currency: "USD" }),
 
   // ── Report delivery ───────────────────────────────────────────────────────
   reportSentEmail: () => posthog.capture("report_sent_email"),
