@@ -16,6 +16,7 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   return {
     title: post.seo.metaTitle,
     description: post.seo.metaDescription,
+    keywords: post.keywords,
     alternates: { canonical: post.seo.canonicalURL },
     openGraph: {
       title: post.seo.metaTitle,
@@ -23,6 +24,7 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
       url: post.seo.canonicalURL,
       type: "article",
       publishedTime: post.publishedAt,
+      modifiedTime: post.updatedAt,
     },
     twitter: {
       card: "summary_large_image",
@@ -41,14 +43,27 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
     "@type": "Article",
     headline: post.title,
     description: post.excerpt,
+    keywords: post.keywords.join(", "),
+    author: {
+      "@type": "Organization",
+      name: "Contrivox",
+      url: "https://contrivox.com",
+    },
     publisher: {
       "@type": "Organization",
       name: "Contrivox",
       logo: { "@type": "ImageObject", url: "https://contrivox.com/logo.png" },
     },
+    image: {
+      "@type": "ImageObject",
+      url: "https://contrivox.com/logo.png",
+      width: 148,
+      height: 32,
+    },
     datePublished: post.publishedAt,
     dateModified: post.updatedAt,
     mainEntityOfPage: { "@type": "WebPage", "@id": post.seo.canonicalURL },
+    inLanguage: "en-US",
   };
 
   return (

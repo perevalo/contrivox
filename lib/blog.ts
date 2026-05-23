@@ -32,6 +32,7 @@ export interface BlogPost {
   publishedAt: string;
   updatedAt: string;
   coverImage: string | null;
+  keywords: string[];
   seo: { metaTitle: string; metaDescription: string; canonicalURL: string };
   readingTime: number;
 }
@@ -54,6 +55,10 @@ function parsePost(filename: string): BlogPost {
 
   const date = (data.publishedAt as string) ?? new Date().toISOString().slice(0, 10);
 
+  const primaryKeyword = data.primaryKeyword as string | undefined;
+  const secondaryKeywords = (data.secondaryKeywords as string[] | undefined) ?? [];
+  const keywords = primaryKeyword ? [primaryKeyword, ...secondaryKeywords] : secondaryKeywords;
+
   return {
     slug,
     title: (data.title as string) ?? slug,
@@ -64,6 +69,7 @@ function parsePost(filename: string): BlogPost {
     publishedAt: date,
     updatedAt: (data.updatedAt as string) ?? date,
     coverImage: (data.coverImage as string) ?? null,
+    keywords,
     seo: {
       metaTitle: (data.title as string) ?? slug,
       metaDescription: (data.metaDescription as string) ?? "",

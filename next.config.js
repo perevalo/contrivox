@@ -58,6 +58,12 @@ const nextConfig = {
         destination: "https://contrivox.com/:path*",
         permanent: true,
       },
+      // favicon.ico fallback for browsers that request it directly
+      {
+        source: "/favicon.ico",
+        destination: "/favicon.png",
+        permanent: false,
+      },
       // SEO keyword landing routes
       {
         source: "/non-compete-checker",
