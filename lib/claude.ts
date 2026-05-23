@@ -104,7 +104,7 @@ export async function previewContract(payload: FilePayload): Promise<ContractPre
   }
 
   // PDFs need sonnet — haiku misreads them and returns error strings as contract_type
-  const model = payload.type === "pdf" ? "claude-sonnet-4-20250514" : "claude-haiku-4-5-20251001";
+  const model = payload.type === "pdf" ? "claude-sonnet-4-6" : "claude-haiku-4-5-20251001";
 
   try {
     const message = await client.messages.create({
@@ -184,7 +184,7 @@ export async function analyseContract(
 
   try {
     const message = await client.messages.create({
-      model: "claude-sonnet-4-20250514",
+      model: "claude-sonnet-4-6",
       max_tokens: 4096,
       system: buildContrivoxPrompt(langCode),
       messages: [{ role: "user", content: userContent }],

@@ -240,7 +240,7 @@ Before any production deploy, verify:
 
 ## 🤖 CLAUDE API USAGE RULES
 
-- Model: `claude-sonnet-4-20250514` (never use haiku for contract analysis)
+- Model: `claude-sonnet-4-6` (never use haiku for contract analysis)
 - Max tokens: 4096 (analysis), 1000 (summaries)
 - Temperature: not set (default) — we want deterministic legal analysis
 - System prompt: ALWAYS include the full safety + language instruction prompt
