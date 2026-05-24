@@ -17,6 +17,10 @@ suggestedCategory: "Employment"
 suggestedFeaturedImage: "Employee reviewing a contract with a magnifying glass on a non-compete clause"
 relatedArticles:
   - employment-contract-red-flags
+  - non-compete-enforceable-california
+  - non-compete-enforceable-texas
+  - non-compete-enforceable-new-york
+  - violate-non-compete-agreement
   - what-is-an-nda
   - contract-clauses-explained
 publishedAt: "2026-05-20"

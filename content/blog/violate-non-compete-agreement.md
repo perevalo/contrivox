@@ -4,7 +4,7 @@
 title: "What Happens If You Violate a Non-Compete Agreement? (2025)"
 slug: "violate-non-compete-agreement"
 metaTitle: "What Happens If You Violate a Non-Compete? (2025)"
-metaDescription: "Breaking a non-compete can lead to lawsuits, injunctions, and damages — but enforcement varies widely. Here's what actually happens and how to protect yourself."
+metaDescription: "Breaking a non-compete can lead to lawsuits and injunctions. Enforcement varies by state. Here's what actually happens and how to protect yourself."
 primaryKeyword: "what happens if you violate non-compete"
 secondaryKeywords:
   - break non-compete agreement

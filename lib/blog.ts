@@ -42,9 +42,14 @@ function calcReadingTime(md: string): number {
   return Math.max(1, Math.ceil(words / 200));
 }
 
-function parsePost(filename: string): BlogPost {
+// Returns null for draft posts (missing or empty publishedAt)
+function parsePost(filename: string): BlogPost | null {
   const raw = fs.readFileSync(path.join(POSTS_DIR, filename), "utf-8");
   const { data, content } = matter(raw);
+
+  // Treat missing or empty publishedAt as a draft — exclude from all public listings
+  const publishedAt = (data.publishedAt as string) || "";
+  if (!publishedAt) return null;
 
   const slug = (data.slug as string) || filename.replace(/\.md$/, "");
   const catName = data.suggestedCategory as string | undefined;
@@ -52,8 +57,6 @@ function parsePost(filename: string): BlogPost {
   const category: BlogCategory | null = catMeta && catName
     ? { slug: catMeta.slug, name: catName, color: catMeta.color, description: catMeta.description }
     : null;
-
-  const date = (data.publishedAt as string) ?? new Date().toISOString().slice(0, 10);
 
   const primaryKeyword = data.primaryKeyword as string | undefined;
   const secondaryKeywords = (data.secondaryKeywords as string[] | undefined) ?? [];
@@ -66,12 +69,12 @@ function parsePost(filename: string): BlogPost {
     bodyHtml: String(marked.parse(content)),
     category,
     featured: Boolean(data.featured),
-    publishedAt: date,
-    updatedAt: (data.updatedAt as string) ?? date,
+    publishedAt,
+    updatedAt: (data.updatedAt as string) || publishedAt,
     coverImage: (data.coverImage as string) ?? null,
     keywords,
     seo: {
-      metaTitle: (data.title as string) ?? slug,
+      metaTitle: (data.metaTitle as string) || (data.title as string) || slug,
       metaDescription: (data.metaDescription as string) ?? "",
       canonicalURL: `https://contrivox.com/blog/${slug}`,
     },
@@ -85,6 +88,7 @@ function loadAll(): BlogPost[] {
     .readdirSync(POSTS_DIR)
     .filter(f => f.endsWith(".md"))
     .map(f => parsePost(f))
+    .filter((p): p is BlogPost => p !== null)
     .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
 }
 

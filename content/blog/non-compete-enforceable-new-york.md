@@ -4,7 +4,7 @@
 title: "Is a Non-Compete Enforceable in New York? (2025)"
 slug: "non-compete-enforceable-new-york"
 metaTitle: "Is a Non-Compete Enforceable in New York? (2025)"
-metaDescription: "New York passed sweeping non-compete restrictions. Here's what changed, what it means for your contract, and how to protect yourself."
+metaDescription: "New York passed sweeping non-compete restrictions in 2023 — then the governor vetoed them. Here's what the law says now and how to protect yourself."
 primaryKeyword: "non-compete enforceable New York"
 secondaryKeywords:
   - New York non-compete law 2024

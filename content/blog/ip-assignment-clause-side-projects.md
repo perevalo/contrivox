@@ -3,7 +3,7 @@
 ---
 title: "IP Assignment Clauses: Does Your Employer Own Your Side Projects?"
 slug: "ip-assignment-clause-side-projects"
-metaTitle: "IP Assignment Clauses: Does Your Boss Own Your Side Projects?"
+metaTitle: "IP Assignment: Does Your Boss Own Your Side Projects?"
 metaDescription: "Many employment contracts claim ownership of everything you create — even outside work hours. Here's how to find and fight this clause."
 primaryKeyword: "IP assignment clause side projects"
 secondaryKeywords:

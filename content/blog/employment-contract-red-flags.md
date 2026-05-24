@@ -16,6 +16,8 @@ suggestedCategory: "Employment"
 suggestedFeaturedImage: "Person reviewing a job offer letter at a desk"
 relatedArticles:
   - non-compete-clause-explained
+  - arbitration-clause-opt-out
+  - ip-assignment-clause-side-projects
   - indemnification-clause-explained
   - contract-clauses-explained
 publishedAt: "2026-05-19"
