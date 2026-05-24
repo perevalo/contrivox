@@ -1083,7 +1083,7 @@ export default function Contrivox() {
           <div style={{ maxWidth:660, margin:"0 auto" }}>
             <div style={{ background:"rgba(255,255,255,0.024)", border:`0.5px solid ${COLORS.border}`, borderRadius:20, padding:"26px 24px", backdropFilter:"blur(12px)" }}>
               <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:22, color:COLORS.heading, marginBottom:4, fontWeight:600 }}>{t.upload_title}</h2>
-              <p style={{ fontSize:12, color:COLORS.muted, margin:"0 0 18px", fontFamily:"'DM Sans',sans-serif" }}>{t.upload_formats} · Any language</p>
+              <p style={{ fontSize:12, color:"var(--cvx-upload-label)", margin:"0 0 18px", fontFamily:"'DM Sans',sans-serif" }}>{t.upload_formats} · Any language</p>
 
               <input
                 ref={fileRef}
@@ -1123,7 +1123,7 @@ export default function Contrivox() {
                     <IconFileDoc size={24} color="rgba(167,139,250,0.85)"/>
                   </div>
                   <p style={{ fontSize:15, fontWeight:600, color:COLORS.text, marginBottom:4, fontFamily:"'DM Sans',sans-serif" }}>{t.upload_drop}</p>
-                  <p style={{ fontSize:11.5, color:COLORS.faint, fontFamily:"'DM Sans',sans-serif", marginBottom:14 }}>{t.upload_or}</p>
+                  <p style={{ fontSize:11.5, color:"var(--cvx-upload-hint)", fontFamily:"'DM Sans',sans-serif", marginBottom:14 }}>{t.upload_or}</p>
                   <span style={{ display:"inline-block", padding:"9px 22px", fontSize:13, fontWeight:600, background:COLORS.accentGrad, color:"white", borderRadius:9, fontFamily:"'DM Sans',sans-serif", boxShadow:"0 2px 12px rgba(99,102,241,0.35)", pointerEvents:"none" }}>
                     Choose file
                   </span>
@@ -1139,7 +1139,7 @@ export default function Contrivox() {
               <button
                 onClick={analyse}
                 disabled={!file||loading}
-                style={{ width:"100%", padding:"16px", fontSize:15, fontWeight:700, borderRadius:12, border:"none", cursor:file&&!loading?"pointer":"not-allowed", background:file&&!loading?COLORS.accentGrad:"rgba(255,255,255,0.05)", color:file&&!loading?"white":"rgba(255,255,255,0.18)", transition:"all .2s", letterSpacing:"0.02em", touchAction:"manipulation", WebkitTapHighlightColor:"transparent", minHeight:52 }}
+                style={{ width:"100%", padding:"16px", fontSize:15, fontWeight:700, borderRadius:12, border:file&&!loading?"none":"1.5px solid var(--cvx-upload-cta-idle-bd)", cursor:file&&!loading?"pointer":"default", background:file&&!loading?COLORS.accentGrad:"var(--cvx-upload-cta-idle-bg)", color:file&&!loading?"white":"var(--cvx-upload-cta-idle-text)", transition:"all .25s ease", letterSpacing:"0.02em", touchAction:"manipulation", WebkitTapHighlightColor:"transparent", minHeight:52, boxShadow:file&&!loading?"0 4px 24px rgba(99,102,241,0.40)":"none" }}
               >
                 {loading ? (
                   <span style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:10 }}>
@@ -1148,15 +1148,15 @@ export default function Contrivox() {
                   </span>
                 ) : t.analyse_btn}
               </button>
-              <p style={{ textAlign:"center", fontSize:11, color:COLORS.faint, fontFamily:"'DM Sans',sans-serif", marginTop:10 }}>{t.analyse_trust}</p>
+              <p style={{ textAlign:"center", fontSize:11, color:"var(--cvx-upload-hint)", fontFamily:"'DM Sans',sans-serif", marginTop:10 }}>{t.analyse_trust}</p>
             </div>
 
             {/* Privacy note */}
             <div style={{ marginTop:14, display:"flex", alignItems:"flex-start", gap:8, padding:"12px 16px", background:"rgba(255,255,255,0.02)", border:`0.5px solid ${COLORS.border}`, borderRadius:10 }}>
-              <IconLock size={12} color={COLORS.faint} style={{ flexShrink:0, marginTop:1 }}/>
-              <p style={{ fontSize:11.5, color:COLORS.faint, fontFamily:"'DM Sans',sans-serif", lineHeight:1.6, margin:0 }}>
+              <IconLock size={12} color="var(--cvx-upload-label)" style={{ flexShrink:0, marginTop:1 }}/>
+              <p style={{ fontSize:11.5, color:"var(--cvx-upload-label)", fontFamily:"'DM Sans',sans-serif", lineHeight:1.6, margin:0 }}>
                 {t.privacy_note}{" "}
-                <a href="/privacy" style={{ color:"rgba(167,139,250,0.6)", textDecoration:"underline" }}>Privacy Policy</a>
+                <a href="/privacy" style={{ color:"var(--cvx-accent)", textDecoration:"underline" }}>Privacy Policy</a>
               </p>
             </div>
           </div>
