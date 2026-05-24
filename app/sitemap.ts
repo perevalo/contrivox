@@ -23,8 +23,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }));
 
   return [
-    { url: base,           lastModified: new Date(), changeFrequency: "weekly" as const, priority: 1   },
-    { url: `${base}/blog`, lastModified: new Date(), changeFrequency: "weekly" as const, priority: 0.9 },
+    { url: base,                        lastModified: new Date(), changeFrequency: "weekly"  as const, priority: 1   },
+    { url: `${base}/sample-report`,     lastModified: new Date(), changeFrequency: "monthly" as const, priority: 0.8 },
+    { url: `${base}/blog`,              lastModified: new Date(), changeFrequency: "weekly"  as const, priority: 0.9 },
+    { url: `${base}/contact`,           lastModified: new Date(), changeFrequency: "monthly" as const, priority: 0.5 },
+    { url: `${base}/privacy`,           lastModified: new Date(), changeFrequency: "monthly" as const, priority: 0.4 },
+    { url: `${base}/terms`,             lastModified: new Date(), changeFrequency: "monthly" as const, priority: 0.4 },
     ...postUrls,
     ...catUrls,
   ];

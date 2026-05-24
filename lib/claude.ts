@@ -79,6 +79,8 @@ export type FilePayload =
 
 export type ContractPreview = {
   contract_type: string;
+  is_contract: boolean;
+  rejected_type: string | null;
   high_risk_count: number;
   flagged_count: number;
   page_estimate: number;
@@ -89,18 +91,28 @@ const PREVIEW_SYSTEM = `You are a contract classifier. Return ONLY a valid JSON 
 export async function previewContract(payload: FilePayload): Promise<ContractPreview> {
   let userContent: Anthropic.MessageParam["content"];
 
+  const classifyPrompt = `Scan this document and return ONLY this JSON:
+{"contract_type":"type in plain English e.g. Employment Agreement","is_contract":true,"rejected_type":null,"high_risk_count":0,"flagged_count":0,"page_estimate":1}
+
+Rules:
+- Set is_contract=true ONLY if the document is one of: employment agreement, NDA, non-disclosure agreement, lease, rental agreement, tenancy agreement, freelance contract, independent contractor agreement, service agreement, business contract, vendor agreement, settlement agreement, commercial lease.
+- Set is_contract=false and set rejected_type to what the document actually is (e.g. "Resume/CV", "Invoice", "Academic Paper", "Medical Record", "Letter") for all other documents.
+- high_risk_count: count of non-competes + mandatory arbitration + broad IP assignment + clawback + unilateral modification clauses (integer 0-20).
+- flagged_count: count of other clauses worth reviewing (integer 0-20).
+- page_estimate: estimated number of pages (integer 1-50).`;
+
   if (payload.type === "image") {
     userContent = [
       { type: "image", source: { type: "base64", media_type: payload.mediaType as "image/jpeg" | "image/png" | "image/gif" | "image/webp", data: payload.data } },
-      { type: "text", text: `Scan this contract and return ONLY this JSON:\n{"contract_type":"type in plain English e.g. Employment Agreement","high_risk_count":<integer: non-competes + mandatory arbitration + broad IP assignment + clawback + unilateral modification>,"flagged_count":<integer: other clauses worth reviewing>,"page_estimate":<integer: estimated pages 1-50>}` },
+      { type: "text", text: classifyPrompt },
     ];
   } else if (payload.type === "pdf") {
     userContent = [
       { type: "document", source: { type: "base64", media_type: "application/pdf", data: payload.data } },
-      { type: "text", text: `Scan this contract and return ONLY this JSON:\n{"contract_type":"type in plain English e.g. Employment Agreement","high_risk_count":<integer: non-competes + mandatory arbitration + broad IP assignment + clawback + unilateral modification>,"flagged_count":<integer: other clauses worth reviewing>,"page_estimate":<integer: estimated pages 1-50>}` },
+      { type: "text", text: classifyPrompt },
     ];
   } else {
-    userContent = `Scan this contract and return ONLY this JSON:\n{"contract_type":"type in plain English e.g. Employment Agreement","high_risk_count":<integer: non-competes + mandatory arbitration + broad IP assignment + clawback + unilateral modification>,"flagged_count":<integer: other clauses worth reviewing>,"page_estimate":<integer: estimated pages 1-50>}\n\nContract:\n${payload.text.slice(0, 60000)}`;
+    userContent = `${classifyPrompt}\n\nDocument:\n${payload.text.slice(0, 60000)}`;
   }
 
   // PDFs need sonnet — haiku misreads them and returns error strings as contract_type
@@ -126,15 +138,20 @@ export async function previewContract(payload: FilePayload): Promise<ContractPre
     const badType = /unable|cannot|corrupt|encrypt|error|unknown|n\/a|not (a |be |determine)/i.test(rawType);
     const contract_type = badType || !rawType ? "Contract" : String(parsed.contract_type).slice(0, 200);
 
+    const is_contract = parsed.is_contract === false ? false : true;
+    const rejected_type = is_contract ? null : (String(parsed.rejected_type || "").slice(0, 100) || "Unknown document type");
+
     return {
       contract_type,
+      is_contract,
+      rejected_type,
       high_risk_count: Math.max(0, Math.min(20, parseInt(String(parsed.high_risk_count)) || 0)),
       flagged_count:   Math.max(0, Math.min(20, parseInt(String(parsed.flagged_count))   || 0)),
       page_estimate:   Math.max(1, Math.min(50, parseInt(String(parsed.page_estimate))   || 1)),
     };
   } catch (err) {
     console.error("[previewContract] error:", err instanceof Error ? err.message : String(err));
-    return { contract_type: "Contract", high_risk_count: 0, flagged_count: 0, page_estimate: 1 };
+    return { contract_type: "Contract", is_contract: true, rejected_type: null, high_risk_count: 0, flagged_count: 0, page_estimate: 1 };
   }
 }
 

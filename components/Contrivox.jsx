@@ -29,7 +29,7 @@ const T = {
     privacy_note: "Your contract is encrypted in transit, analyzed privately, and never stored after your report is delivered.",
     risk_stats_title: "What's hiding in your contract?",
     preview_scanned: "Contract Scanned",
-    preview_pages: "pages scanned",
+    preview_pages: "scanned",
     preview_high_risk: "high-risk clauses detected",
     preview_flagged: "clauses flagged for review",
     unlock_btn: "Unlock Full Report — $9",
@@ -82,7 +82,7 @@ const T = {
     faq4q: "Is my contract private?",
     faq4a: "Yes. Your document is encrypted in transit, processed privately in memory, and deleted after your report is generated. We never sell or share your contract data. See our privacy policy for full details.",
     faq5q: "How is this different from asking ChatGPT?",
-    faq5a: "Contrivox is trained specifically on US contract language. It knows which clauses are standard, which are aggressive, and what negotiation leverage you have. ChatGPT gives general answers — Contrivox gives clause-by-clause analysis with a fairness score and ready-to-use negotiation scripts.",
+    faq5a: "ChatGPT gives general information about contract clauses. Contrivox is purpose-built for contract analysis — it understands clause-level risk, flags terms that are aggressive compared to industry standards, generates a Fairness Score based on the full document, and provides negotiation scripts tailored to your specific clauses. It's the difference between a general health article and a doctor reading your actual test results.",
     faq6q: "What contract types do you support?",
     faq6a: "Employment agreements, NDAs and non-disclosure agreements, freelance and independent contractor contracts, service agreements, and residential leases. Contract types are detected automatically — just upload.",
     cta_band: "Know exactly what you're signing.",
@@ -490,12 +490,34 @@ function FlagCard({ flag, t }) {
 
 // ─── Preview card (shown after upload, before payment) ────────────────────────
 function PreviewCard({ preview, onUnlock, unlockLoading, t }) {
-  const locked = [
-    "Fairness Score (0–100)",
-    "Full clause-by-clause breakdown",
-    "Negotiation scripts for each red flag",
-    "Missing legal protections",
-  ];
+  const isZeroFindings = preview.high_risk_count === 0 && preview.flagged_count === 0;
+  const totalIssues = (preview.high_risk_count || 0) + (preview.flagged_count || 0);
+
+  // Animated counter from 0 → final value over 1.5s
+  const [highCount, setHighCount] = useState(0);
+  const [flagCount, setFlagCount] = useState(0);
+  useEffect(() => {
+    if (isZeroFindings) return;
+    const steps = 30, duration = 1500;
+    let step = 0;
+    const iv = setInterval(() => {
+      step++;
+      const p = step / steps;
+      setHighCount(Math.round(preview.high_risk_count * p));
+      setFlagCount(Math.round(preview.flagged_count * p));
+      if (step >= steps) clearInterval(iv);
+    }, duration / steps);
+    return () => clearInterval(iv);
+  }, []);
+
+  const blurText = { fontSize:13, color:COLORS.muted, fontFamily:"'DM Sans',sans-serif", filter:"blur(3.5px)", userSelect:"none", lineHeight:1.6, margin:0, pointerEvents:"none" };
+  const fadeOverlay = { position:"absolute", bottom:0, left:0, right:0, height:"65%", background:"linear-gradient(to bottom, transparent, var(--cvx-bg))", pointerEvents:"none" };
+  const lockBadge = (
+    <span style={{ display:"flex", alignItems:"center", gap:4, fontSize:10, fontWeight:700, color:COLORS.faint, letterSpacing:"0.06em", fontFamily:"'DM Sans',sans-serif", flexShrink:0 }}>
+      <IconLock size={10} color="currentColor"/> LOCKED
+    </span>
+  );
+
   return (
     <div style={{ background:"rgba(255,255,255,0.024)", border:`0.5px solid ${COLORS.border}`, borderRadius:20, overflow:"hidden", animation:"fadeUp .5s ease" }}>
       {/* Header */}
@@ -509,37 +531,114 @@ function PreviewCard({ preview, onUnlock, unlockLoading, t }) {
 
       {/* Counts */}
       <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", borderBottom:`0.5px solid ${COLORS.border}` }}>
-        <div style={{ padding:"24px 22px", textAlign:"center", borderRight:`0.5px solid ${COLORS.border}` }}>
-          <div style={{ fontSize:44, fontWeight:700, color:COLORS.danger, fontFamily:"'Fraunces',serif", lineHeight:1 }}>{preview.high_risk_count}</div>
-          <div style={{ fontSize:12, color:COLORS.muted, fontFamily:"'DM Sans',sans-serif", marginTop:7, lineHeight:1.5 }}>{t.preview_high_risk}</div>
+        <div style={{ padding:"20px 22px", textAlign:"center", borderRight:`0.5px solid ${COLORS.border}` }}>
+          {!isZeroFindings && preview.high_risk_count > 0 && (
+            <div style={{ marginBottom:6 }}>
+              <span style={{ fontSize:10, fontWeight:700, color:"#ef4444", background:"rgba(239,68,68,0.12)", padding:"2px 9px", borderRadius:20, letterSpacing:"0.06em", fontFamily:"'DM Sans',sans-serif" }}>⚠ HIGH RISK</span>
+            </div>
+          )}
+          {isZeroFindings
+            ? <div style={{ fontSize:14, fontWeight:700, color:COLORS.text, fontFamily:"'DM Sans',sans-serif", lineHeight:1.4, padding:"8px 0" }}>No major red flags detected</div>
+            : <div style={{ fontSize:44, fontWeight:700, color:COLORS.danger, fontFamily:"'Fraunces',serif", lineHeight:1 }}>{highCount}</div>
+          }
+          {!isZeroFindings && <div style={{ fontSize:12, color:COLORS.muted, fontFamily:"'DM Sans',sans-serif", marginTop:7, lineHeight:1.5 }}>{t.preview_high_risk}</div>}
         </div>
-        <div style={{ padding:"24px 22px", textAlign:"center" }}>
-          <div style={{ fontSize:44, fontWeight:700, color:"#fbbf24", fontFamily:"'Fraunces',serif", lineHeight:1 }}>{preview.flagged_count}</div>
-          <div style={{ fontSize:12, color:COLORS.muted, fontFamily:"'DM Sans',sans-serif", marginTop:7, lineHeight:1.5 }}>{t.preview_flagged}</div>
+        <div style={{ padding:"20px 22px", textAlign:"center" }}>
+          {!isZeroFindings && preview.flagged_count > 0 && (
+            <div style={{ marginBottom:6 }}>
+              <span style={{ fontSize:10, fontWeight:700, color:"#f59e0b", background:"rgba(245,158,11,0.12)", padding:"2px 9px", borderRadius:20, letterSpacing:"0.06em", fontFamily:"'DM Sans',sans-serif" }}>! REVIEW NEEDED</span>
+            </div>
+          )}
+          {isZeroFindings
+            ? <div style={{ fontSize:14, fontWeight:700, color:COLORS.text, fontFamily:"'DM Sans',sans-serif", lineHeight:1.4, padding:"8px 0" }}>Standard clauses present</div>
+            : <div style={{ fontSize:44, fontWeight:700, color:"#fbbf24", fontFamily:"'Fraunces',serif", lineHeight:1 }}>{flagCount}</div>
+          }
+          {!isZeroFindings && <div style={{ fontSize:12, color:COLORS.muted, fontFamily:"'DM Sans',sans-serif", marginTop:7, lineHeight:1.5 }}>{t.preview_flagged}</div>}
         </div>
       </div>
 
-      {/* Locked rows */}
-      <div style={{ padding:"0 22px" }}>
-        {locked.map((label, i) => (
-          <div key={i} style={{ display:"flex", alignItems:"center", justifyContent:"space-between", padding:"13px 0", borderBottom: i < locked.length - 1 ? `0.5px solid ${COLORS.faint}` : "none" }}>
-            <span style={{ fontSize:13, color:COLORS.muted, fontFamily:"'DM Sans',sans-serif" }}>{label}</span>
-            <span style={{ display:"flex", alignItems:"center", gap:4, fontSize:10, fontWeight:700, color:COLORS.faint, letterSpacing:"0.06em", fontFamily:"'DM Sans',sans-serif" }}>
-              <IconLock size={10} color="currentColor"/> LOCKED
-            </span>
+      {/* Zero-findings reassurance */}
+      {isZeroFindings && (
+        <div style={{ padding:"14px 22px", background:"rgba(34,197,94,0.04)", borderBottom:`0.5px solid ${COLORS.faint}` }}>
+          <p style={{ fontSize:12.5, color:COLORS.muted, fontFamily:"'DM Sans',sans-serif", lineHeight:1.65, margin:0, textAlign:"center" }}>
+            Your full report includes your Fairness Score, complete clause-by-clause breakdown, and any missing legal protections — even in clean contracts.
+          </p>
+        </div>
+      )}
+
+      {/* Teaser locked rows */}
+      <div style={{ padding:"4px 22px 0" }}>
+
+        {/* Fairness Score */}
+        <div style={{ padding:"14px 0", borderBottom:`0.5px solid ${COLORS.faint}` }}>
+          <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:10 }}>
+            <span style={{ fontSize:13, fontWeight:500, color:COLORS.text, fontFamily:"'DM Sans',sans-serif" }}>Fairness Score (0–100)</span>
+            {lockBadge}
           </div>
-        ))}
+          <div style={{ display:"flex", alignItems:"center", gap:12 }}>
+            <span style={{ fontSize:22, fontWeight:700, color:COLORS.faint, fontFamily:"'Fraunces',serif", letterSpacing:"-0.02em", userSelect:"none" }}>██/100</span>
+            <div style={{ flex:1, height:6, background:"rgba(255,255,255,0.07)", borderRadius:3, overflow:"hidden" }}>
+              <div style={{ width:"58%", height:"100%", background:"linear-gradient(90deg,#7c3aed,#6366f1)", borderRadius:3, filter:"blur(2px)" }}/>
+            </div>
+          </div>
+        </div>
+
+        {/* Full clause breakdown */}
+        <div style={{ padding:"14px 0", borderBottom:`0.5px solid ${COLORS.faint}` }}>
+          <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:8 }}>
+            <span style={{ fontSize:13, fontWeight:500, color:COLORS.text, fontFamily:"'DM Sans',sans-serif" }}>Full clause-by-clause breakdown</span>
+            {lockBadge}
+          </div>
+          <div style={{ position:"relative", overflow:"hidden" }}>
+            <p style={blurText}>Section 4.2 contains a restraint clause that may limit your ability to work in your industry for up to 24 months after leaving. Section 6.1 assigns all intellectual property created during employment to the employer, including work done outside business hours...</p>
+            <div style={fadeOverlay}/>
+          </div>
+        </div>
+
+        {/* Negotiation scripts */}
+        <div style={{ padding:"14px 0", borderBottom:`0.5px solid ${COLORS.faint}` }}>
+          <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:8 }}>
+            <span style={{ fontSize:13, fontWeight:500, color:COLORS.text, fontFamily:"'DM Sans',sans-serif" }}>Negotiation scripts for each red flag</span>
+            {lockBadge}
+          </div>
+          <div style={{ position:"relative", overflow:"hidden" }}>
+            <p style={blurText}>For the clause on page {Math.max(2, Math.floor((preview.page_estimate || 3) * 0.4))}, respond to your employer with: "I'd like to propose an amendment to this section — specifically regarding the scope of the restriction, which as written would prevent me from...</p>
+            <div style={fadeOverlay}/>
+          </div>
+        </div>
+
+        {/* Missing legal protections */}
+        <div style={{ padding:"14px 0" }}>
+          <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:8 }}>
+            <span style={{ fontSize:13, fontWeight:500, color:COLORS.text, fontFamily:"'DM Sans',sans-serif" }}>Missing legal protections</span>
+            {lockBadge}
+          </div>
+          <div style={{ position:"relative", overflow:"hidden" }}>
+            <p style={blurText}>This contract is missing standard protections including severance provisions, written notice requirements before termination, and equity vesting acceleration on acquisition or change of control...</p>
+            <div style={fadeOverlay}/>
+          </div>
+        </div>
+
       </div>
 
       {/* CTA */}
       <div style={{ padding:"20px 22px 24px" }}>
+        <p style={{ textAlign:"center", fontSize:12.5, color:COLORS.muted, fontFamily:"'DM Sans',sans-serif", marginBottom:12, lineHeight:1.5 }}>
+          {totalIssues > 0
+            ? `You have ${totalIssues} issue${totalIssues !== 1 ? "s" : ""} that need your attention before you sign.`
+            : "Verify this contract is safe to sign."
+          }
+        </p>
         <button
           onClick={onUnlock}
           disabled={unlockLoading}
-          style={{ width:"100%", padding:"16px", fontSize:15, fontWeight:700, background:unlockLoading?COLORS.surface:COLORS.accentGrad, color:unlockLoading?COLORS.faint:"white", border:"none", borderRadius:12, cursor:unlockLoading?"not-allowed":"pointer", fontFamily:"'DM Sans',sans-serif", boxShadow:unlockLoading?"none":"0 4px 28px rgba(99,102,241,0.5)", letterSpacing:"0.01em", transition:"all .2s", marginBottom:10 }}
+          style={{ width:"100%", padding:"16px", fontSize:15, fontWeight:700, background:unlockLoading?COLORS.surface:COLORS.accentGrad, color:unlockLoading?COLORS.faint:"white", border:"none", borderRadius:12, cursor:unlockLoading?"not-allowed":"pointer", fontFamily:"'DM Sans',sans-serif", boxShadow:unlockLoading?"none":"0 4px 28px rgba(99,102,241,0.5)", letterSpacing:"0.01em", transition:"all .2s", marginBottom:8 }}
         >
           {unlockLoading ? "Redirecting to checkout…" : t.unlock_btn}
         </button>
+        <p style={{ textAlign:"center", fontSize:12, color:COLORS.muted, fontFamily:"'DM Sans',sans-serif", marginBottom:8 }}>
+          ⏱ Your report will be ready in 60 seconds
+        </p>
         <p style={{ textAlign:"center", fontSize:11, color:COLORS.faint, fontFamily:"'DM Sans',sans-serif", display:"flex", alignItems:"center", justifyContent:"center", gap:5, margin:0 }}>
           <IconLock size={10} color="currentColor"/> {t.unlock_trust}
         </p>
@@ -663,8 +762,8 @@ function HistoryPanel({ t, account, onClose, onLoad }) {
   );
 }
 
-function FaqItem({ q, a }) {
-  const [open, setOpen] = useState(false);
+function FaqItem({ q, a, initialOpen = false }) {
+  const [open, setOpen] = useState(initialOpen);
   return (
     <div style={{ borderBottom:`0.5px solid ${COLORS.border}`, padding:"17px 0" }}>
       <button onClick={()=>{ const next=!open; setOpen(next); if(next) Analytics.faqOpened(q); }} style={{ width:"100%", display:"flex", justifyContent:"space-between", alignItems:"center", background:"none", border:"none", cursor:"pointer", textAlign:"left", padding:0, gap:12 }}>
@@ -694,6 +793,7 @@ export default function Contrivox() {
   const [showHist, setShowHist]           = useState(false);
   const [sessionId, setSessionId]         = useState(null);
   const [unlockLoading, setUnlockLoading] = useState(false);
+  const [rejectedDoc, setRejectedDoc]     = useState(null);
   const fileRef    = useRef();
   const resultsRef = useRef();
   const t = T.en;
@@ -718,12 +818,15 @@ export default function Contrivox() {
 
   const analyse = async () => {
     if (!file) return;
-    setLoading(true); setError(null); setPreview(null); setResult(null); setPdfUri(null); setSessionId(null);
+    setLoading(true); setError(null); setPreview(null); setResult(null); setPdfUri(null); setSessionId(null); setRejectedDoc(null);
 
-    const msgs = ["Uploading your contract…", "Scanning clause types…", "Detecting risk patterns…", "Building your preview…"];
-    let mi = 0;
-    setLoadMsg(msgs[0]);
-    const interval = setInterval(() => { mi = (mi + 1) % msgs.length; setLoadMsg(msgs[mi]); }, 1800);
+    const loadStart = Date.now();
+    const loadTimers = [];
+    const loadMsgs = ["Reading your contract...", "Scanning for risk clauses...", "Calculating fairness score...", "Preparing your summary..."];
+    setLoadMsg(loadMsgs[0]);
+    loadTimers.push(setTimeout(() => setLoadMsg(loadMsgs[1]), 1500));
+    loadTimers.push(setTimeout(() => setLoadMsg(loadMsgs[2]), 3000));
+    loadTimers.push(setTimeout(() => setLoadMsg(loadMsgs[3]), 4500));
 
     try {
       const payload = await extractFile(file);
@@ -748,6 +851,18 @@ export default function Contrivox() {
       }
 
       const { sessionId: sid, preview: prev } = await res.json();
+
+      // Hold on the last loading message until at least 4.5 s have elapsed
+      const elapsed = Date.now() - loadStart;
+      if (elapsed < 4500) await new Promise(r => setTimeout(r, 4500 - elapsed));
+
+      // Reject non-contract documents before showing paywall
+      if (prev && prev.is_contract === false) {
+        setRejectedDoc(prev.rejected_type || "this type of document");
+        setTimeout(() => resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 150);
+        return;
+      }
+
       setSessionId(sid);
       setPreview(prev);
 
@@ -769,7 +884,7 @@ export default function Contrivox() {
       setError("Could not process your contract. Please try again.");
       Analytics.analysisErrored(e.message);
     } finally {
-      clearInterval(interval);
+      loadTimers.forEach(clearTimeout);
       setLoading(false);
     }
   };
@@ -818,9 +933,10 @@ export default function Contrivox() {
         input::placeholder{color:var(--cvx-placeholder);}
         input:focus{border-color:rgba(139,92,246,0.45)!important;outline:none;}
         button,a,[role="button"]{-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
-        @media(max-width:640px){
+        @media(max-width:767px){
           nav{padding:0 14px!important;}
           .nav-links{display:none!important;}
+          .sign-in-link{display:none!important;}
           section{padding-left:14px!important;padding-right:14px!important;}
           .hero-stats{grid-template-columns:1fr 1fr!important;}
           .fear-grid{grid-template-columns:1fr!important;}
@@ -864,7 +980,7 @@ export default function Contrivox() {
                 </>
               ) : (
                 <>
-                  <button onClick={()=>{ Analytics.signInClicked(); setShowAuth(true); }} className="nav-link" style={{ padding:"6px 13px", fontSize:12, fontWeight:500, background:COLORS.inputBg, color:COLORS.muted, border:`0.5px solid ${COLORS.border}`, borderRadius:8, cursor:"pointer" }}>{t.nav_signin}</button>
+                  <button onClick={()=>{ Analytics.signInClicked(); setShowAuth(true); }} className="nav-link sign-in-link" style={{ padding:"6px 8px", fontSize:14, fontWeight:400, background:"none", color:COLORS.muted, border:"none", cursor:"pointer" }}>{t.nav_signin}</button>
                   <button onClick={scrollToUpload} style={{ padding:"7px 16px", fontSize:12.5, fontWeight:700, background:COLORS.accentGrad, color:"white", border:"none", borderRadius:8, cursor:"pointer", animation:"glow 3s infinite", letterSpacing:"0.01em", minHeight:36 }}>{t.nav_cta}</button>
                 </>
               )}
@@ -886,7 +1002,7 @@ export default function Contrivox() {
             <p style={{ fontSize:"clamp(14.5px,1.9vw,17px)", color:COLORS.muted, lineHeight:1.76, maxWidth:500, margin:"0 auto 14px", fontFamily:"'DM Sans',sans-serif" }}>{t.hero_sub}</p>
             <p style={{ fontSize:13, color:COLORS.muted, marginBottom:10, fontFamily:"'DM Sans',sans-serif" }}>{t.hero_social}</p>
             <p style={{ fontSize:12, color:COLORS.faint, marginBottom:32, fontFamily:"'DM Sans',sans-serif" }}>
-              Trusted by <span style={{ color:COLORS.muted, fontWeight:600 }}>12,400+</span> professionals in 40+ countries
+              Trusted by professionals in <span style={{ color:COLORS.muted, fontWeight:600 }}>40+ countries</span>
             </p>
 
             {/* Stats */}
@@ -1046,6 +1162,34 @@ export default function Contrivox() {
           </div>
         </section>
 
+        {/* REJECTED DOCUMENT STATE */}
+        {rejectedDoc && !preview && !result && (
+          <section ref={resultsRef} style={{ padding:"0 20px 80px", animation:"fadeUp .5s ease" }}>
+            <div style={{ maxWidth:660, margin:"0 auto" }}>
+              <div style={{ background:"rgba(255,255,255,0.024)", border:`0.5px solid ${COLORS.border}`, borderRadius:20, padding:"40px 28px", textAlign:"center" }}>
+                <div style={{ width:56, height:56, borderRadius:14, background:"rgba(245,158,11,0.1)", border:"0.5px solid rgba(245,158,11,0.2)", display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 20px" }}>
+                  <IconAlertTriangle size={24} color="#fbbf24"/>
+                </div>
+                <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:22, color:COLORS.heading, fontWeight:600, marginBottom:12 }}>This doesn't look like a contract</h2>
+                <p style={{ fontSize:14, color:COLORS.muted, fontFamily:"'DM Sans',sans-serif", lineHeight:1.7, maxWidth:420, margin:"0 auto 28px" }}>
+                  We detected this might be a <strong style={{ color:COLORS.text }}>{rejectedDoc}</strong>. Contrivox works with employment agreements, NDAs, leases, freelance contracts, and service agreements.
+                </p>
+                <div style={{ display:"flex", flexDirection:"column", gap:12, alignItems:"center" }}>
+                  <button
+                    onClick={() => { setRejectedDoc(null); setFile(null); setPreview(null); setError(null); }}
+                    style={{ padding:"14px 32px", fontSize:14, fontWeight:700, background:COLORS.accentGrad, color:"white", border:"none", borderRadius:12, cursor:"pointer", fontFamily:"'DM Sans',sans-serif", minHeight:48, boxShadow:"0 4px 20px rgba(99,102,241,0.4)" }}
+                  >
+                    Try a Different File
+                  </button>
+                  <a href="/sample-report" target="_blank" style={{ fontSize:13, color:"rgba(167,139,250,0.8)", fontFamily:"'DM Sans',sans-serif", textDecoration:"none" }}>
+                    See a Sample Report →
+                  </a>
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
+
         {/* PREVIEW CARD (shown after upload, before payment) */}
         {preview && !result && (
           <section ref={resultsRef} style={{ padding:"0 20px 80px", animation:"fadeUp .5s ease" }}>
@@ -1167,11 +1311,11 @@ export default function Contrivox() {
         <section id="faq" style={{ padding:"72px 20px", background:"rgba(255,255,255,0.013)" }}>
           <div style={{ maxWidth:620, margin:"0 auto" }}>
             <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(26px,4vw,38px)", color:COLORS.heading, textAlign:"center", marginBottom:36, fontWeight:600 }}>{t.faq_title}</h2>
-            <FaqItem q={t.faq1q} a={t.faq1a}/>
-            <FaqItem q={t.faq2q} a={t.faq2a}/>
-            <FaqItem q={t.faq3q} a={t.faq3a}/>
-            <FaqItem q={t.faq4q} a={t.faq4a}/>
+            <FaqItem q={t.faq1q} a={t.faq1a} initialOpen={true}/>
+            <FaqItem q={t.faq4q} a={t.faq4a} initialOpen={true}/>
             <FaqItem q={t.faq5q} a={t.faq5a}/>
+            <FaqItem q={t.faq3q} a={t.faq3a}/>
+            <FaqItem q={t.faq2q} a={t.faq2a}/>
             <FaqItem q={t.faq6q} a={t.faq6a}/>
           </div>
         </section>
