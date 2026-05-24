@@ -60,9 +60,9 @@ const T = {
     none_found: "None identified.",
     disclaimer: "Contrivox is not a law firm and does not provide legal advice. This report is for informational purposes only. Consult a qualified lawyer before signing any contract.",
     how_title: "How it works",
-    how1t: "Upload in any format", how1b: "PDF, photo, Word doc, or paste text. Any language.",
-    how2t: "AI reads every clause", how2b: "Identifies risks, missing protections, and one-sided terms in seconds.",
-    how3t: "Get your plain-language report", how3b: "Fairness score, red flags, and exact scripts to negotiate better terms.",
+    how1t: "Upload in any format", how1b: "PDF, photo, Word doc, or pasted text — in any language. Upload takes under 10 seconds.",
+    how2t: "AI reads every clause", how2b: "Scans for non-competes, arbitration clauses, IP assignment, auto-renewals, indemnification terms, and 40+ other clause types — in 60 seconds.",
+    how3t: "Get your plain-language report", how3b: "Your Fairness Score (0–100), every red flag explained in plain English, missing protections identified, and word-for-word negotiation scripts for every problematic clause.",
     trust_label: "Trusted by professionals in 40+ countries",
     trust_items: ["Employment contracts", "Lease agreements", "Freelance contracts", "NDAs", "Service agreements", "Business contracts"],
     test_title: "Real people. Real contracts.",
@@ -88,7 +88,7 @@ const T = {
     cta_band: "Know exactly what you're signing.",
     cta_urgency: "The average employment dispute costs $18,000. A $9 report takes 60 seconds.",
     cta_trust: "Secure payment via Stripe · No subscription · No account required",
-    footer_copy: "© 2025 Contrivox",
+    footer_copy: `© ${new Date().getFullYear()} Contrivox`,
     account_title: "My Analyses", account_empty: "No saved analyses yet. Upload a contract to get started.",
     account_date: "Analysed", account_view: "View report",
     account_signin_prompt: "Sign in to save this analysis to your account.",
@@ -107,21 +107,49 @@ const RISK_STATS = {
     { stat: "81%", desc: "include mandatory arbitration clauses that waive your right to sue in court" },
     { stat: "43%", desc: "have IP assignment clauses that may cover your personal projects" },
   ],
-  nda: [
-    { stat: "58%", desc: "of NDAs have overly broad definitions of confidential information" },
-    { stat: "71%", desc: "include indefinite duration clauses that courts often limit or void" },
-    { stat: "39%", desc: "are one-sided — only one party is bound by confidentiality obligations" },
-  ],
   lease: [
-    { stat: "62%", desc: "of leases include auto-renewal clauses that activate without notice" },
-    { stat: "44%", desc: "contain late fee provisions above state-permitted maximums" },
-    { stat: "51%", desc: "assign maintenance duties that exceed what tenants legally owe" },
+    { stat: "72%", desc: "of lease agreements contain auto-renewal clauses with no cap on rent increases" },
+    { stat: "58%", desc: "include landlord entry clauses broader than local law requires" },
+    { stat: "41%", desc: "have unilateral modification clauses that let landlords change terms mid-lease" },
   ],
   freelance: [
-    { stat: "73%", desc: "of freelance contracts assign all IP to the client — including pre-existing work" },
-    { stat: "55%", desc: "include kill fees well below the industry standard of 25–50%" },
-    { stat: "48%", desc: "allow unilateral scope changes without additional compensation" },
+    { stat: "68%", desc: "of freelance contracts claim ownership of all work created during the contract period" },
+    { stat: "54%", desc: "contain payment dispute clauses that favor the client over the freelancer" },
+    { stat: "39%", desc: "include non-solicitation clauses that limit your future client relationships" },
   ],
+  nda: [
+    { stat: "61%", desc: "of NDAs have no expiration date or time limit" },
+    { stat: "74%", desc: "define confidential information so broadly it covers publicly available information" },
+    { stat: "45%", desc: "include unilateral clauses that only protect the company, not the signer" },
+  ],
+  service: [
+    { stat: "63%", desc: "of service agreements contain automatic renewal clauses with short cancellation windows" },
+    { stat: "55%", desc: "include liability caps that protect the provider, not the customer" },
+    { stat: "48%", desc: "have unilateral price adjustment clauses with no notice requirement" },
+  ],
+  business: [
+    { stat: "71%", desc: "of business contracts include indemnification clauses broader than industry standard" },
+    { stat: "59%", desc: "contain intellectual property assignment clauses that exceed what was negotiated verbally" },
+    { stat: "44%", desc: "have dispute resolution clauses that require arbitration in a different state or jurisdiction" },
+  ],
+};
+
+const STAT_TABS = [
+  { key: "employment", label: "Employment" },
+  { key: "lease",      label: "Lease" },
+  { key: "freelance",  label: "Freelance" },
+  { key: "nda",        label: "NDAs" },
+  { key: "service",    label: "Service" },
+  { key: "business",   label: "Business" },
+];
+
+const STAT_TYPE_LABEL = {
+  employment: "employment contracts",
+  nda:        "NDAs",
+  lease:      "lease agreements",
+  freelance:  "freelance contracts",
+  service:    "service agreements",
+  business:   "business contracts",
 };
 
 // ─── File extraction ──────────────────────────────────────────────────────────
@@ -794,8 +822,11 @@ export default function Contrivox() {
   const [sessionId, setSessionId]         = useState(null);
   const [unlockLoading, setUnlockLoading] = useState(false);
   const [rejectedDoc, setRejectedDoc]     = useState(null);
+  const [statsVisible, setStatsVisible]   = useState(false);
+  const [barWidths, setBarWidths]         = useState([0, 0, 0]);
   const fileRef    = useRef();
   const resultsRef = useRef();
+  const statsRef   = useRef();
   const t = T.en;
 
   useEffect(() => { setAccount(getAccount()); }, []);
@@ -804,6 +835,26 @@ export default function Contrivox() {
     if (!result) return;
     generatePDF(result, t).then(setPdfUri).catch(() => {});
   }, [result]);
+
+  // Animate progress bars into view on scroll
+  useEffect(() => {
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) setStatsVisible(true); },
+      { threshold: 0.2 }
+    );
+    if (statsRef.current) obs.observe(statsRef.current);
+    return () => obs.disconnect();
+  }, []);
+
+  // Re-animate bars when section is visible or contract type tab changes
+  useEffect(() => {
+    if (!statsVisible) { setBarWidths([0, 0, 0]); return; }
+    setBarWidths([0, 0, 0]);
+    const timer = setTimeout(() => {
+      setBarWidths((RISK_STATS[detectedType] ?? RISK_STATS.employment).map(({ stat }) => parseInt(stat)));
+    }, 50);
+    return () => clearTimeout(timer);
+  }, [statsVisible, detectedType]);
 
   const handleFile = useCallback((f) => {
     if (!f) return;
@@ -872,8 +923,12 @@ export default function Contrivox() {
         setDetectedType("nda");
       } else if (typeStr.includes("lease") || typeStr.includes("rental") || typeStr.includes("tenancy")) {
         setDetectedType("lease");
-      } else if (typeStr.includes("freelance") || typeStr.includes("independent") || typeStr.includes("service")) {
+      } else if (typeStr.includes("freelance") || typeStr.includes("independent contractor")) {
         setDetectedType("freelance");
+      } else if (typeStr.includes("service") || typeStr.includes("vendor") || typeStr.includes("consulting")) {
+        setDetectedType("service");
+      } else if (typeStr.includes("business") || typeStr.includes("commercial") || typeStr.includes("partnership")) {
+        setDetectedType("business");
       } else {
         setDetectedType("employment");
       }
@@ -991,19 +1046,16 @@ export default function Contrivox() {
         {/* HERO */}
         <section style={{ padding:"88px 20px 64px", textAlign:"center" }}>
           <div style={{ maxWidth:680, margin:"0 auto" }}>
-            <div style={{ display:"inline-flex", alignItems:"center", gap:7, marginBottom:22, padding:"4px 14px", background:"rgba(239,68,68,0.09)", borderRadius:20, border:"0.5px solid rgba(239,68,68,0.2)" }}>
-              <span style={{ width:5, height:5, borderRadius:"50%", background:COLORS.danger, animation:"pulse 2s infinite", flexShrink:0 }}/>
-              <span style={{ fontSize:10.5, fontWeight:700, color:"#f87171", letterSpacing:"0.08em", textTransform:"uppercase", fontFamily:"'DM Sans',sans-serif" }}>{t.hero_badge}</span>
+            <div style={{ display:"inline-flex", alignItems:"center", gap:7, marginBottom:22, padding:"4px 14px", background:"rgba(124,58,237,0.09)", borderRadius:20, border:"0.5px solid rgba(124,58,237,0.22)" }}>
+              <span style={{ width:5, height:5, borderRadius:"50%", background:"var(--cvx-accent)", animation:"pulse 2s infinite", flexShrink:0 }}/>
+              <span style={{ fontSize:10.5, fontWeight:700, color:"#a78bfa", letterSpacing:"0.08em", textTransform:"uppercase", fontFamily:"'DM Sans',sans-serif" }}>See a sample report →</span>
             </div>
             <h1 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(36px,7vw,66px)", color:COLORS.heading, lineHeight:1.07, marginBottom:20, fontWeight:600 }}>
               {t.hero_h1a}<br/>
               <em style={{ color:COLORS.danger, fontStyle:"italic" }}>{t.hero_h1b}</em>
             </h1>
             <p style={{ fontSize:"clamp(14.5px,1.9vw,17px)", color:COLORS.muted, lineHeight:1.76, maxWidth:500, margin:"0 auto 14px", fontFamily:"'DM Sans',sans-serif" }}>{t.hero_sub}</p>
-            <p style={{ fontSize:13, color:COLORS.muted, marginBottom:10, fontFamily:"'DM Sans',sans-serif" }}>{t.hero_social}</p>
-            <p style={{ fontSize:12, color:COLORS.faint, marginBottom:32, fontFamily:"'DM Sans',sans-serif" }}>
-              Trusted by professionals in <span style={{ color:COLORS.muted, fontWeight:600 }}>40+ countries</span>
-            </p>
+            <p style={{ fontSize:13, color:COLORS.muted, marginBottom:32, fontFamily:"'DM Sans',sans-serif" }}>{t.hero_social}</p>
 
             {/* Stats */}
             <div className="hero-stats" style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:8, maxWidth:520, margin:"0 auto 28px" }}>
@@ -1057,23 +1109,51 @@ export default function Contrivox() {
         </section>
 
         {/* RISK STATS */}
-        <section style={{ padding:"0 20px 60px" }}>
+        <section ref={statsRef} style={{ padding:"0 20px 60px" }}>
           <div style={{ maxWidth:820, margin:"0 auto" }}>
             <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(22px,3.5vw,32px)", color:COLORS.heading, textAlign:"center", marginBottom:8, fontWeight:600 }}>{t.risk_stats_title}</h2>
-            <p style={{ fontSize:13, color:COLORS.muted, textAlign:"center", marginBottom:28, fontFamily:"'DM Sans',sans-serif" }}>
+            <p style={{ fontSize:13, color:COLORS.muted, textAlign:"center", marginBottom:20, fontFamily:"'DM Sans',sans-serif" }}>
               Based on{" "}
               <span style={{ color:COLORS.text, fontWeight:500 }}>
-                {{ employment:"employment contracts", nda:"NDAs", lease:"lease agreements", freelance:"freelance contracts" }[detectedType]}
+                {STAT_TYPE_LABEL[detectedType]}
               </span>
               {preview ? " — detected from your upload." : "."}
             </p>
-            <div className="risk-stats-grid" style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:12 }}>
-              {currentStats.map(({stat,desc},i)=>(
-                <div key={i} style={{ background:"rgba(239,68,68,0.04)", border:"0.5px solid rgba(239,68,68,0.13)", borderRadius:14, padding:"20px 18px", textAlign:"center" }}>
-                  <div style={{ fontSize:"clamp(28px,4vw,42px)", fontWeight:700, color:COLORS.danger, fontFamily:"'Fraunces',serif", marginBottom:8, lineHeight:1 }}>{stat}</div>
-                  <div style={{ fontSize:12, color:COLORS.muted, lineHeight:1.6, fontFamily:"'DM Sans',sans-serif" }}>{desc}</div>
-                </div>
+
+            {/* Tab switcher */}
+            <div style={{ display:"flex", flexWrap:"wrap", justifyContent:"center", gap:6, marginBottom:24 }}>
+              {STAT_TABS.map(({ key, label }) => (
+                <button
+                  key={key}
+                  onClick={() => setDetectedType(key)}
+                  style={{
+                    padding:"6px 14px", fontSize:12, fontWeight:600, borderRadius:20, cursor:"pointer",
+                    fontFamily:"'DM Sans',sans-serif", transition:"all .18s",
+                    background: detectedType === key ? "var(--cvx-accent)" : "rgba(255,255,255,0.05)",
+                    color:      detectedType === key ? "white"            : COLORS.muted,
+                    border:     detectedType === key ? "none"             : `0.5px solid ${COLORS.border}`,
+                  }}
+                >
+                  {label}
+                </button>
               ))}
+            </div>
+
+            <div className="risk-stats-grid" style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:12 }}>
+              {currentStats.map(({ stat, desc }, i) => {
+                const pct = parseInt(stat);
+                const barColor = pct >= 75 ? "var(--cvx-accent)" : pct >= 50 ? "#F59E0B" : "var(--cvx-accent)";
+                return (
+                  <div key={i} style={{ background:"rgba(239,68,68,0.04)", border:"0.5px solid rgba(239,68,68,0.13)", borderRadius:14, padding:"20px 18px", textAlign:"center" }}>
+                    <div style={{ fontSize:"clamp(28px,4vw,42px)", fontWeight:700, color:COLORS.danger, fontFamily:"'Fraunces',serif", marginBottom:6, lineHeight:1 }}>{stat}</div>
+                    {/* Animated progress bar */}
+                    <div style={{ height:4, background:"rgba(255,255,255,0.08)", borderRadius:2, margin:"8px 0 10px", overflow:"hidden" }}>
+                      <div style={{ height:"100%", width: barWidths[i] + "%", background:barColor, borderRadius:2, transition:"width 800ms ease" }}/>
+                    </div>
+                    <div style={{ fontSize:12, color:COLORS.muted, lineHeight:1.6, fontFamily:"'DM Sans',sans-serif" }}>{desc}</div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </section>
@@ -1287,14 +1367,74 @@ export default function Contrivox() {
           </div>
         </section>
 
+        {/* REPORT MOCKUP */}
+        <section style={{ padding:"60px 20px", background:"rgba(255,255,255,0.013)" }}>
+          <div style={{ maxWidth:680, margin:"0 auto", textAlign:"center" }}>
+            <p style={{ fontSize:11, fontWeight:700, color:"var(--cvx-upload-hint)", letterSpacing:"0.1em", textTransform:"uppercase", fontFamily:"'DM Sans',sans-serif", marginBottom:32 }}>Here's what you get</p>
+            <div style={{ transform:"rotate(-1deg)", boxShadow:"0 32px 80px rgba(0,0,0,0.55), 0 8px 24px rgba(0,0,0,0.35)", borderRadius:18, overflow:"hidden", border:`0.5px solid ${COLORS.border}`, background:"#101018" }}>
+              {/* Mockup header */}
+              <div style={{ background:"#0d0d1a", borderBottom:"0.5px solid rgba(255,255,255,0.07)", padding:"18px 22px", display:"flex", alignItems:"center", justifyContent:"space-between" }}>
+                <div style={{ display:"flex", alignItems:"center", gap:10 }}>
+                  <div style={{ width:32, height:32, borderRadius:8, background:"linear-gradient(135deg,#7c3aed,#4f46e5)", display:"flex", alignItems:"center", justifyContent:"center" }}>
+                    <span style={{ fontSize:13, fontWeight:700, color:"white" }}>CV</span>
+                  </div>
+                  <div>
+                    <p style={{ fontSize:11, fontWeight:700, color:"rgba(167,139,250,0.8)", letterSpacing:"0.08em", textTransform:"uppercase", fontFamily:"'DM Sans',sans-serif", margin:0 }}>Contract Analysis Report</p>
+                    <p style={{ fontSize:13, fontWeight:600, color:"#f0eeff", fontFamily:"'Fraunces',serif", margin:0 }}>Employment Agreement</p>
+                  </div>
+                </div>
+                <div style={{ textAlign:"right" }}>
+                  <div style={{ fontSize:22, fontWeight:700, color:"#fbbf24", fontFamily:"'Fraunces',serif", lineHeight:1 }}>61</div>
+                  <div style={{ fontSize:10, color:"rgba(255,255,255,0.45)", fontFamily:"'DM Sans',sans-serif" }}>/100 fairness</div>
+                </div>
+              </div>
+              {/* Score bar */}
+              <div style={{ height:3, background:"rgba(255,255,255,0.07)" }}>
+                <div style={{ width:"61%", height:"100%", background:"linear-gradient(90deg,#f59e0b,#fbbf24)" }}/>
+              </div>
+              {/* Flag cards */}
+              <div style={{ padding:"16px 22px", display:"flex", flexDirection:"column", gap:8 }}>
+                {[
+                  { level:"HIGH RISK", color:"#f87171", bg:"rgba(239,68,68,0.09)", bd:"rgba(239,68,68,0.2)", icon:"⚠", title:"Non-Compete Clause", body:"Bans you from working in the tech industry within 50 miles for 24 months." },
+                  { level:"HIGH RISK", color:"#f87171", bg:"rgba(239,68,68,0.09)", bd:"rgba(239,68,68,0.2)", icon:"⚠", title:"Arbitration Clause", body:"Waives your right to sue or join class actions. All disputes go to private arbitration." },
+                  { level:"REVIEW NEEDED", color:"#fbbf24", bg:"rgba(245,158,11,0.08)", bd:"rgba(245,158,11,0.2)", icon:"!", title:"IP Assignment", body:"Assigns all work created during employment to the employer, including personal projects." },
+                ].map((c,i) => (
+                  <div key={i} style={{ background:c.bg, border:`0.5px solid ${c.bd}`, borderRadius:10, padding:"11px 14px" }}>
+                    <div style={{ display:"flex", alignItems:"center", gap:7, marginBottom:4 }}>
+                      <span style={{ fontSize:9, fontWeight:700, color:c.color, background:`${c.bd}`, padding:"2px 8px", borderRadius:20, letterSpacing:"0.07em", fontFamily:"'DM Sans',sans-serif" }}>{c.icon} {c.level}</span>
+                      <span style={{ fontSize:12.5, fontWeight:600, color:"#f0eeff", fontFamily:"'DM Sans',sans-serif" }}>{c.title}</span>
+                    </div>
+                    <p style={{ fontSize:11.5, color:"rgba(255,255,255,0.6)", fontFamily:"'DM Sans',sans-serif", margin:0, lineHeight:1.55 }}>{c.body}</p>
+                  </div>
+                ))}
+                {/* Locked bottom */}
+                <div style={{ position:"relative", marginTop:4, borderRadius:10, overflow:"hidden" }}>
+                  <div style={{ padding:"14px", background:"rgba(255,255,255,0.03)", border:`0.5px solid ${COLORS.border}`, borderRadius:10, filter:"blur(3px)", userSelect:"none", pointerEvents:"none" }}>
+                    <p style={{ fontSize:12, color:"rgba(255,255,255,0.5)", fontFamily:"'DM Sans',sans-serif", margin:0 }}>Negotiation script: "Request that the non-compete be limited to direct competitors within your specific role..." and 4 more clauses with word-for-word negotiation scripts.</p>
+                  </div>
+                  <div style={{ position:"absolute", inset:0, display:"flex", alignItems:"center", justifyContent:"center", background:"rgba(9,9,15,0.65)", borderRadius:10 }}>
+                    <span style={{ fontSize:12, fontWeight:700, color:"rgba(167,139,250,0.9)", fontFamily:"'DM Sans',sans-serif", letterSpacing:"0.03em" }}>🔒 Negotiation scripts unlocked after purchase</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <a href="/sample-report" target="_blank" style={{ display:"inline-block", marginTop:20, fontSize:13, color:"rgba(167,139,250,0.8)", fontFamily:"'DM Sans',sans-serif", textDecoration:"none" }}>See full sample →</a>
+          </div>
+        </section>
+
         {/* TESTIMONIALS */}
         <section style={{ padding:"72px 20px" }}>
           <div style={{ maxWidth:900, margin:"0 auto" }}>
             <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(26px,4vw,40px)", color:COLORS.heading, textAlign:"center", marginBottom:8, fontWeight:600 }}>{t.test_title}</h2>
             <p style={{ fontSize:14, color:COLORS.muted, textAlign:"center", marginBottom:40, fontFamily:"'DM Sans',sans-serif" }}>What people found in their contracts.</p>
             <div className="test-grid" style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(250px,1fr))", gap:12 }}>
-              {[[t.t1n,t.t1r,t.t1t],[t.t2n,t.t2r,t.t2t],[t.t3n,t.t3r,t.t3t]].map(([name,role,text],i)=>(
+              {[
+                [t.t1n, t.t1r, t.t1t, "IP Assignment Clause"],
+                [t.t2n, t.t2r, t.t2t, "Non-Compete Clause"],
+                [t.t3n, t.t3r, t.t3t, "Auto-Renewal Clause"],
+              ].map(([name, role, text, badge], i) => (
                 <div key={i} style={{ background:COLORS.surface, border:`0.5px solid ${COLORS.border}`, borderRadius:14, padding:"20px 18px", display:"flex", flexDirection:"column" }}>
+                  <span style={{ display:"inline-block", alignSelf:"flex-start", marginBottom:12, padding:"3px 10px", fontSize:10, fontWeight:700, letterSpacing:"0.07em", textTransform:"uppercase", color:"var(--cvx-accent)", background:"rgba(124,58,237,0.12)", border:"1px solid rgba(124,58,237,0.30)", borderRadius:20, fontFamily:"'DM Sans',sans-serif" }}>{badge}</span>
                   <div style={{ marginBottom:12, color:"#f59e0b", fontSize:12, letterSpacing:"2px" }}>★★★★★</div>
                   <p style={{ fontSize:13, color:COLORS.text, lineHeight:1.74, marginBottom:16, fontStyle:"italic", fontFamily:"'DM Sans',sans-serif", flex:1 }}>"{text}"</p>
                   <div style={{ borderTop:`0.5px solid ${COLORS.border}`, paddingTop:12 }}>
@@ -1332,10 +1472,12 @@ export default function Contrivox() {
               Check My Contract — $9
             </button>
             <p style={{ marginTop:12, fontSize:11.5, color:COLORS.faint, fontFamily:"'DM Sans',sans-serif" }}>{t.cta_trust}</p>
-            <div style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:16, marginTop:14, flexWrap:"wrap" }}>
-              <span style={{ display:"flex", alignItems:"center", gap:5, fontSize:11, color:COLORS.faint, fontFamily:"'DM Sans',sans-serif" }}><IconLock size={11} color="currentColor"/> Private &amp; secure</span>
-              <span style={{ display:"flex", alignItems:"center", gap:5, fontSize:11, color:COLORS.faint, fontFamily:"'DM Sans',sans-serif" }}><IconZap size={11} color="currentColor"/> Results in 60 seconds</span>
-              <span style={{ display:"flex", alignItems:"center", gap:5, fontSize:11, color:COLORS.faint, fontFamily:"'DM Sans',sans-serif" }}><IconGlobe size={11} color="currentColor"/> Any language</span>
+            <div style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:20, marginTop:18, flexWrap:"wrap" }}>
+              <span style={{ display:"flex", alignItems:"center", gap:6, fontSize:14, color:"#CBD5E1", fontFamily:"'DM Sans',sans-serif" }}><IconLock size={14} color="var(--cvx-accent)"/> Private &amp; secure</span>
+              <span style={{ color:"rgba(255,255,255,0.18)", fontSize:14 }}>·</span>
+              <span style={{ display:"flex", alignItems:"center", gap:6, fontSize:14, color:"#CBD5E1", fontFamily:"'DM Sans',sans-serif" }}><IconZap size={14} color="var(--cvx-accent)"/> Results in 60 seconds</span>
+              <span style={{ color:"rgba(255,255,255,0.18)", fontSize:14 }}>·</span>
+              <span style={{ display:"flex", alignItems:"center", gap:6, fontSize:14, color:"#CBD5E1", fontFamily:"'DM Sans',sans-serif" }}><IconGlobe size={14} color="var(--cvx-accent)"/> Any language</span>
             </div>
           </div>
         </section>
@@ -1352,7 +1494,7 @@ export default function Contrivox() {
               { label:"Privacy Policy", href:"/privacy" },
               { label:"Terms of Service", href:"/terms" },
               { label:"Contact", href:"/contact" },
-              { label:"contact@contrivox.com", href:"mailto:contact@contrivox.com" },
+              { label:"Contact Us", href:"mailto:contact@contrivox.com" },
             ].map(({ label, href }, i, arr) => (
               <span key={href} style={{ display:"flex", alignItems:"center" }}>
                 <a href={href} style={{ fontSize:12, color:COLORS.muted, fontFamily:"'DM Sans',sans-serif", textDecoration:"none", padding:"3px 2px", transition:"color .15s" }}

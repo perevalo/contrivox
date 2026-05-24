@@ -72,7 +72,7 @@ function buildWelcomeEmail(): string {
       <li>Exclusivity clause (can you work with others)</li>
       <li>Liquidated damages (penalty clauses)</li>
     </ol>
-    <p style="font-size:14px;color:#4b5563;line-height:1.7;margin:16px 0 24px;">Found something concerning? Upload your contract to Contrivox and get a full plain-English analysis in 30 seconds.</p>
+    <p style="font-size:14px;color:#4b5563;line-height:1.7;margin:16px 0 24px;">Found something concerning? Upload your contract to Contrivox and get a full plain-English analysis in 60 seconds.</p>
     <a href="https://contrivox.com/#upload-sec" style="display:inline-block;padding:12px 24px;background:linear-gradient(135deg,#7c3aed,#4f46e5);color:#fff;text-decoration:none;border-radius:9px;font-size:14px;font-weight:700;">Check My Contract →</a>
   </td></tr>
   <tr><td style="padding:16px 28px;background:#f9fafb;font-size:10px;color:#9ca3af;">Not legal advice. Educational purposes only.</td></tr>
