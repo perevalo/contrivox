@@ -96,7 +96,8 @@ export async function previewContract(payload: FilePayload): Promise<ContractPre
 
 Rules:
 - Set is_contract=true ONLY if the document is one of: employment agreement, NDA, non-disclosure agreement, lease, rental agreement, tenancy agreement, freelance contract, independent contractor agreement, service agreement, business contract, vendor agreement, settlement agreement, commercial lease.
-- Set is_contract=false and set rejected_type to what the document actually is (e.g. "Resume/CV", "Invoice", "Academic Paper", "Medical Record", "Letter") for all other documents.
+- Set is_contract=false and set rejected_type to the document's PURPOSE or content type — never its file format. Good examples: "Resume/CV", "Invoice", "Academic Paper", "Medical Record", "Cover Letter", "Bank Statement", "News Article", "Receipt", "Report". Bad examples (never use these): "Word Document", "PDF", "Spreadsheet", "Text File", "Binary File".
+- If the document content is unreadable, garbled, or appears to be binary/encoded data, set is_contract=false and rejected_type="Unreadable file".
 - high_risk_count: count of non-competes + mandatory arbitration + broad IP assignment + clawback + unilateral modification clauses (integer 0-20).
 - flagged_count: count of other clauses worth reviewing (integer 0-20).
 - page_estimate: estimated number of pages (integer 1-50).`;
@@ -139,7 +140,12 @@ Rules:
     const contract_type = badType || !rawType ? "Contract" : String(parsed.contract_type).slice(0, 200);
 
     const is_contract = parsed.is_contract === false ? false : true;
-    const rejected_type = is_contract ? null : (String(parsed.rejected_type || "").slice(0, 100) || "Unknown document type");
+    const rawRejected = String(parsed.rejected_type || "").slice(0, 100).trim();
+    // Sanitize: if the model returned a file format name instead of a content type, replace it
+    const isFormatName = /^(word\s*(doc(ument)?)?|pdf(\s*file)?|excel|spreadsheet|powerpoint|text\s*file|image(\s*file)?|binary|docx?|xlsx?|pptx?|csv|document\s*file)$/i.test(rawRejected);
+    const rejected_type = is_contract
+      ? null
+      : (isFormatName || !rawRejected ? "Unreadable file" : rawRejected);
 
     return {
       contract_type,

@@ -1251,9 +1251,20 @@ export default function Contrivox() {
                   <IconAlertTriangle size={24} color="#fbbf24"/>
                 </div>
                 <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:22, color:COLORS.heading, fontWeight:600, marginBottom:12 }}>This doesn't look like a contract</h2>
-                <p style={{ fontSize:14, color:COLORS.muted, fontFamily:"'DM Sans',sans-serif", lineHeight:1.7, maxWidth:420, margin:"0 auto 28px" }}>
-                  We detected this might be a <strong style={{ color:COLORS.text }}>{rejectedDoc}</strong>. Contrivox works with employment agreements, NDAs, leases, freelance contracts, and service agreements.
+                <p style={{ fontSize:14, color:COLORS.muted, fontFamily:"'DM Sans',sans-serif", lineHeight:1.7, maxWidth:420, margin:"0 auto 16px" }}>
+                  {/unreadable/i.test(rejectedDoc)
+                    ? "We couldn't read the content of this file."
+                    : <>We detected this might be a <strong style={{ color:COLORS.text }}>{rejectedDoc}</strong>.</>
+                  }{" "}Contrivox works with employment agreements, NDAs, leases, freelance contracts, and service agreements.
                 </p>
+                {/unreadable/i.test(rejectedDoc) && (
+                  <div style={{ background:"rgba(245,158,11,0.07)", border:"0.5px solid rgba(245,158,11,0.2)", borderRadius:10, padding:"12px 16px", maxWidth:400, margin:"0 auto 20px", textAlign:"left" }}>
+                    <p style={{ fontSize:13, color:"#fbbf24", fontWeight:600, fontFamily:"'DM Sans',sans-serif", margin:"0 0 4px" }}>Tip: Word documents (.docx)</p>
+                    <p style={{ fontSize:12.5, color:COLORS.muted, fontFamily:"'DM Sans',sans-serif", lineHeight:1.6, margin:0 }}>
+                      Word files can't be read directly. In Word or Google Docs, choose <strong style={{ color:COLORS.text }}>File → Save as PDF</strong>, then upload the PDF instead.
+                    </p>
+                  </div>
+                )}
                 <div style={{ display:"flex", flexDirection:"column", gap:12, alignItems:"center" }}>
                   <button
                     onClick={() => { setRejectedDoc(null); setFile(null); setPreview(null); setError(null); }}
