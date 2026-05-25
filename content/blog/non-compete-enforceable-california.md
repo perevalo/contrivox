@@ -1,5 +1,3 @@
-# PUBLISH ON: 2026-05-28
-
 ---
 title: "Is a Non-Compete Enforceable in California? (2025)"
 slug: "non-compete-enforceable-california"
@@ -22,9 +20,9 @@ relatedArticles:
   - non-compete-clause-explained
   - employment-contract-red-flags
   - violate-non-compete-agreement
-publishedAt: ""
-updatedAt: ""
-featured: false
+publishedAt: "2026-05-26"
+updatedAt: "2026-05-26"
+featured: true
 ctaPlacements:
   - After introduction
   - After SB 699 section

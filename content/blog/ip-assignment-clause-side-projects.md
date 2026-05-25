@@ -1,5 +1,3 @@
-# PUBLISH ON: 2026-06-30
-
 ---
 title: "IP Assignment Clauses: Does Your Employer Own Your Side Projects?"
 slug: "ip-assignment-clause-side-projects"
@@ -22,8 +20,8 @@ relatedArticles:
   - employment-contract-red-flags
   - non-compete-clause-explained
   - contract-clauses-explained
-publishedAt: ""
-updatedAt: ""
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
 featured: false
 ctaPlacements:
   - After introduction

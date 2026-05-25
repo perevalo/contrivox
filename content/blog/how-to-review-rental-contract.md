@@ -19,7 +19,8 @@ relatedArticles:
   - contract-clauses-explained
 publishedAt: "2026-05-19"
 updatedAt: "2026-05-19"
-featured: true
+featured: false
+author: "Contrivox Editorial Team"
 ctaPlacements:
   - After introduction
   - After early termination section

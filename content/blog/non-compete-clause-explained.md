@@ -26,6 +26,7 @@ relatedArticles:
 publishedAt: "2026-05-20"
 updatedAt: "2026-05-20"
 featured: false
+author: "Contrivox Editorial Team"
 ctaPlacements:
   - After introduction
   - After "Can You Negotiate" section

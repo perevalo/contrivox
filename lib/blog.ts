@@ -33,6 +33,7 @@ export interface BlogPost {
   updatedAt: string;
   coverImage: string | null;
   keywords: string[];
+  author: string;
   seo: { metaTitle: string; metaDescription: string; canonicalURL: string };
   readingTime: number;
 }
@@ -42,14 +43,15 @@ function calcReadingTime(md: string): number {
   return Math.max(1, Math.ceil(words / 200));
 }
 
-// Returns null for draft posts (missing or empty publishedAt)
+// Returns null for draft posts (missing publishedAt) or future-dated posts
 function parsePost(filename: string): BlogPost | null {
   const raw = fs.readFileSync(path.join(POSTS_DIR, filename), "utf-8");
   const { data, content } = matter(raw);
 
-  // Treat missing or empty publishedAt as a draft — exclude from all public listings
   const publishedAt = (data.publishedAt as string) || "";
   if (!publishedAt) return null;
+  // Hide future-scheduled articles until their publish date
+  if (new Date(publishedAt) > new Date()) return null;
 
   const slug = (data.slug as string) || filename.replace(/\.md$/, "");
   const catName = data.suggestedCategory as string | undefined;
@@ -73,6 +75,7 @@ function parsePost(filename: string): BlogPost | null {
     updatedAt: (data.updatedAt as string) || publishedAt,
     coverImage: (data.coverImage as string) ?? null,
     keywords,
+    author: (data.author as string) || "Contrivox Editorial Team",
     seo: {
       metaTitle: (data.metaTitle as string) || (data.title as string) || slug,
       metaDescription: (data.metaDescription as string) ?? "",

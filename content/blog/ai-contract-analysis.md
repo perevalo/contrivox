@@ -21,7 +21,8 @@ relatedArticles:
   - how-to-review-rental-contract
 publishedAt: "2026-05-21"
 updatedAt: "2026-05-21"
-featured: true
+featured: false
+author: "Contrivox Editorial Team"
 ctaPlacements:
   - After introduction
   - After "How Contrivox Works" section

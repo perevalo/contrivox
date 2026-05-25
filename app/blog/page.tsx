@@ -2,28 +2,32 @@ import { getAllPosts, getFeaturedPosts, getAllCategories, formatDate, type BlogP
 import type { Metadata } from "next";
 import { BlogCTA } from "@/components/blog/BlogCTA";
 
+export const revalidate = 86400;
+
 export const metadata: Metadata = {
   title: "Contract Guides & Resources — Contrivox Blog",
-  description: "Plain-English guides to understanding employment contracts, NDAs, apartment leases, non-competes, and freelance agreements.",
+  description: "Free guides to understanding employment contracts, NDAs, leases, non-competes, and freelance agreements — written in plain English by the Contrivox team.",
   alternates: { canonical: "https://contrivox.com/blog" },
   openGraph: {
-    title: "Contrivox Blog — Contract Guides",
-    description: "Read it before you sign it.",
+    title: "Contrivox Blog — Read It Before You Sign It",
+    description: "Free plain-English guides to employment contracts, NDAs, leases, non-competes, and freelance agreements.",
     url: "https://contrivox.com/blog",
     siteName: "Contrivox",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Contrivox Blog — Contract Guides",
-    description: "Read it before you sign it.",
+    title: "Contrivox Blog — Read It Before You Sign It",
+    description: "Free plain-English guides to employment contracts, NDAs, leases, non-competes, and freelance agreements.",
   },
 };
 
 export default function BlogIndex() {
-  const posts     = getAllPosts();
-  const featured  = getFeaturedPosts();
+  const allPosts   = getAllPosts();
+  const featured   = getFeaturedPosts();
   const categories = getAllCategories();
+  const featuredSlugs = new Set(featured.map(p => p.slug));
+  const posts = allPosts.filter(p => !featuredSlugs.has(p.slug));
 
   const breadcrumbLd = {
     "@context": "https://schema.org",
@@ -54,12 +58,17 @@ export default function BlogIndex() {
 
       {/* Category pills */}
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap" as const, marginBottom: 40 }}>
-        <a href="/blog" style={{ padding: "6px 14px", fontSize: 12, fontWeight: 600, background: "var(--cvx-surface)", color: "var(--cvx-heading)", borderRadius: 20, textDecoration: "none", border: "0.5px solid var(--cvx-border)" }}>All</a>
-        {categories.map(cat => (
-          <a key={cat.slug} href={`/blog/category/${cat.slug}`} style={{ padding: "6px 14px", fontSize: 12, fontWeight: 600, background: "var(--cvx-surface)", color: "var(--cvx-muted)", borderRadius: 20, textDecoration: "none", borderLeft: `3px solid ${cat.color}` }}>
-            {cat.name}
-          </a>
-        ))}
+        <a href="/blog" style={{ padding: "6px 14px", fontSize: 12, fontWeight: 600, background: "var(--cvx-surface)", color: "var(--cvx-heading)", borderRadius: 20, textDecoration: "none", border: "0.5px solid var(--cvx-border)" }}>
+          All <span style={{ opacity: 0.5 }}>({allPosts.length})</span>
+        </a>
+        {categories.map(cat => {
+          const count = allPosts.filter(p => p.category?.slug === cat.slug).length;
+          return (
+            <a key={cat.slug} href={`/blog/category/${cat.slug}`} style={{ padding: "6px 14px", fontSize: 12, fontWeight: 600, background: "var(--cvx-surface)", color: "var(--cvx-muted)", borderRadius: 20, textDecoration: "none", borderLeft: `3px solid ${cat.color}` }}>
+              {cat.name} <span style={{ opacity: 0.5 }}>({count})</span>
+            </a>
+          );
+        })}
       </div>
 
       {/* Featured */}
@@ -71,6 +80,17 @@ export default function BlogIndex() {
           </div>
         </section>
       )}
+
+      {/* Conversion CTA */}
+      <div style={{ margin: "0 0 48px", padding: "24px 28px", background: "linear-gradient(135deg,rgba(124,58,237,0.12),rgba(79,70,229,0.08))", border: "0.5px solid rgba(124,58,237,0.25)", borderRadius: 14, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 20, flexWrap: "wrap" as const }}>
+        <div>
+          <p style={{ fontFamily: "'Fraunces',serif", fontSize: 18, color: "var(--cvx-heading)", margin: "0 0 6px", lineHeight: 1.2 }}>Have a contract to review right now?</p>
+          <p style={{ fontSize: 13, color: "var(--cvx-muted)", margin: 0 }}>Upload it and get a plain-English report in 60 seconds — $9, no subscription.</p>
+        </div>
+        <a href="/#upload-sec" style={{ flexShrink: 0, padding: "11px 22px", fontSize: 13, fontWeight: 700, background: "linear-gradient(135deg,#7c3aed,#4f46e5)", color: "white", borderRadius: 10, textDecoration: "none", whiteSpace: "nowrap" as const }}>
+          Check My Contract →
+        </a>
+      </div>
 
       {/* All articles */}
       <section>

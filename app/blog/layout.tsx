@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { getAllCategories } from "@/lib/blog";
 import { Logo } from "@/components/Logo";
 
 export const metadata: Metadata = {
@@ -8,7 +7,6 @@ export const metadata: Metadata = {
 };
 
 export default function BlogLayout({ children }: { children: React.ReactNode }) {
-  const categories = getAllCategories();
   return (
     <div style={{ minHeight: "100vh", background: "var(--cvx-bg)" }}>
       <nav style={{
@@ -20,13 +18,8 @@ export default function BlogLayout({ children }: { children: React.ReactNode }) 
           <a href="/" style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
             <Logo height={22} />
           </a>
-          <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" as const }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
             <a href="/blog" style={{ fontSize: 13, color: "var(--cvx-muted)", textDecoration: "none" }}>Blog</a>
-            {categories.slice(0, 4).map(c => (
-              <a key={c.slug} href={`/blog/category/${c.slug}`} style={{ fontSize: 12, color: "var(--cvx-faint)", textDecoration: "none" }}>
-                {c.name}
-              </a>
-            ))}
             <a href="/#upload-sec" style={{ padding: "6px 14px", fontSize: 12, fontWeight: 700, background: "linear-gradient(135deg,#7c3aed,#4f46e5)", color: "white", borderRadius: 8, textDecoration: "none" }}>
               Check My Contract
             </a>

@@ -1,5 +1,3 @@
-# PUBLISH ON: 2026-06-09
-
 ---
 title: "Is a Non-Compete Enforceable in Texas? (2025)"
 slug: "non-compete-enforceable-texas"
@@ -22,8 +20,8 @@ relatedArticles:
   - non-compete-clause-explained
   - violate-non-compete-agreement
   - employment-contract-red-flags
-publishedAt: ""
-updatedAt: ""
+publishedAt: "2026-06-05"
+updatedAt: "2026-06-05"
 featured: false
 ctaPlacements:
   - After introduction

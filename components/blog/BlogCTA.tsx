@@ -23,10 +23,10 @@ export function BlogCTA({ style }: { style?: React.CSSProperties }) {
   return (
     <div style={{ background: "rgba(99,102,241,0.07)", border: "0.5px solid rgba(99,102,241,0.2)", borderRadius: 16, padding: "28px 24px", ...style }}>
       <p style={{ fontFamily: "'Fraunces',serif", fontSize: 22, color: "white", margin: "0 0 8px", lineHeight: 1.2 }}>
-        Get our free contract checklist.
+        The 12 clauses that cost people thousands.
       </p>
       <p style={{ fontSize: 14, color: "rgba(255,255,255,0.5)", margin: "0 0 20px", lineHeight: 1.65 }}>
-        The 12 clauses to check before signing any US contract — employment, lease, or freelance. Free, no spam.
+        Free checklist — delivered instantly. No spam, ever. Used by thousands of professionals before signing.
       </p>
       {status === "sent" ? (
         <p style={{ fontSize: 14, color: "#4ade80" }}>✓ Check your inbox!</p>

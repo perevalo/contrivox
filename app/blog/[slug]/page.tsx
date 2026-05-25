@@ -100,7 +100,7 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
 
       {/* Meta */}
       <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 32, paddingBottom: 24, borderBottom: "0.5px solid var(--cvx-border)", fontSize: 13, color: "var(--cvx-faint)" }}>
-        <span style={{ fontWeight: 600, color: "var(--cvx-text)" }}>Contrivox</span>
+        <span style={{ fontWeight: 600, color: "var(--cvx-text)" }}>{post.author}</span>
         <span>{formatDate(post.publishedAt)}</span>
         <span>·</span>
         <span>{post.readingTime} min read</span>

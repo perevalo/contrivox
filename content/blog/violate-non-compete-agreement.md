@@ -1,5 +1,3 @@
-# PUBLISH ON: 2026-06-02
-
 ---
 title: "What Happens If You Violate a Non-Compete Agreement? (2025)"
 slug: "violate-non-compete-agreement"
@@ -22,9 +20,9 @@ relatedArticles:
   - non-compete-clause-explained
   - non-compete-enforceable-california
   - employment-contract-red-flags
-publishedAt: ""
-updatedAt: ""
-featured: false
+publishedAt: "2026-05-31"
+updatedAt: "2026-05-31"
+featured: true
 ctaPlacements:
   - After introduction
   - After enforcement factors section

@@ -23,6 +23,7 @@ relatedArticles:
 publishedAt: "2026-05-19"
 updatedAt: "2026-05-19"
 featured: true
+author: "Contrivox Editorial Team"
 ctaPlacements:
   - After introduction
   - After arbitration section

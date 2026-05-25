@@ -1,5 +1,3 @@
-# PUBLISH ON: 2026-06-23
-
 ---
 title: "Is a Non-Compete Enforceable in New York? (2025)"
 slug: "non-compete-enforceable-new-york"
@@ -22,8 +20,8 @@ relatedArticles:
   - non-compete-clause-explained
   - violate-non-compete-agreement
   - employment-contract-red-flags
-publishedAt: ""
-updatedAt: ""
+publishedAt: "2026-06-15"
+updatedAt: "2026-06-15"
 featured: false
 ctaPlacements:
   - After introduction

@@ -1,5 +1,3 @@
-# PUBLISH ON: 2026-06-16
-
 ---
 title: "Arbitration Clause: What It Really Means and Can You Opt Out?"
 slug: "arbitration-clause-opt-out"
@@ -22,8 +20,8 @@ relatedArticles:
   - employment-contract-red-flags
   - contract-clauses-explained
   - non-compete-clause-explained
-publishedAt: ""
-updatedAt: ""
+publishedAt: "2026-06-10"
+updatedAt: "2026-06-10"
 featured: false
 ctaPlacements:
   - After introduction
