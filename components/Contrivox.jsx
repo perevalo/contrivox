@@ -1147,8 +1147,8 @@ export default function Contrivox() {
                   <div key={i} style={{ background:"rgba(255,255,255,0.03)", border:`0.5px solid ${COLORS.border}`, borderRadius:14, padding:"20px 18px", textAlign:"center" }}>
                     <div style={{ fontSize:"clamp(28px,4vw,42px)", fontWeight:700, color:"var(--cvx-accent)", fontFamily:"'Fraunces',serif", marginBottom:6, lineHeight:1 }}>{stat}</div>
                     {/* Animated progress bar */}
-                    <div style={{ height:4, background:"rgba(255,255,255,0.08)", borderRadius:2, margin:"8px 0 10px", overflow:"hidden" }}>
-                      <div style={{ height:"100%", width: barWidths[i] + "%", background:barColor, borderRadius:2, transition:"width 800ms ease" }}/>
+                    <div style={{ height:6, background:"rgba(255,255,255,0.08)", borderRadius:3, margin:"10px 0 12px", overflow:"hidden" }}>
+                      <div style={{ height:"100%", width: barWidths[i] + "%", background:barColor, borderRadius:3, transition:"width 800ms ease" }}/>
                     </div>
                     <div style={{ fontSize:12, color:COLORS.muted, lineHeight:1.6, fontFamily:"'DM Sans',sans-serif" }}>{desc}</div>
                   </div>
