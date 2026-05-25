@@ -822,7 +822,6 @@ export default function Contrivox() {
   const [sessionId, setSessionId]         = useState(null);
   const [unlockLoading, setUnlockLoading] = useState(false);
   const [rejectedDoc, setRejectedDoc]     = useState(null);
-  const [statsVisible, setStatsVisible]   = useState(false);
   const [barWidths, setBarWidths]         = useState([0, 0, 0]);
   const fileRef    = useRef();
   const resultsRef = useRef();
@@ -836,25 +835,14 @@ export default function Contrivox() {
     generatePDF(result, t).then(setPdfUri).catch(() => {});
   }, [result]);
 
-  // Animate progress bars into view on scroll
+  // Animate bars on mount and on tab change
   useEffect(() => {
-    const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setStatsVisible(true); },
-      { threshold: 0.2 }
-    );
-    if (statsRef.current) obs.observe(statsRef.current);
-    return () => obs.disconnect();
-  }, []);
-
-  // Re-animate bars when section is visible or contract type tab changes
-  useEffect(() => {
-    if (!statsVisible) { setBarWidths([0, 0, 0]); return; }
     setBarWidths([0, 0, 0]);
     const timer = setTimeout(() => {
       setBarWidths((RISK_STATS[detectedType] ?? RISK_STATS.employment).map(({ stat }) => parseInt(stat)));
-    }, 50);
+    }, 120);
     return () => clearTimeout(timer);
-  }, [statsVisible, detectedType]);
+  }, [detectedType]);
 
   const handleFile = useCallback((f) => {
     if (!f) return;
@@ -1218,8 +1206,8 @@ export default function Contrivox() {
 
               <button
                 onClick={analyse}
-                disabled={!file||loading}
-                style={{ width:"100%", padding:"16px", fontSize:15, fontWeight:700, borderRadius:12, border:file&&!loading?"none":"1.5px solid var(--cvx-upload-cta-idle-bd)", cursor:file&&!loading?"pointer":"default", background:file&&!loading?COLORS.accentGrad:"var(--cvx-upload-cta-idle-bg)", color:file&&!loading?"white":"var(--cvx-upload-cta-idle-text)", transition:"all .25s ease", letterSpacing:"0.02em", touchAction:"manipulation", WebkitTapHighlightColor:"transparent", minHeight:52, boxShadow:file&&!loading?"0 4px 24px rgba(99,102,241,0.40)":"none" }}
+                disabled={loading}
+                style={{ width:"100%", padding:"16px", fontSize:15, fontWeight:700, borderRadius:12, border:file&&!loading?"1.5px solid transparent":"1.5px solid var(--cvx-upload-cta-idle-bd)", cursor:loading?"wait":"pointer", background:file&&!loading?COLORS.accentGrad:"var(--cvx-upload-cta-idle-bg)", color:file&&!loading?"white":"var(--cvx-upload-cta-idle-text)", transition:"all .25s ease", letterSpacing:"0.02em", touchAction:"manipulation", WebkitTapHighlightColor:"transparent", minHeight:52, boxShadow:file&&!loading?"0 4px 24px rgba(99,102,241,0.40)":"none" }}
               >
                 {loading ? (
                   <span style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:10 }}>
@@ -1464,8 +1452,8 @@ export default function Contrivox() {
             <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(26px,4vw,38px)", color:COLORS.heading, textAlign:"center", marginBottom:36, fontWeight:600 }}>{t.faq_title}</h2>
             <FaqItem q={t.faq1q} a={t.faq1a} initialOpen={true}/>
             <FaqItem q={t.faq4q} a={t.faq4a} initialOpen={true}/>
-            <FaqItem q={t.faq3q} a={t.faq3a} initialOpen={true}/>
-            <FaqItem q={t.faq5q} a={t.faq5a}/>
+            <FaqItem q={t.faq5q} a={t.faq5a} initialOpen={true}/>
+            <FaqItem q={t.faq3q} a={t.faq3a}/>
             <FaqItem q={t.faq2q} a={t.faq2a}/>
             <FaqItem q={t.faq6q} a={t.faq6a}/>
           </div>
