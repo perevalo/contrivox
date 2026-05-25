@@ -1493,7 +1493,6 @@ export default function Contrivox() {
               { label:"Privacy Policy", href:"/privacy" },
               { label:"Terms of Service", href:"/terms" },
               { label:"Contact", href:"/contact" },
-              { label:"Contact Us", href:"mailto:contact@contrivox.com" },
             ].map(({ label, href }, i, arr) => (
               <span key={href} style={{ display:"flex", alignItems:"center" }}>
                 <a href={href} style={{ fontSize:12, color:COLORS.muted, fontFamily:"'DM Sans',sans-serif", textDecoration:"none", padding:"3px 2px", transition:"color .15s" }}

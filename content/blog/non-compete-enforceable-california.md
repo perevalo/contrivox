@@ -20,7 +20,7 @@ relatedArticles:
   - non-compete-clause-explained
   - employment-contract-red-flags
   - violate-non-compete-agreement
-publishedAt: "2026-05-26"
+publishedAt: "2026-05-25"
 updatedAt: "2026-05-26"
 featured: true
 ctaPlacements:

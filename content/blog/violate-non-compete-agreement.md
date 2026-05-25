@@ -20,7 +20,7 @@ relatedArticles:
   - non-compete-clause-explained
   - non-compete-enforceable-california
   - employment-contract-red-flags
-publishedAt: "2026-05-31"
+publishedAt: "2026-05-25"
 updatedAt: "2026-05-31"
 featured: true
 ctaPlacements:
