@@ -8,7 +8,7 @@ const T = {
     app_name: "Contrivox",
     app_tagline: "AI contract analysis. Plain language. Instant.",
     nav_cta: "Check My Contract", nav_signin: "Sign In", nav_history: "My Analyses", signout: "Sign out",
-    hero_badge: "91% of Americans sign contracts they don't fully understand",
+    hero_badge: "See a sample report →",
     hero_h1a: "Your employer, landlord, or client", hero_h1b: "wrote that contract to protect themselves.",
     hero_sub: "Non-competes that ban you from your industry. Arbitration clauses that take away your right to sue. Auto-renewals that charge you for years. Contrivox reads every word — in 60 seconds — so you know exactly what you're agreeing to.",
     hero_social: "Join thousands of professionals who checked before they signed.",
@@ -1046,10 +1046,10 @@ export default function Contrivox() {
         {/* HERO */}
         <section style={{ padding:"88px 20px 64px", textAlign:"center" }}>
           <div style={{ maxWidth:680, margin:"0 auto" }}>
-            <div style={{ display:"inline-flex", alignItems:"center", gap:7, marginBottom:22, padding:"4px 14px", background:"rgba(124,58,237,0.09)", borderRadius:20, border:"0.5px solid rgba(124,58,237,0.22)" }}>
+            <a href="/sample-report" target="_blank" onClick={()=>Analytics.ctaClicked("hero_badge")} style={{ display:"inline-flex", alignItems:"center", gap:7, marginBottom:22, padding:"4px 14px", background:"rgba(124,58,237,0.09)", borderRadius:20, border:"0.5px solid rgba(124,58,237,0.22)", textDecoration:"none" }}>
               <span style={{ width:5, height:5, borderRadius:"50%", background:"var(--cvx-accent)", animation:"pulse 2s infinite", flexShrink:0 }}/>
-              <span style={{ fontSize:10.5, fontWeight:700, color:"#a78bfa", letterSpacing:"0.08em", textTransform:"uppercase", fontFamily:"'DM Sans',sans-serif" }}>See a sample report →</span>
-            </div>
+              <span style={{ fontSize:10.5, fontWeight:700, color:"#a78bfa", letterSpacing:"0.08em", textTransform:"uppercase", fontFamily:"'DM Sans',sans-serif" }}>{t.hero_badge}</span>
+            </a>
             <h1 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(36px,7vw,66px)", color:COLORS.heading, lineHeight:1.07, marginBottom:20, fontWeight:600 }}>
               {t.hero_h1a}<br/>
               <em style={{ color:COLORS.danger, fontStyle:"italic" }}>{t.hero_h1b}</em>
@@ -1144,8 +1144,8 @@ export default function Contrivox() {
                 const pct = parseInt(stat);
                 const barColor = pct >= 75 ? "var(--cvx-accent)" : pct >= 50 ? "#F59E0B" : "var(--cvx-accent)";
                 return (
-                  <div key={i} style={{ background:"rgba(239,68,68,0.04)", border:"0.5px solid rgba(239,68,68,0.13)", borderRadius:14, padding:"20px 18px", textAlign:"center" }}>
-                    <div style={{ fontSize:"clamp(28px,4vw,42px)", fontWeight:700, color:COLORS.danger, fontFamily:"'Fraunces',serif", marginBottom:6, lineHeight:1 }}>{stat}</div>
+                  <div key={i} style={{ background:"rgba(255,255,255,0.03)", border:`0.5px solid ${COLORS.border}`, borderRadius:14, padding:"20px 18px", textAlign:"center" }}>
+                    <div style={{ fontSize:"clamp(28px,4vw,42px)", fontWeight:700, color:"var(--cvx-accent)", fontFamily:"'Fraunces',serif", marginBottom:6, lineHeight:1 }}>{stat}</div>
                     {/* Animated progress bar */}
                     <div style={{ height:4, background:"rgba(255,255,255,0.08)", borderRadius:2, margin:"8px 0 10px", overflow:"hidden" }}>
                       <div style={{ height:"100%", width: barWidths[i] + "%", background:barColor, borderRadius:2, transition:"width 800ms ease" }}/>
@@ -1380,8 +1380,8 @@ export default function Contrivox() {
 
         {/* REPORT MOCKUP */}
         <section style={{ padding:"60px 20px", background:"rgba(255,255,255,0.013)" }}>
-          <div style={{ maxWidth:680, margin:"0 auto", textAlign:"center" }}>
-            <p style={{ fontSize:11, fontWeight:700, color:"var(--cvx-upload-hint)", letterSpacing:"0.1em", textTransform:"uppercase", fontFamily:"'DM Sans',sans-serif", marginBottom:32 }}>Here's what you get</p>
+          <div style={{ maxWidth:760, margin:"0 auto", textAlign:"center" }}>
+            <p style={{ fontSize:13, fontWeight:600, color:COLORS.muted, letterSpacing:"0.06em", textTransform:"uppercase", fontFamily:"'DM Sans',sans-serif", marginBottom:24 }}>Here's what your report looks like</p>
             <div style={{ transform:"rotate(-1deg)", boxShadow:"0 32px 80px rgba(0,0,0,0.55), 0 8px 24px rgba(0,0,0,0.35)", borderRadius:18, overflow:"hidden", border:`0.5px solid ${COLORS.border}`, background:"#101018" }}>
               {/* Mockup header */}
               <div style={{ background:"#0d0d1a", borderBottom:"0.5px solid rgba(255,255,255,0.07)", padding:"18px 22px", display:"flex", alignItems:"center", justifyContent:"space-between" }}>
@@ -1464,8 +1464,8 @@ export default function Contrivox() {
             <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(26px,4vw,38px)", color:COLORS.heading, textAlign:"center", marginBottom:36, fontWeight:600 }}>{t.faq_title}</h2>
             <FaqItem q={t.faq1q} a={t.faq1a} initialOpen={true}/>
             <FaqItem q={t.faq4q} a={t.faq4a} initialOpen={true}/>
+            <FaqItem q={t.faq3q} a={t.faq3a} initialOpen={true}/>
             <FaqItem q={t.faq5q} a={t.faq5a}/>
-            <FaqItem q={t.faq3q} a={t.faq3a}/>
             <FaqItem q={t.faq2q} a={t.faq2a}/>
             <FaqItem q={t.faq6q} a={t.faq6a}/>
           </div>

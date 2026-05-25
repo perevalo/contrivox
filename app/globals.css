@@ -59,9 +59,9 @@
   /* ── Upload widget contrast ─────────────────── */
   --cvx-upload-label:         #CBD5E1;               /* subtitle + privacy body ~13:1 */
   --cvx-upload-hint:          #94A3B8;               /* "or drag and drop" + trust line ~6:1 */
-  --cvx-upload-cta-idle-bg:   rgba(124,58,237,0.12);
-  --cvx-upload-cta-idle-bd:   rgba(124,58,237,0.50);
-  --cvx-upload-cta-idle-text: #E2E8F0;               /* ~10:1 on idle bg */
+  --cvx-upload-cta-idle-bg:   rgba(124,58,237,0.20);
+  --cvx-upload-cta-idle-bd:   rgba(124,58,237,0.70);
+  --cvx-upload-cta-idle-text: #F1F5F9;               /* ~11:1 on idle bg */
 }
 
 [data-theme="light"] {
@@ -108,9 +108,9 @@
   /* ── Upload widget contrast ─────────────────── */
   --cvx-upload-label:         #475569;               /* Slate 600 ~6:1 on light bg */
   --cvx-upload-hint:          #64748B;               /* Slate 500 ~4.6:1 on light bg */
-  --cvx-upload-cta-idle-bg:   rgba(124,58,237,0.06);
-  --cvx-upload-cta-idle-bd:   rgba(124,58,237,0.35);
-  --cvx-upload-cta-idle-text: #374151;               /* dark gray — clear on light bg */
+  --cvx-upload-cta-idle-bg:   rgba(124,58,237,0.10);
+  --cvx-upload-cta-idle-bd:   rgba(124,58,237,0.50);
+  --cvx-upload-cta-idle-text: #1e1b4b;               /* deep indigo — clear on light bg */
 }
 
 html {
