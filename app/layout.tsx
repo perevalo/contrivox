@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     type: "website",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "Contract Review AI — Red Flags, Fairness Score & Negotiation Scripts | Contrivox",
     description: "Upload any contract — employment, NDA, lease, or freelance — and get a plain-English analysis, red flags, fairness score, and negotiation scripts in 60 seconds. $9.",
   },

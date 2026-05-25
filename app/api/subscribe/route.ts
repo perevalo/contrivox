@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
   }
 
   const { error: emailError } = await resend.emails.send({
-    from:    `Contrivox <blog@contrivox.com>`,
+    from:    `Contrivox <${process.env.RESEND_FROM_EMAIL ?? "hello@contrivox.com"}>`,
     to:      input.email,
     subject: "Your free contract checklist",
     html:    buildWelcomeEmail(),
