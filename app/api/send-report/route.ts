@@ -22,11 +22,11 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Bad request" }, { status: 400 });
   }
 
-  const { email, analysis, pdfBase64, language } = input;
+  const { email, analysis, pdfBase64 } = input;
   const refSource = req.headers.get("x-ref-source") ?? "direct";
 
   // Send email via Resend
-  const { id, error } = await sendReportEmail({ to: email, analysis, pdfBase64, language });
+  const { id, error } = await sendReportEmail({ to: email, analysis, pdfBase64 });
 
   if (error) {
     console.error("[send-report] Resend error:", error);
@@ -41,7 +41,6 @@ export async function POST(req: NextRequest) {
     email_hash:         emailHash,
     resend_id:          id,
     status:             "sent",
-    language,
     acquisition_source: refSource,
   });
 

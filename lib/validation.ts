@@ -36,7 +36,6 @@ export const analyseInputSchema = z.object({
   fileType:  z.enum(["image", "pdf", "text"]),
   mediaType: z.string().max(100).optional(),
   text:      z.string().max(500_000).optional(),
-  langCode:  z.string().length(2),
 });
 
 export const checkoutInputSchema = z.object({
@@ -51,7 +50,6 @@ export const contractCreateSchema = z.object({
   fileType:  z.enum(["image", "pdf", "text"]),
   mediaType: z.string().max(100).nullable(),
   fileName:  z.string().max(500),
-  langCode:  z.string().length(2),
 });
 
 export const sendReportInputSchema = z.object({
@@ -59,7 +57,6 @@ export const sendReportInputSchema = z.object({
   whatsapp:   z.string().max(20).optional(),
   analysis:   ContrivoxAnalysisSchema,
   pdfBase64:  z.string().max(10_000_000).optional(),
-  language:   z.string().length(2),
 });
 
 // ─── Allowed MIME types for file uploads ─────────────────────────────────────

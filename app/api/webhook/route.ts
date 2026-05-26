@@ -101,7 +101,7 @@ async function triggerRealAnalysis(contractSessionId: string, customerEmail: str
 
   const { data: contract, error: fetchError } = await supabase
     .from("contracts")
-    .select("session_id, file_type, file_storage_path, file_text, media_type, lang_code")
+    .select("session_id, file_type, file_storage_path, file_text, media_type")
     .eq("session_id", contractSessionId)
     .single();
 
@@ -145,7 +145,7 @@ async function triggerRealAnalysis(contractSessionId: string, customerEmail: str
   // Run Claude analysis
   let analysis;
   try {
-    analysis = await analyseContract(payload, contract.lang_code ?? "en");
+    analysis = await analyseContract(payload);
   } catch (e) {
     console.error("[analysis] Claude error for:", contractSessionId, e);
     await supabase
@@ -169,7 +169,6 @@ async function triggerRealAnalysis(contractSessionId: string, customerEmail: str
     const { error: emailError } = await sendReportEmail({
       to:       customerEmail,
       analysis,
-      language: contract.lang_code ?? "en",
     });
     if (emailError) {
       console.error("[analysis] email error:", emailError);

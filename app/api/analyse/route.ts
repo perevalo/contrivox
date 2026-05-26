@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
 
   // 5. Call Claude
   try {
-    const analysis = await analyseContract(payload, input.langCode);
+    const analysis = await analyseContract(payload);
     return NextResponse.json({ analysis });
   } catch (e) {
     if (e instanceof AppError) {

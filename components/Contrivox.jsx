@@ -23,7 +23,7 @@ const T = {
     fear3b: "Leases, service agreements, and freelance contracts that lock you in automatically. The clause is always there. It's always small print. It always costs more than you expect.",
     upload_title: "Drop your contract. Get your report.", upload_formats: "PDF · PNG · JPG · DOCX · TXT",
     upload_drop: "Tap to choose your contract", upload_or: "or drag and drop",
-    out_lang: "Report language", analyse_btn: "Check My Contract — $9 · 60 seconds",
+    analyse_btn: "Check My Contract",
     analyse_trust: "Secure payment via Stripe. No subscription. Cancel anytime.",
     sample_btn: "See a Sample Report →",
     privacy_note: "Your contract is encrypted in transit, analyzed privately, and never stored after your report is delivered.",
@@ -60,7 +60,7 @@ const T = {
     none_found: "None identified.",
     disclaimer: "Contrivox is not a law firm and does not provide legal advice. This report is for informational purposes only. Consult a qualified lawyer before signing any contract.",
     how_title: "How it works",
-    how1t: "Upload in any format", how1b: "PDF, photo, Word doc, or pasted text — in any language. Upload takes under 10 seconds.",
+    how1t: "Upload in any format", how1b: "PDF, photo, Word doc, or pasted text. Upload takes under 10 seconds.",
     how2t: "AI reads every clause", how2b: "Scans for non-competes, arbitration clauses, IP assignment, auto-renewals, indemnification terms, and 40+ other clause types — in 60 seconds.",
     how3t: "Get your plain-language report", how3b: "Your Fairness Score (0–100), every red flag explained in plain English, missing protections identified, and word-for-word negotiation scripts for every problematic clause.",
     trust_label: "Trusted by professionals in 40+ countries",
@@ -76,7 +76,7 @@ const T = {
     faq1q: "Is this legal advice?",
     faq1a: "No. Contrivox identifies clauses and explains them in plain English. Always consult a qualified attorney before signing any contract — especially before refusing terms or renegotiating an offer.",
     faq2q: "What file types can I upload?",
-    faq2a: "PDF, JPG, PNG, GIF, WEBP, TXT, and DOCX. Works on any contract in any language — the report comes back in English.",
+    faq2a: "PDF, JPG, PNG, GIF, WEBP, TXT, and DOCX.",
     faq3q: "What do I get for $9?",
     faq3a: "The complete analysis: every clause explained in plain English, all red flags with real-world impact, missing protections listed, word-for-word negotiation scripts, and your full fairness score with reasoning. Instant delivery — one-time payment, no subscription.",
     faq4q: "Is my contract private?",
@@ -805,7 +805,6 @@ function FaqItem({ q, a, initialOpen = false }) {
 
 // ─── MAIN ─────────────────────────────────────────────────────────────────────
 export default function Contrivox() {
-  const [outLang, setOutLang]             = useState("en");
   const [file, setFile]                   = useState(null);
   const [dragging, setDragging]           = useState(false);
   const [loading, setLoading]             = useState(false);
@@ -880,7 +879,6 @@ export default function Contrivox() {
           fileType:  payload.type,
           mediaType: payload.mediaType ?? null,
           fileName:  file.name,
-          langCode:  outLang,
         }),
       });
 
@@ -1151,7 +1149,7 @@ export default function Contrivox() {
           <div style={{ maxWidth:660, margin:"0 auto" }}>
             <div style={{ background:"rgba(255,255,255,0.024)", border:`0.5px solid ${COLORS.border}`, borderRadius:20, padding:"26px 24px", backdropFilter:"blur(12px)" }}>
               <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:22, color:COLORS.heading, marginBottom:4, fontWeight:600 }}>{t.upload_title}</h2>
-              <p style={{ fontSize:12, color:"var(--cvx-upload-label)", margin:"0 0 18px", fontFamily:"'DM Sans',sans-serif" }}>{t.upload_formats} · Any language</p>
+              <p style={{ fontSize:12, color:"var(--cvx-upload-label)", margin:"0 0 18px", fontFamily:"'DM Sans',sans-serif" }}>{t.upload_formats}</p>
 
               <input
                 ref={fileRef}
@@ -1475,8 +1473,6 @@ export default function Contrivox() {
               <span style={{ display:"flex", alignItems:"center", gap:6, fontSize:14, color:"#CBD5E1", fontFamily:"'DM Sans',sans-serif" }}><IconLock size={14} color="var(--cvx-accent)"/> Private &amp; secure</span>
               <span style={{ color:"rgba(255,255,255,0.18)", fontSize:14 }}>·</span>
               <span style={{ display:"flex", alignItems:"center", gap:6, fontSize:14, color:"#CBD5E1", fontFamily:"'DM Sans',sans-serif" }}><IconZap size={14} color="var(--cvx-accent)"/> Results in 60 seconds</span>
-              <span style={{ color:"rgba(255,255,255,0.18)", fontSize:14 }}>·</span>
-              <span style={{ display:"flex", alignItems:"center", gap:6, fontSize:14, color:"#CBD5E1", fontFamily:"'DM Sans',sans-serif" }}><IconGlobe size={14} color="var(--cvx-accent)"/> Any language</span>
             </div>
           </div>
         </section>

@@ -3,10 +3,7 @@ import type { ContrivoxAnalysis } from "./validation";
 
 const resend = new Resend(process.env.RESEND_API_KEY!);
 
-// Add subjects here as new output languages are enabled.
-const SUBJECTS: Record<string, string> = {
-  en: "Your contract decoded — Contrivox report inside",
-};
+const EMAIL_SUBJECT = "Your contract decoded — Contrivox report inside";
 
 const SCORE_COLORS: Record<string, string> = {
   Fair: "#22c55e", Acceptable: "#84cc16", Concerning: "#eab308",
@@ -17,14 +14,12 @@ export async function sendReportEmail({
   to,
   analysis,
   pdfBase64,
-  language,
 }: {
   to: string;
   analysis: ContrivoxAnalysis;
   pdfBase64?: string;
-  language: string;
 }): Promise<{ id?: string; error?: string }> {
-  const subject = `${SUBJECTS[language] ?? SUBJECTS.en} — ${analysis.contract_type}`;
+  const subject = `${EMAIL_SUBJECT} — ${analysis.contract_type}`;
   const sc = SCORE_COLORS[analysis.score_label] ?? "#888";
 
   const attachments = pdfBase64
