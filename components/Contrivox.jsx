@@ -155,19 +155,35 @@ const STAT_TYPE_LABEL = {
 // ─── File extraction ──────────────────────────────────────────────────────────
 async function extractFile(file) {
   const ext = file.name.split(".").pop().toLowerCase();
+  if (["jpg","jpeg","png","gif","webp"].includes(ext)) {
+    return new Promise((res, rej) => {
+      const r = new FileReader();
+      r.onload = () => res({ type:"image", data:r.result.split(",")[1], mediaType:file.type });
+      r.onerror = rej;
+      r.readAsDataURL(file);
+    });
+  }
+  if (ext === "pdf") {
+    return new Promise((res, rej) => {
+      const r = new FileReader();
+      r.onload = () => res({ type:"pdf", data:r.result.split(",")[1] });
+      r.onerror = rej;
+      r.readAsDataURL(file);
+    });
+  }
+  if (ext === "docx" || ext === "doc") {
+    const mammoth = (await import("mammoth")).default;
+    const arrayBuffer = await file.arrayBuffer();
+    const { value: text } = await mammoth.extractRawText({ arrayBuffer });
+    if (!text || text.trim().length < 50) throw new Error("Could not extract text from Word document.");
+    return { type: "text", text };
+  }
+  // txt and other plain-text formats
   return new Promise((res, rej) => {
     const r = new FileReader();
-    if (["jpg","jpeg","png","gif","webp"].includes(ext)) {
-      r.onload = () => res({ type:"image", data:r.result.split(",")[1], mediaType:file.type });
-      r.readAsDataURL(file);
-    } else if (ext === "pdf") {
-      r.onload = () => res({ type:"pdf", data:r.result.split(",")[1] });
-      r.readAsDataURL(file);
-    } else {
-      r.onload = () => res({ type:"text", text:r.result });
-      r.readAsText(file);
-    }
+    r.onload = () => res({ type:"text", text:r.result });
     r.onerror = rej;
+    r.readAsText(file);
   });
 }
 
