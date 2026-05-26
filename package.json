@@ -2,6 +2,7 @@
   "name": "contrivox",
   "version": "1.0.0",
   "private": true,
+  "packageManager": "pnpm@10.18.2",
   "description": "Contrivox — Multilingual AI contract analyser SaaS",
   "scripts": {
     "dev": "next dev",
