@@ -1,0 +1,126 @@
+name: SEO Content Pipeline
+
+# Manual trigger only — run from GitHub → Actions → SEO Content Pipeline → Run workflow
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "What to do"
+        required: true
+        default: generate-and-publish
+        type: choice
+        options:
+          - seed-only               # Insert the 20 starter clauses (first run)
+          - generate                # Generate AI content, do NOT publish yet
+          - generate-and-publish    # Generate + auto-publish in one shot (recommended)
+          - publish-only            # Publish clauses already generated in a previous run
+          - dry-run                 # Show what would be published, no writes
+      target_slug:
+        description: "Single clause slug (e.g. non-compete-clause). Leave blank for all."
+        required: false
+        default: ""
+      target_category:
+        description: "Limit to one category. Leave blank for all."
+        required: false
+        default: ""
+        type: choice
+        options:
+          - ""
+          - employment
+          - freelance
+          - commercial
+          - ip
+          - general
+
+# Prevent two runs from hitting the DB / API simultaneously
+concurrency:
+  group: seo-pipeline
+  cancel-in-progress: false
+
+jobs:
+  pipeline:
+    name: "${{ inputs.action }}"
+    runs-on: ubuntu-latest
+    timeout-minutes: 30          # 20 clauses × 2s rate limit + Claude latency ≈ 5 min; 30 is headroom
+
+    steps:
+      # ── Checkout ────────────────────────────────────────────
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ── Node + pnpm ─────────────────────────────────────────
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4      # auto-detects version from packageManager field
+
+      - name: Install dependencies
+        run: pnpm install
+
+      # ── Seed ────────────────────────────────────────────────
+      - name: Seed starter clauses
+        if: |
+          inputs.action == 'seed-only' ||
+          inputs.action == 'generate' ||
+          inputs.action == 'generate-and-publish'
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: pnpm exec tsx scripts/seed-clauses.ts
+
+      # ── Generate ─────────────────────────────────────────────
+      - name: Generate AI content
+        if: |
+          inputs.action == 'generate' ||
+          inputs.action == 'generate-and-publish'
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          TARGET_SLUG: ${{ inputs.target_slug }}
+          TARGET_CATEGORY: ${{ inputs.target_category }}
+        run: |
+          if [ -n "$TARGET_SLUG" ]; then
+            echo "Targeting slug: $TARGET_SLUG"
+            pnpm exec tsx scripts/generate.ts "$TARGET_SLUG"
+          elif [ -n "$TARGET_CATEGORY" ]; then
+            echo "Targeting category: $TARGET_CATEGORY"
+            pnpm exec tsx scripts/generate.ts --category "$TARGET_CATEGORY"
+          else
+            echo "Targeting all ungenerated clauses"
+            pnpm exec tsx scripts/generate.ts
+          fi
+
+      # ── Publish ──────────────────────────────────────────────
+      - name: Publish generated content
+        if: |
+          inputs.action == 'generate-and-publish' ||
+          inputs.action == 'publish-only'
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: pnpm exec tsx scripts/auto-publish.ts
+
+      # ── Dry run ──────────────────────────────────────────────
+      - name: Dry run — preview pending publishes
+        if: inputs.action == 'dry-run'
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: pnpm exec tsx scripts/auto-publish.ts --dry-run
+
+      # ── Trigger Vercel redeploy (optional) ───────────────────
+      # Pages use ISR (revalidate: 3600) so they go live within 1 hour automatically.
+      # Set VERCEL_DEPLOY_HOOK in repo secrets for immediate effect.
+      - name: Trigger Vercel deploy
+        if: |
+          (inputs.action == 'generate-and-publish' || inputs.action == 'publish-only') &&
+          env.VERCEL_DEPLOY_HOOK != ''
+        env:
+          VERCEL_DEPLOY_HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
+        run: |
+          curl -s -o /dev/null -w "HTTP %{http_code}" -X POST "$VERCEL_DEPLOY_HOOK"
+          echo " — Vercel deploy triggered"
