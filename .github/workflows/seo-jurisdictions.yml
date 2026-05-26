@@ -1,0 +1,125 @@
+name: SEO Jurisdiction Pages
+
+# Manual trigger — run from GitHub → Actions → SEO Jurisdiction Pages → Run workflow
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "What to do"
+        required: true
+        default: generate-and-publish
+        type: choice
+        options:
+          - seed-jurisdictions        # Seed clause × jurisdiction rows (run once)
+          - generate                  # Generate AI content, do NOT publish yet
+          - generate-and-publish      # Generate + auto-publish (recommended)
+          - publish-only              # Publish already-generated pages
+          - dry-run                   # Preview pending publishes, no writes
+      target_clause:
+        description: "Single clause slug (e.g. non-compete-clause). Leave blank for all."
+        required: false
+        default: ""
+      target_jurisdiction:
+        description: "Single jurisdiction slug (e.g. california). Leave blank for all."
+        required: false
+        default: ""
+        type: choice
+        options:
+          - ""
+          - california
+          - new-york
+          - texas
+          - florida
+          - illinois
+          - united-kingdom
+          - european-union
+          - australia
+          - canada
+
+concurrency:
+  group: seo-jurisdictions
+  cancel-in-progress: false
+
+jobs:
+  pipeline:
+    name: "${{ inputs.action }}"
+    runs-on: ubuntu-latest
+    timeout-minutes: 60    # 45 pages × 2s rate limit + Claude latency ≈ 20 min
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: "10.18.2"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install
+
+      # ── Seed ────────────────────────────────────────────────
+      - name: Seed jurisdiction rows
+        if: inputs.action == 'seed-jurisdictions'
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: pnpm exec tsx scripts/seed-jurisdictions.ts
+
+      # ── Generate ─────────────────────────────────────────────
+      - name: Generate AI content
+        if: |
+          inputs.action == 'generate' ||
+          inputs.action == 'generate-and-publish'
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          TARGET_CLAUSE: ${{ inputs.target_clause }}
+          TARGET_JURISDICTION: ${{ inputs.target_jurisdiction }}
+        run: |
+          if [ -n "$TARGET_CLAUSE" ] && [ -n "$TARGET_JURISDICTION" ]; then
+            echo "Targeting: $TARGET_CLAUSE / $TARGET_JURISDICTION"
+            pnpm exec tsx scripts/generate-jurisdiction.ts "$TARGET_CLAUSE" "$TARGET_JURISDICTION"
+          elif [ -n "$TARGET_CLAUSE" ]; then
+            echo "Targeting clause: $TARGET_CLAUSE (all jurisdictions)"
+            pnpm exec tsx scripts/generate-jurisdiction.ts "$TARGET_CLAUSE"
+          else
+            echo "Targeting all pending jurisdiction pages"
+            pnpm exec tsx scripts/generate-jurisdiction.ts
+          fi
+
+      # ── Publish ──────────────────────────────────────────────
+      - name: Publish generated pages
+        if: |
+          inputs.action == 'generate-and-publish' ||
+          inputs.action == 'publish-only'
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: pnpm exec tsx scripts/auto-publish-jurisdictions.ts
+
+      # ── Dry run ──────────────────────────────────────────────
+      - name: Dry run — preview pending publishes
+        if: inputs.action == 'dry-run'
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: pnpm exec tsx scripts/auto-publish-jurisdictions.ts --dry-run
+
+      # ── Trigger Vercel redeploy ───────────────────────────────
+      - name: Trigger Vercel deploy
+        if: |
+          (inputs.action == 'generate-and-publish' || inputs.action == 'publish-only') &&
+          env.VERCEL_DEPLOY_HOOK != ''
+        env:
+          VERCEL_DEPLOY_HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
+        run: |
+          curl -s -o /dev/null -w "HTTP %{http_code}" -X POST "$VERCEL_DEPLOY_HOOK"
+          echo " — Vercel deploy triggered"

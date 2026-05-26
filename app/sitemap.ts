@@ -11,9 +11,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Fetch published SEO pages from Supabase
   const db = createSupabaseServiceClient();
-  const [{ data: clauses }, { data: contracts }] = await Promise.all([
+  const [{ data: clauses }, { data: contracts }, { data: jurisdictions }] = await Promise.all([
     db.from("clauses").select("slug, generated_at, created_at").eq("published", true),
     db.from("seo_contracts").select("slug, created_at").eq("published", true),
+    db.from("clause_jurisdictions").select("clause_slug, jurisdiction_slug, generated_at, created_at").eq("published", true),
   ]);
 
   const clauseUrls: MetadataRoute.Sitemap = (clauses ?? []).map((c) => ({
@@ -21,6 +22,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: new Date(c.generated_at ?? c.created_at),
     changeFrequency: "monthly" as const,
     priority: 0.8,
+  }));
+
+  const jurisdictionUrls: MetadataRoute.Sitemap = (jurisdictions ?? []).map((j) => ({
+    url: `${base}/clauses/${(j as { clause_slug: string; jurisdiction_slug: string; generated_at: string | null; created_at: string }).clause_slug}/${(j as { clause_slug: string; jurisdiction_slug: string; generated_at: string | null; created_at: string }).jurisdiction_slug}`,
+    lastModified: new Date((j as { generated_at: string | null; created_at: string }).generated_at ?? (j as { created_at: string }).created_at),
+    changeFrequency: "monthly" as const,
+    priority: 0.75,
   }));
 
   const contractUrls: MetadataRoute.Sitemap = (contracts ?? []).map((c) => ({
@@ -55,6 +63,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...postUrls,
     ...catUrls,
     ...clauseUrls,
+    ...jurisdictionUrls,
     ...contractUrls,
   ];
 }

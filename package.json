@@ -16,9 +16,14 @@
     "db:types": "supabase gen types typescript --local > types/supabase.ts",
     "db:migrate": "supabase migration new",
     "seo:seed": "tsx --env-file=.env.local scripts/seed-clauses.ts",
+    "seo:seed-more": "tsx --env-file=.env.local scripts/seed-more-clauses.ts",
     "seo:generate": "tsx --env-file=.env.local scripts/generate.ts",
     "seo:review": "tsx --env-file=.env.local scripts/review-queue.ts",
-    "seo:add": "tsx --env-file=.env.local scripts/add-clause.ts"
+    "seo:add": "tsx --env-file=.env.local scripts/add-clause.ts",
+    "seo:seed-jurisdictions": "tsx --env-file=.env.local scripts/seed-jurisdictions.ts",
+    "seo:generate-jurisdictions": "tsx --env-file=.env.local scripts/generate-jurisdiction.ts",
+    "seo:publish-jurisdictions": "tsx --env-file=.env.local scripts/auto-publish-jurisdictions.ts",
+    "seo:blog": "tsx --env-file=.env.local scripts/generate-blog-articles.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.96.0",

@@ -94,6 +94,56 @@ export const JurisdictionRowSchema = z.object({
 
 export type JurisdictionRow = z.infer<typeof JurisdictionRowSchema>;
 
+// ─── Jurisdiction page content (AI-generated, per clause+jurisdiction) ────────
+
+export const JurisdictionContentSchema = z.object({
+  meta_title:       z.string().min(1),
+  meta_description: z.string().min(1),
+  h1:               z.string().min(1),
+  intro_paragraph:  z.string().min(1),
+
+  enforceability: z.object({
+    verdict:       z.enum(["enforceable", "limited", "unenforceable", "varies"]),
+    verdict_label: z.string().min(1),
+    explanation:   z.string().min(1),
+  }),
+
+  key_rules: z.array(
+    z.object({ rule: z.string().min(1), detail: z.string().min(1) })
+  ).min(1),
+
+  recent_changes:   z.string().nullable(),
+  how_it_differs:   z.string().min(1),
+  negotiation_tips: z.array(z.string()).min(1),
+
+  faqs: z.array(
+    z.object({ question: z.string().min(1), answer: z.string().min(1) })
+  ).min(1),
+
+  cta_hook: z.string().min(1),
+});
+
+export type JurisdictionContent = z.infer<typeof JurisdictionContentSchema>;
+
+export const JurisdictionPageRowSchema = z.object({
+  id:                z.string().uuid(),
+  clause_slug:       z.string(),
+  jurisdiction_slug: z.string(),
+  jurisdiction_name: z.string(),
+  generated_content: JurisdictionContentSchema.nullable(),
+  published:         z.boolean(),
+  generated_at:      z.string().nullable(),
+  created_at:        z.string(),
+});
+
+export type JurisdictionPageRow = z.infer<typeof JurisdictionPageRowSchema>;
+
+export type JurisdictionSeed = {
+  clause_slug:       string;
+  jurisdiction_slug: string;
+  jurisdiction_name: string;
+};
+
 // ─── Seed data type (subset of ClauseRow, no DB-generated fields) ────────────
 
 export type ClauseSeed = {

@@ -11,6 +11,7 @@ on:
         type: choice
         options:
           - seed-only               # Insert the 20 starter clauses (first run)
+          - seed-v2                 # Insert the 80 additional clauses (run once after seed-only)
           - generate                # Generate AI content, do NOT publish yet
           - generate-and-publish    # Generate + auto-publish in one shot (recommended)
           - publish-only            # Publish clauses already generated in a previous run
@@ -63,7 +64,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      # ── Seed ────────────────────────────────────────────────
+      # ── Seed (original 20) ──────────────────────────────────
       - name: Seed starter clauses
         if: |
           inputs.action == 'seed-only' ||
@@ -73,6 +74,14 @@ jobs:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
         run: pnpm exec tsx scripts/seed-clauses.ts
+
+      # ── Seed v2 (80 additional clauses) ─────────────────────
+      - name: Seed additional clauses (v2)
+        if: inputs.action == 'seed-v2'
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: pnpm exec tsx scripts/seed-more-clauses.ts
 
       # ── Generate ─────────────────────────────────────────────
       - name: Generate AI content
