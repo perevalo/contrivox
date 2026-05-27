@@ -537,6 +537,14 @@ function PreviewCard({ preview, onUnlock, unlockLoading, t }) {
   const isZeroFindings = preview.high_risk_count === 0 && preview.flagged_count === 0;
   const totalIssues = (preview.high_risk_count || 0) + (preview.flagged_count || 0);
 
+  // Derive visual risk tier from preview counts (actual score unknown until unlock)
+  const estIsRisky  = preview.high_risk_count >= 2;
+  const estIsMedium = !estIsRisky && (preview.high_risk_count >= 1 || preview.flagged_count >= 3);
+  const estBarColor   = estIsRisky ? "linear-gradient(90deg,#ef4444,#f87171)" : estIsMedium ? "linear-gradient(90deg,#f59e0b,#fbbf24)" : "linear-gradient(90deg,#22c55e,#4ade80)";
+  const estBarWidth   = estIsRisky ? "38%" : estIsMedium ? "56%" : "78%";
+  const estScoreColor = estIsRisky ? "#f87171" : estIsMedium ? "#fbbf24" : "#4ade80";
+  const teaserDigit   = estIsRisky ? "3" : estIsMedium ? "5" : "7";
+
   // Animated counter from 0 → final value over 1.5s
   const [highCount, setHighCount] = useState(0);
   const [flagCount, setFlagCount] = useState(0);
@@ -570,7 +578,13 @@ function PreviewCard({ preview, onUnlock, unlockLoading, t }) {
           <p style={{ fontSize:10, fontWeight:700, color:"rgba(167,139,250,0.8)", letterSpacing:"0.1em", textTransform:"uppercase", fontFamily:"'DM Sans',sans-serif", marginBottom:3 }}>{t.preview_scanned}</p>
           <p style={{ fontSize:16, fontWeight:600, color:COLORS.heading, fontFamily:"'Fraunces',serif", margin:0 }}>{preview.contract_type}</p>
         </div>
-        <span style={{ fontSize:11, color:COLORS.muted, fontFamily:"'DM Sans',sans-serif" }}>{preview.page_estimate} {preview.page_estimate === 1 ? "page" : "pages"} {t.preview_pages}</span>
+        <div style={{ textAlign:"right" }}>
+          <p style={{ fontSize:12, fontWeight:600, color:COLORS.text, fontFamily:"'DM Sans',sans-serif", margin:"0 0 3px" }}>{preview.page_estimate} {preview.page_estimate === 1 ? "page" : "pages"} scanned</p>
+          <p style={{ fontSize:10.5, color:"#4ade80", fontFamily:"'DM Sans',sans-serif", margin:0, display:"flex", alignItems:"center", justifyContent:"flex-end", gap:4 }}>
+            <span style={{ width:5, height:5, borderRadius:"50%", background:"#4ade80", display:"inline-block", flexShrink:0 }}/>
+            AI analysis complete
+          </p>
+        </div>
       </div>
 
       {/* Counts */}
@@ -620,9 +634,9 @@ function PreviewCard({ preview, onUnlock, unlockLoading, t }) {
             {lockBadge}
           </div>
           <div style={{ display:"flex", alignItems:"center", gap:12 }}>
-            <span style={{ fontSize:22, fontWeight:700, color:COLORS.faint, fontFamily:"'Fraunces',serif", letterSpacing:"-0.02em", userSelect:"none" }}>██/100</span>
+            <span style={{ fontSize:22, fontWeight:700, color:estScoreColor, fontFamily:"'Fraunces',serif", letterSpacing:"-0.02em", userSelect:"none" }}>{teaserDigit}█/100</span>
             <div style={{ flex:1, height:6, background:"rgba(255,255,255,0.07)", borderRadius:3, overflow:"hidden" }}>
-              <div style={{ width:"58%", height:"100%", background:"linear-gradient(90deg,#7c3aed,#6366f1)", borderRadius:3, filter:"blur(2px)" }}/>
+              <div style={{ width:estBarWidth, height:"100%", background:estBarColor, borderRadius:3, filter:"blur(2px)" }}/>
             </div>
           </div>
         </div>
@@ -652,7 +666,7 @@ function PreviewCard({ preview, onUnlock, unlockLoading, t }) {
         </div>
 
         {/* Missing legal protections */}
-        <div style={{ padding:"14px 0" }}>
+        <div style={{ padding:"10px 0 6px" }}>
           <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:8 }}>
             <span style={{ fontSize:13, fontWeight:500, color:COLORS.text, fontFamily:"'DM Sans',sans-serif" }}>Missing legal protections</span>
             {lockBadge}
@@ -666,7 +680,7 @@ function PreviewCard({ preview, onUnlock, unlockLoading, t }) {
       </div>
 
       {/* CTA */}
-      <div style={{ padding:"20px 22px 24px" }}>
+      <div style={{ padding:"12px 22px 24px" }}>
         <p style={{ textAlign:"center", fontSize:12.5, color:COLORS.muted, fontFamily:"'DM Sans',sans-serif", marginBottom:12, lineHeight:1.5 }}>
           {totalIssues > 0
             ? `You have ${totalIssues} issue${totalIssues !== 1 ? "s" : ""} that need your attention before you sign.`
