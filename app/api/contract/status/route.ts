@@ -28,11 +28,12 @@ export async function GET(req: NextRequest) {
 
   const { data: contract } = await supabase
     .from("contracts")
-    .select("status")
+    .select("status, analysis")
     .eq("session_id", payment.contract_session_id)
     .single();
 
   return NextResponse.json({
-    status: (contract?.status ?? "pending") as "pending" | "done" | "error",
+    status:   (contract?.status ?? "pending") as "pending" | "done" | "error",
+    analysis: contract?.status === "done" ? (contract.analysis ?? null) : null,
   });
 }

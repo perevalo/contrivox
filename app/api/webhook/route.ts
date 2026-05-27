@@ -166,12 +166,18 @@ async function triggerRealAnalysis(contractSessionId: string, customerEmail: str
   }
 
   if (customerEmail) {
-    const { error: emailError } = await sendReportEmail({
-      to:       customerEmail,
-      analysis,
-    });
-    if (emailError) {
-      console.error("[analysis] email error:", emailError);
+    const attempt = await sendReportEmail({ to: customerEmail, analysis });
+    if (attempt.error) {
+      console.error("[email] first attempt failed:", attempt.error, "— retrying in 5s for session:", contractSessionId);
+      await new Promise(r => setTimeout(r, 5000));
+      const retry = await sendReportEmail({ to: customerEmail, analysis });
+      if (retry.error) {
+        console.error("[email] retry failed for session:", contractSessionId, retry.error);
+      } else {
+        console.log("[email] report sent (retry) to:", customerEmail);
+      }
+    } else {
+      console.log("[email] report sent to:", customerEmail);
     }
   }
 }
