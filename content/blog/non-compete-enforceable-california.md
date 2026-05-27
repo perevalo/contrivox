@@ -31,7 +31,7 @@ ctaPlacements:
 
 # Is a Non-Compete Enforceable in California?
 
-Maya, a UX designer at a San Francisco startup, was handed a stack of onboarding documents on her first day. Page 9 had a non-compete clause: "Employee agrees not to work for any company in the software industry within the United States for 24 months after leaving."
+Maya, a UX designer at a San Francisco startup, was handed a stack of onboarding documents on her first day. Page 9 had a [non-compete clause](/blog/non-compete-clause-explained): "Employee agrees not to work for any company in the software industry within the United States for 24 months after leaving."
 
 She signed it, because her new manager said it was standard. Three years later, when she got a better offer from a competing firm, a lawyer friend told her something she wished she'd known on day one.
 

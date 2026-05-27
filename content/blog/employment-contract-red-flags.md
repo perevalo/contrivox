@@ -48,7 +48,7 @@ Here are the ten red flags that show up most often — and what to do when you f
 
 ## Red Flag #1: An Overbroad Non-Compete Clause
 
-Non-competes are common. Overly aggressive non-competes are a serious problem.
+A [non-compete clause](/blog/non-compete-clause-explained) restricts where you can work after leaving — and overly aggressive ones are a serious problem.
 
 A reasonable non-compete might say: "You won't work for a direct competitor for 6 months after leaving."
 

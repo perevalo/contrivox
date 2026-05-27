@@ -63,7 +63,7 @@ The restrictions vary enormously:
 This varies dramatically by state. The U.S. has no unified federal rule on non-competes.
 
 **States where non-competes are generally unenforceable:**
-- California
+- [California](/blog/non-compete-enforceable-california)
 - Minnesota
 - North Dakota
 - Oklahoma
