@@ -908,6 +908,12 @@ export default function Contrivox() {
       const elapsed = Date.now() - loadStart;
       if (elapsed < 4500) await new Promise(r => setTimeout(r, 4500 - elapsed));
 
+      if (!prev?.is_contract) {
+        const docType = prev?.rejected_type || "this type of document";
+        setError(`This doesn't look like a contract. We detected: ${docType}. Please upload an employment agreement, NDA, lease, freelance contract, or similar legal document.`);
+        return;
+      }
+
       setSessionId(sid);
       setPreview(prev);
 
