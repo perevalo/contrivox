@@ -43,7 +43,7 @@ This guide answers all of that — in plain English, without the legalese.
 
 ## What Is an NDA?
 
-An NDA — Non-Disclosure Agreement — is a legal contract that requires one or both parties to keep certain information confidential.
+An NDA — [Non-Disclosure Agreement](/clauses/non-disclosure-agreement) — is a legal contract that requires one or both parties to keep certain information confidential.
 
 The basic premise: "What happens here, stays here."
 

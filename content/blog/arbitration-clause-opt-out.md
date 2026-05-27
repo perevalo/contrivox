@@ -47,7 +47,7 @@ She had seven days left.
 
 ## What Mandatory Arbitration Actually Means
 
-When you sign an employment contract with a mandatory arbitration clause, you're agreeing to resolve any future disputes through a private process instead of the court system.
+When you sign an employment contract with a mandatory [arbitration clause](/clauses/arbitration-clause), you're agreeing to resolve any future disputes through a private process instead of the court system.
 
 In plain English: if your employer discriminates against you, withholds your wages, or fires you illegally, you can't sue them in court. You have to go to arbitration — a private hearing run by a third-party arbitrator, usually chosen from a pool selected by a large arbitration provider like AAA (American Arbitration Association) or JAMS.
 
@@ -146,6 +146,7 @@ Only if the contract has an opt-out window that hasn't closed. If that window ha
 - [10 Employment Contract Red Flags You Should Never Ignore](/blog/employment-contract-red-flags)
 - [The Most Common Contract Clauses Explained in Plain English](/blog/contract-clauses-explained)
 - [Non-Compete Clauses: What Employees Actually Need to Know](/blog/non-compete-clause-explained)
+- [Arbitration Clause — Full Legal Breakdown & Risks](/clauses/arbitration-clause)
 
 ---
 

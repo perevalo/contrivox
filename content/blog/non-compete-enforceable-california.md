@@ -140,6 +140,8 @@ That said, "likely void" and "definitely void in your specific situation" are di
 
 **[Upload your employment contract to Contrivox →](/)** We'll flag every clause, including non-competes, and explain what they mean in plain English.
 
+> **Explore the clause in depth:** [Non-Compete Clause — Legal Breakdown, Risks & Red Flags →](/clauses/non-compete-clause)
+
 ---
 
 > **Found a non-compete in your contract?**

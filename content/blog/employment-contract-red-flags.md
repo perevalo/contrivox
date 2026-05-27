@@ -81,7 +81,7 @@ Your employment contract should clearly state:
 
 ## Red Flag #3: An "At-Will" Clause Without Understanding What It Means
 
-Most U.S. employment contracts include at-will language. That means either party can end the employment relationship at any time, for almost any reason.
+Most U.S. employment contracts include [at-will](/clauses/at-will-employment) language. That means either party can end the employment relationship at any time, for almost any reason.
 
 This is not inherently a red flag — at-will is the default in most U.S. states. But it becomes a problem when:
 
@@ -95,7 +95,7 @@ If at-will employment concerns you, negotiate a severance clause before signing.
 
 ## Red Flag #4: Intellectual Property Clauses That Are Too Wide
 
-Many employment contracts include intellectual property assignment — meaning anything you create while employed belongs to the company. That's often reasonable.
+Many employment contracts include [intellectual property assignment](/clauses/ip-assignment-clause) — meaning anything you create while employed belongs to the company. That's often reasonable.
 
 What's not reasonable: clauses that claim ownership of work you do on your own time, on your own equipment, with no relation to your job.
 
@@ -109,7 +109,7 @@ That clause could technically claim ownership of a novel you wrote on weekends. 
 
 ## Red Flag #5: Mandatory Arbitration Waiving Your Right to Sue
 
-Arbitration clauses require you to settle disputes with your employer through private arbitration rather than the court system.
+[Arbitration clauses](/clauses/arbitration-clause) require you to settle disputes with your employer through private arbitration rather than the court system.
 
 This isn't automatically bad. But watch out for clauses that:
 
@@ -126,7 +126,7 @@ Arbitration tends to favor employers statistically. If you're considering a seni
 
 ## Red Flag #6: Clawback Provisions on Signing Bonuses
 
-Companies offer signing bonuses to attract candidates. But many attach clawback provisions: if you leave before a certain date, you have to repay the bonus.
+Companies offer signing bonuses to attract candidates. But many attach [clawback provisions](/clauses/clawback-clause): if you leave before a certain date, you have to repay the bonus.
 
 This is sometimes reasonable — 6 months to 1 year is typical. But watch for:
 
@@ -152,7 +152,7 @@ Negotiate to limit what the company can change without your written consent.
 
 ## Red Flag #8: Excessive Non-Solicitation Clauses
 
-Non-solicitation is different from non-compete. Non-solicitation typically means:
+[Non-solicitation](/clauses/non-solicitation-clause) is different from non-compete. Non-solicitation typically means:
 
 - You won't recruit your former colleagues to join your new employer
 - You won't solicit former clients for 6–12 months

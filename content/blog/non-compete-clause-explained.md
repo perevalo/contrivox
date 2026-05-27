@@ -130,7 +130,7 @@ These two clauses are often confused — and often both appear in the same contr
 | Clause | What It Restricts |
 |---|---|
 | Non-compete | Where you can work after leaving |
-| Non-solicitation (clients) | Soliciting former clients for a competitor |
+| [Non-solicitation](/clauses/non-solicitation-clause) (clients) | Soliciting former clients for a competitor |
 | Non-solicitation (employees) | Recruiting your former colleagues |
 | NDA/confidentiality | What information you can disclose |
 
@@ -147,7 +147,7 @@ Yes — and you should try, especially if the clause is aggressive.
 - Narrower geographic scope
 - Carve-outs for specific companies you're interested in
 - Limiting the clause to roles where you'd actually use sensitive information
-- Adding garden leave — requiring the employer to pay your salary during the non-compete period
+- Adding [garden leave](/clauses/garden-leave-clause) — requiring the employer to pay your salary during the non-compete period
 - Making it mutual (if you can't work for them, they should have reciprocal restrictions too)
 
 **How to approach it:**

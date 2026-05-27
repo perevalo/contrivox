@@ -81,7 +81,7 @@ Termination for convenience usually:
 - May trigger a termination payment or severance
 - Doesn't require the terminating party to justify their decision
 
-In employment contracts, at-will employment is essentially termination for convenience by the employer.
+In employment contracts, [at-will employment](/clauses/at-will-employment) is essentially termination for convenience by the employer.
 
 ---
 
@@ -126,12 +126,12 @@ A cure period (also called a remedy period) gives the breaching party a window �
 What money changes hands when the contract ends?
 
 In employment contracts, look for:
-- Severance formula (e.g., 2 weeks per year of service)
+- [Severance](/clauses/severance-clause) formula (e.g., 2 weeks per year of service)
 - Conditions that must be met to receive severance (sign a release, no disparagement, etc.)
 - Whether severance applies only to termination without cause, or also covers layoffs
 
 In service agreements, look for:
-- Kill fees — a flat payment owed to the vendor if you cancel
+- [Kill fees](/clauses/kill-fee-clause) — a flat payment owed to the vendor if you cancel
 - Payment for work already completed
 - Refund provisions for prepaid services
 

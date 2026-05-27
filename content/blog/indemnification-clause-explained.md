@@ -45,7 +45,7 @@ Here's what they actually mean — in plain English.
 
 ## What Is an Indemnification Clause?
 
-An indemnification clause (sometimes called a "hold harmless" clause) is a contract provision that shifts financial responsibility for certain losses, damages, or legal claims from one party to another.
+An [indemnification clause](/clauses/indemnification-clause) (sometimes called a "hold harmless" clause) is a contract provision that shifts financial responsibility for certain losses, damages, or legal claims from one party to another.
 
 In simple terms: "If something goes wrong in this category, you'll cover my losses — even if I caused some of it."
 
@@ -181,7 +181,7 @@ Typically include IP indemnification — the vendor indemnifies the customer aga
 It means you agree to cover another party's losses — including their legal fees — for claims related to your actions (or sometimes theirs, depending on the contract). "Hold harmless" means they can't come after you for those specific losses once you've indemnified them.
 
 **Is an indemnification clause the same as a liability clause?**
-They're related but different. A liability clause limits how much one party can owe the other. An indemnification clause shifts who pays for certain losses. A contract can include both.
+They're related but different. A [liability clause](/clauses/limitation-of-liability) limits how much one party can owe the other. An indemnification clause shifts who pays for certain losses. A contract can include both.
 
 **What is "consequential damages"?**
 Consequential damages are indirect losses caused by a breach — lost profits, lost business opportunities, reputational harm. Many contracts exclude consequential damages from indemnification to limit exposure.

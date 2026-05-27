@@ -62,6 +62,8 @@ A scope clause should describe deliverables, timelines, formats, quantities, and
 
 **Watch for:** Auto-renewal with an automatic price increase. Payment terms that change the total amount owed (e.g., a "payment in full" discount that expires on a specific date).
 
+*[Full breakdown: [Payment Terms Clause](/clauses/payment-terms-clause)]*
+
 ---
 
 ## 3. Termination Clause
@@ -96,6 +98,8 @@ A scope clause should describe deliverables, timelines, formats, quantities, and
 
 **Watch for:** IP assignment that covers work unrelated to the contract. Missing payment trigger — meaning IP transfers before payment is complete. License restrictions that limit how you can use something you paid for.
 
+*[Full breakdown: [IP Assignment Clause](/clauses/ip-assignment-clause)]*
+
 ---
 
 ## 6. Indemnification Clause
@@ -120,6 +124,8 @@ Common structure: Total liability capped at the fees paid in the preceding 3 or 
 
 **Watch for:** One-sided caps that protect only the drafter. Caps so low they make the contract's promises meaningless. No exclusion for fraud or intentional misconduct.
 
+*[Full breakdown: [Limitation of Liability Clause](/clauses/limitation-of-liability)]*
+
 ---
 
 ## 8. Force Majeure Clause
@@ -132,6 +138,8 @@ Common structure: Total liability capped at the fees paid in the preceding 3 or 
 
 **Watch for also:** Force majeure that applies only to one party. If only the vendor is excused by force majeure, you still have to pay even when they can't deliver.
 
+*[Full breakdown: [Force Majeure Clause](/clauses/force-majeure-clause)]*
+
 > **Want to know what your specific contract says about force majeure, liability, and termination?** [Upload it to Contrivox](/) for an instant analysis.
 
 ---
@@ -143,6 +151,8 @@ Common structure: Total liability capped at the fees paid in the preceding 3 or 
 **What it means for you:** If you're in Florida and the other party is in Texas, and the contract says "this agreement shall be governed by Texas law and disputes shall be resolved exclusively in Travis County courts," you'd need to litigate in Austin.
 
 **Watch for:** Jurisdiction that's far from you and convenient only for the other party. Governing law from a state with unfavorable laws for your situation (e.g., a state with very aggressive non-compete enforcement).
+
+*[Full breakdown: [Governing Law Clause](/clauses/governing-law-clause)]*
 
 ---
 

@@ -108,7 +108,7 @@ The contract should specify:
 
 **Important:** Many service agreements don't include any consequences for late delivery. If timelines matter to you, add a provision — even a simple one that says repeated delays give you the right to terminate.
 
-Also look for: **"Time is of the essence"** language. When this phrase appears, deadlines are legally significant — missing them can constitute a material breach. If it's absent and timelines are critical to you, consider adding it.
+Also look for: **["Time is of the essence"](/clauses/time-is-of-the-essence-clause)** language. When this phrase appears, deadlines are legally significant — missing them can constitute a material breach. If it's absent and timelines are critical to you, consider adding it.
 
 ---
 
@@ -149,7 +149,7 @@ This is standard. Check that:
 
 This section caps how much the service provider can owe you if something goes wrong.
 
-Standard limitation of liability language looks like this:
+Standard [limitation of liability](/clauses/limitation-of-liability) language looks like this:
 *"Provider's total liability to client under this agreement shall not exceed the total fees paid by client in the three months preceding the claim."*
 
 This is common practice and generally reasonable — it prevents a small agency or freelancer from facing unlimited liability.
@@ -167,7 +167,7 @@ Look for:
 - Notice period for either party to exit
 - Conditions for termination for cause
 - What happens to in-progress work and deposits on termination
-- Kill fees or cancellation fees
+- [Kill fees](/clauses/kill-fee-clause) or cancellation fees
 
 Particularly for retainers: **make sure you can actually exit.** Some retainer agreements have 90-day notice requirements with no exit before then. If you sign a 12-month retainer and need to leave at month 2, you could owe 90 days of fees on top of what you've already paid.
 

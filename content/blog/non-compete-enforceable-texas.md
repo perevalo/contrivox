@@ -144,6 +144,7 @@ Emergency injunctive proceedings can move quickly — within weeks. Full litigat
 - [Non-Compete Clauses: What Employees Actually Need to Know](/blog/non-compete-clause-explained)
 - [What Happens If You Violate a Non-Compete Agreement?](/blog/violate-non-compete-agreement)
 - [10 Employment Contract Red Flags You Should Never Ignore](/blog/employment-contract-red-flags)
+- [Non-Compete Clause — Full Legal Breakdown & Red Flags](/clauses/non-compete-clause)
 
 ---
 

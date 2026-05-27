@@ -186,13 +186,13 @@ If subletting is important to you, make sure the clause isn't a blanket prohibit
 Here's a quick reference of clauses that should make you ask questions before signing:
 
 - **"As-is" condition clause** without a documented move-in inspection
-- **Auto-renewal** without adequate notice requirements to opt out
+- **[Auto-renewal](/clauses/automatic-renewal-clause)** without adequate notice requirements to opt out
 - **One-sided fee structures** that only penalize the tenant
 - **Vague damage language** that gives the landlord broad deposit deduction rights
 - **No grace period** on rent payments
 - **Broad entry rights** for the landlord
 - **Requirement to pay attorney fees** if there's any dispute (that's you paying their lawyer)
-- **Mandatory arbitration clause** that waives your right to sue in court
+- **[Mandatory arbitration clause](/clauses/arbitration-clause)** that waives your right to sue in court
 
 ---
 

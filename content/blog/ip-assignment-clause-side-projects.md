@@ -49,7 +49,7 @@ This is not a hypothetical edge case. Disputes like this happen regularly — an
 
 ## What an IP Assignment Clause Actually Says
 
-Most employment contracts contain intellectual property assignment language. At its most basic, it reads something like:
+Most employment contracts contain [intellectual property assignment](/clauses/ip-assignment-clause) language. At its most basic, it reads something like:
 
 *"All work product, inventions, and developments created by Employee in connection with their employment are the sole property of Company."*
 
@@ -67,7 +67,7 @@ That addition changes everything. "Relates to" is doing enormous work in that se
 
 These are two distinct legal concepts that often get conflated:
 
-**Work made for hire** applies to work created within the scope of employment — work you were specifically hired or directed to create. Under copyright law, the employer automatically owns this without needing an assignment clause.
+**[Work made for hire](/clauses/work-made-for-hire-clause)** applies to work created within the scope of employment — work you were specifically hired or directed to create. Under copyright law, the employer automatically owns this without needing an assignment clause.
 
 **Assignment of inventions** is different. It's a contractual transfer of ownership of things you create that weren't necessarily within the scope of your job — including side projects, personal apps, creative work, and inventions developed independently.
 

@@ -92,7 +92,7 @@ If you're in one of these sectors and you hold a senior role with client or audi
 
 ## Garden Leave: What It Is and Why You Should Ask for It
 
-Garden leave is an alternative to a traditional non-compete that's gaining traction in New York — partly because courts view it more favorably, and partly because it's a more defensible arrangement.
+[Garden leave](/clauses/garden-leave-clause) is an alternative to a traditional non-compete that's gaining traction in New York — partly because courts view it more favorably, and partly because it's a more defensible arrangement.
 
 Under a garden leave clause, when you leave your job, your employer keeps paying your full salary and benefits for the duration of the restricted period. You're bound not to work for a competitor — but you're being compensated for that restriction.
 
@@ -146,6 +146,7 @@ Almost certainly not as written. A three-year, continent-wide restriction is far
 - [Non-Compete Clauses: What Employees Actually Need to Know](/blog/non-compete-clause-explained)
 - [What Happens If You Violate a Non-Compete Agreement?](/blog/violate-non-compete-agreement)
 - [10 Employment Contract Red Flags You Should Never Ignore](/blog/employment-contract-red-flags)
+- [Non-Compete Clause — Full Legal Breakdown & Red Flags](/clauses/non-compete-clause)
 
 ---
 

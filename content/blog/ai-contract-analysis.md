@@ -33,7 +33,7 @@ ctaPlacements:
 
 Every year, millions of people sign contracts they don't fully understand.
 
-Not because they're careless. Because contracts are written in language designed for lawyers, not normal people. Understanding a non-compete clause or an indemnification provision used to require either a law degree or an attorney consultation.
+Not because they're careless. Because contracts are written in language designed for lawyers, not normal people. Understanding a [non-compete clause](/clauses/non-compete-clause) or an [indemnification](/clauses/indemnification-clause) provision used to require either a law degree or an attorney consultation.
 
 AI has changed that.
 
@@ -51,7 +51,7 @@ AI contract analysis uses large language models (the same underlying technology 
 
 A modern AI contract tool can:
 
-- Identify clause types (termination, IP, indemnification, etc.)
+- Identify clause types ([termination](/clauses/severance-clause), [IP assignment](/clauses/ip-assignment-clause), [indemnification](/clauses/indemnification-clause), etc.)
 - Translate dense legal language into plain English
 - Flag clauses that are unusual, aggressive, or potentially harmful to one party
 - Summarize the key terms of a contract in readable format
@@ -80,7 +80,7 @@ The better tools don't just extract text — they understand context. They can t
 
 ### Translating Legal Language
 
-This is where AI genuinely excels. Legal contracts are full of terms like "indemnify," "consequential damages," "force majeure," "liquidated damages," and "at the sole discretion of." AI can translate these into plain English instantly.
+This is where AI genuinely excels. Legal contracts are full of terms like "indemnify," "consequential damages," "[force majeure](/clauses/force-majeure-clause)," "[liquidated damages](/clauses/liquidated-damages-clause)," and "at the sole discretion of." AI can translate these into plain English instantly.
 
 ### Identifying Key Clauses
 

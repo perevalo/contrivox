@@ -135,7 +135,7 @@ Standard options:
 - **Full IP transfer on payment** — the client owns everything once they've paid in full (most common for custom work)
 - **License only** — you retain ownership and license the work to the client
 
-If you're doing work-for-hire, make sure full payment triggers full transfer. If they don't pay, they don't own it — which gives you meaningful leverage.
+If you're doing [work-for-hire](/clauses/work-for-hire-clause), make sure full payment triggers full transfer. If they don't pay, they don't own it — which gives you meaningful leverage.
 
 Also specify: do you retain the right to show the work in your portfolio? Most clients agree to this, but get it in writing.
 
@@ -155,7 +155,7 @@ Define what happens if either party wants to end the contract early:
 - Notice period required (e.g., 14 days written notice)
 - Payment for work completed to date
 - Who owns any partial deliverables on early termination
-- Kill fee if the client cancels after a certain point
+- [Kill fee](/clauses/kill-fee-clause) if the client cancels after a certain point
 
 A common structure: if the client cancels after work has begun, you keep the deposit and invoice for any additional work completed.
 
@@ -222,7 +222,7 @@ That's a red flag. Legitimate clients sign contracts. A client who refuses is ei
 Specify the governing law as your country/state. For payment, use platforms that offer dispute resolution or escrow. Consider currency and wire fee implications in your pricing.
 
 **What's a kill fee?**
-A kill fee is a payment owed to you if the client cancels the project after work has begun. It compensates you for time spent and opportunity cost. Typical kill fees range from 25–100% of the project fee depending on how far along work is.
+A [kill fee](/clauses/kill-fee-clause) is a payment owed to you if the client cancels the project after work has begun. It compensates you for time spent and opportunity cost. Typical kill fees range from 25–100% of the project fee depending on how far along work is.
 
 **Should I use a contract template or write my own?**
 Start with a template, customize it for your specific services and working style. Generic templates are better than nothing, but a personalized contract is more professional and more protective.

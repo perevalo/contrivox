@@ -151,6 +151,7 @@ It depends on how the non-compete is written. Some restrict you from working for
 - [Non-Compete Clauses: What Employees Actually Need to Know](/blog/non-compete-clause-explained)
 - [Is a Non-Compete Enforceable in California?](/blog/non-compete-enforceable-california)
 - [10 Employment Contract Red Flags You Should Never Ignore](/blog/employment-contract-red-flags)
+- [Non-Compete Clause — Full Legal Breakdown & Red Flags](/clauses/non-compete-clause)
 
 ---
 
