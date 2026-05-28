@@ -157,26 +157,34 @@ async function downloadReportPDF(analysis: ContrivoxAnalysis): Promise<void> {
 // ─── Inline report sub-components ─────────────────────────────────────────────
 function ScoreRing({ score, label }: { score: number; label: string }) {
   const color = SCORE_COLORS[label] ?? "#f59e0b";
-  const r = 52;
+  const r = 84;
   const circ = 2 * Math.PI * r;
   const fill = (score / 100) * circ;
   return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8, flexShrink: 0 }}>
-      <svg width={128} height={128} viewBox="0 0 128 128">
-        <circle cx={64} cy={64} r={r} fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth={10} />
-        <circle
-          cx={64} cy={64} r={r}
-          fill="none"
-          stroke={color}
-          strokeWidth={10}
-          strokeDasharray={`${fill} ${circ - fill}`}
-          strokeDashoffset={circ / 4}
-          strokeLinecap="round"
-        />
-        <text x={64} y={60} textAnchor="middle" fill="white" fontSize={28} fontWeight={700} fontFamily={FONT}>{score}</text>
-        <text x={64} y={78} textAnchor="middle" fill="rgba(255,255,255,0.48)" fontSize={11} fontFamily={FONT}>/100</text>
-      </svg>
-      <span style={{ color, fontWeight: 600, fontSize: 15, fontFamily: FONT }}>{label}</span>
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 14, flexShrink: 0 }}>
+      <div style={{ filter: `drop-shadow(0 0 18px ${color}55)` }}>
+        <svg width={200} height={200} viewBox="0 0 200 200">
+          <circle cx={100} cy={100} r={r} fill="none" stroke="rgba(255,255,255,0.07)" strokeWidth={14} />
+          <circle
+            cx={100} cy={100} r={r}
+            fill="none"
+            stroke={color}
+            strokeWidth={14}
+            strokeDasharray={`${fill} ${circ - fill}`}
+            strokeDashoffset={circ / 4}
+            strokeLinecap="round"
+          />
+          <text x={100} y={90} textAnchor="middle" fill="white" fontSize={52} fontWeight={800} fontFamily={FONT}>{score}</text>
+          <text x={100} y={114} textAnchor="middle" fill="rgba(255,255,255,0.38)" fontSize={14} fontFamily={FONT}>/100</text>
+        </svg>
+      </div>
+      <div style={{
+        padding: "5px 20px", borderRadius: 999,
+        background: `${color}20`, border: `1.5px solid ${color}55`,
+        color, fontWeight: 700, fontSize: 15, fontFamily: FONT, letterSpacing: "0.02em",
+      }}>
+        {label}
+      </div>
     </div>
   );
 }
@@ -195,16 +203,33 @@ function RiskBadge({ level }: { level: "high" | "medium" | "low" }) {
   );
 }
 
+const SH = (label: string, accent = "#7c3aed") => ({
+  display: "flex" as const, alignItems: "center" as const, gap: 10,
+  fontSize: 12, fontWeight: 700, letterSpacing: "0.09em",
+  textTransform: "uppercase" as const, color: "rgba(255,255,255,0.45)",
+  margin: "0 0 20px", fontFamily: FONT,
+  paddingBottom: 14, borderBottom: `1px solid ${C.border}`,
+});
+
+function SectionHeader({ label, accent = "#7c3aed" }: { label: string; accent?: string }) {
+  return (
+    <div style={SH(label, accent)}>
+      <span style={{ width: 3, height: 13, borderRadius: 2, background: accent, display: "inline-block", flexShrink: 0 }} />
+      {label}
+    </div>
+  );
+}
+
 function InlineReport({ analysis }: { analysis: ContrivoxAnalysis }) {
   return (
     <div style={{ marginTop: 40, textAlign: "left" }}>
 
       {/* Divider */}
-      <div style={{ borderTop: `1px solid ${C.border}`, marginBottom: 32 }} />
+      <div style={{ borderTop: `1px solid ${C.border}`, marginBottom: 36 }} />
 
-      {/* Header */}
-      <div style={{ marginBottom: 28 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12, flexWrap: "wrap" }}>
+      {/* Contract meta */}
+      <div style={{ marginBottom: 32 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10, flexWrap: "wrap" }}>
           <span style={{
             padding: "4px 14px", borderRadius: 999, fontSize: 13, fontWeight: 600,
             background: "rgba(139,92,246,0.15)", color: "#a78bfa", fontFamily: FONT,
@@ -213,29 +238,29 @@ function InlineReport({ analysis }: { analysis: ContrivoxAnalysis }) {
           </span>
           {analysis.governing_state && (
             <span style={{ color: C.muted, fontSize: 13, fontFamily: FONT }}>
-              Governing state: {analysis.governing_state}
+              {analysis.governing_state}
             </span>
           )}
         </div>
         {analysis.parties?.length > 0 && (
-          <div style={{ color: C.muted, fontSize: 14, fontFamily: FONT }}>
+          <div style={{ color: "rgba(255,255,255,0.3)", fontSize: 13, fontFamily: FONT }}>
             {analysis.parties.join(" · ")}
           </div>
         )}
       </div>
 
-      {/* Score + Summary */}
+      {/* Score — hero element */}
       <div style={{
-        display: "flex", flexWrap: "wrap", gap: 28, padding: 24, borderRadius: 16,
-        border: `1px solid ${C.border}`, background: C.surface, marginBottom: 32, alignItems: "flex-start",
+        display: "flex", flexDirection: "column", alignItems: "center",
+        padding: "40px 28px 32px", borderRadius: 20,
+        border: `1px solid ${C.border}`, background: C.surface, marginBottom: 40,
       }}>
         <ScoreRing score={analysis.score} label={analysis.score_label} />
-        <div style={{ flex: "1 1 260px", minWidth: 0 }}>
-          <h2 style={{ fontSize: 16, fontWeight: 700, marginBottom: 10, color: C.heading, fontFamily: FONT, margin: "0 0 10px" }}>Executive Summary</h2>
-          <p style={{ color: C.muted, lineHeight: 1.7, fontSize: 14, marginBottom: 12, fontFamily: FONT, margin: "0 0 12px" }}>
+        <div style={{ marginTop: 28, textAlign: "center", maxWidth: 560 }}>
+          <p style={{ color: C.muted, lineHeight: 1.75, fontSize: 15, marginBottom: 14, fontFamily: FONT }}>
             {analysis.summary}
           </p>
-          <p style={{ color: C.text, lineHeight: 1.7, fontSize: 14, fontStyle: "italic", fontFamily: FONT, margin: 0 }}>
+          <p style={{ color: "rgba(255,255,255,0.5)", lineHeight: 1.7, fontSize: 13.5, fontStyle: "italic", fontFamily: FONT, margin: 0 }}>
             {analysis.score_reasoning}
           </p>
         </div>
@@ -243,103 +268,105 @@ function InlineReport({ analysis }: { analysis: ContrivoxAnalysis }) {
 
       {/* Red Flags */}
       {analysis.red_flags?.length > 0 && (
-        <section style={{ marginBottom: 32 }}>
-          <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 16, color: C.heading, fontFamily: FONT, margin: "0 0 16px" }}>
-            Red Flags ({analysis.red_flags.length})
-          </h2>
-          <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-            {analysis.red_flags.map((flag, i) => (
-              <div key={i} style={{
-                padding: 20, borderRadius: 14,
-                border: flag.urgency === "high" ? "1px solid rgba(239,68,68,0.35)" : `1px solid ${C.border}`,
-                background: flag.urgency === "high" ? "rgba(239,68,68,0.06)" : C.surface,
-              }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10, flexWrap: "wrap" }}>
-                  <span style={{
-                    width: 8, height: 8, borderRadius: "50%", flexShrink: 0, display: "inline-block",
-                    background: flag.urgency === "high" ? "#ef4444" : "#f59e0b",
-                  }} />
-                  <span style={{ fontWeight: 700, fontSize: 14, color: C.heading, fontFamily: FONT }}>{flag.issue}</span>
-                  {flag.urgency && (
-                    <span style={{
-                      marginLeft: "auto", padding: "2px 10px", borderRadius: 999,
-                      fontSize: 11, fontWeight: 600, fontFamily: FONT,
-                      color: flag.urgency === "high" ? "#ef4444" : "#f59e0b",
-                      background: flag.urgency === "high" ? "rgba(239,68,68,0.15)" : "rgba(245,158,11,0.15)",
+        <section style={{ marginBottom: 44 }}>
+          <SectionHeader label={`Red Flags — ${analysis.red_flags.length}`} accent="#ef4444" />
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            {analysis.red_flags.map((flag, i) => {
+              const borderColor = flag.urgency === "high" ? "#ef4444" : flag.urgency === "medium" ? "#f59e0b" : "#22c55e";
+              return (
+                <div key={i} style={{
+                  padding: "20px 20px 20px 20px",
+                  borderRadius: 12,
+                  border: `1px solid ${C.border}`,
+                  borderLeft: `4px solid ${borderColor}`,
+                  background: flag.urgency === "high" ? "rgba(239,68,68,0.04)" : C.surface,
+                }}>
+                  <div style={{ display: "flex", alignItems: "flex-start", gap: 10, marginBottom: 10, flexWrap: "wrap" }}>
+                    <span style={{ fontWeight: 700, fontSize: 14, color: C.heading, fontFamily: FONT, flex: 1 }}>{flag.issue}</span>
+                    {flag.urgency && (
+                      <span style={{
+                        padding: "2px 10px", borderRadius: 999, flexShrink: 0,
+                        fontSize: 11, fontWeight: 600, fontFamily: FONT,
+                        color: borderColor, background: `${borderColor}18`,
+                        border: `1px solid ${borderColor}40`,
+                      }}>
+                        {flag.urgency === "high" ? "High" : flag.urgency === "medium" ? "Medium" : "Low"}
+                      </span>
+                    )}
+                  </div>
+                  <p style={{ color: C.muted, fontSize: 13.5, lineHeight: 1.7, fontFamily: FONT, margin: `0 0 ${flag.challengeable && flag.challenge ? 14 : 0}px` }}>
+                    {flag.why_it_matters}
+                  </p>
+                  {flag.challengeable && flag.challenge && (
+                    <div style={{
+                      padding: "12px 16px", borderRadius: 10,
+                      background: "rgba(124,58,237,0.08)", border: "1px solid rgba(124,58,237,0.2)",
                     }}>
-                      {flag.urgency === "high" ? "High priority" : "Medium priority"}
-                    </span>
+                      <div style={{
+                        fontSize: 10, fontWeight: 700, color: "#a78bfa", marginBottom: 6,
+                        textTransform: "uppercase", letterSpacing: 1, fontFamily: FONT,
+                      }}>
+                        Negotiation Script
+                      </div>
+                      <p style={{ color: "#c4b5fd", fontSize: 13.5, lineHeight: 1.7, fontStyle: "italic", fontFamily: FONT, margin: 0 }}>
+                        &ldquo;{flag.challenge}&rdquo;
+                      </p>
+                    </div>
                   )}
                 </div>
-                <p style={{ color: C.muted, fontSize: 13.5, lineHeight: 1.65, fontFamily: FONT, margin: `0 0 ${flag.challengeable && flag.challenge ? 14 : 0}px` }}>
-                  <strong style={{ color: C.text }}>Why it matters:</strong> {flag.why_it_matters}
-                </p>
-                {flag.challengeable && flag.challenge && (
-                  <div style={{
-                    padding: 14, borderRadius: 10,
-                    background: "rgba(255,255,255,0.03)", border: `1px solid ${C.border}`,
-                  }}>
-                    <div style={{
-                      fontSize: 11, fontWeight: 600, color: C.muted, marginBottom: 6,
-                      textTransform: "uppercase", letterSpacing: 0.8, fontFamily: FONT,
-                    }}>
-                      Negotiation Script
-                    </div>
-                    <p style={{ color: C.text, fontSize: 13.5, lineHeight: 1.7, fontStyle: "italic", fontFamily: FONT, margin: 0 }}>
-                      &ldquo;{flag.challenge}&rdquo;
-                    </p>
-                  </div>
-                )}
-              </div>
-            ))}
+              );
+            })}
           </div>
         </section>
       )}
 
       {/* Key Clauses */}
       {analysis.key_clauses?.length > 0 && (
-        <section style={{ marginBottom: 32 }}>
-          <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 16, color: C.heading, fontFamily: FONT, margin: "0 0 16px" }}>
-            Key Clauses ({analysis.key_clauses.length})
-          </h2>
-          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            {analysis.key_clauses.map((clause, i) => (
-              <div key={i} style={{
-                padding: 20, borderRadius: 14, border: `1px solid ${C.border}`, background: C.surface,
-              }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8, flexWrap: "wrap" }}>
-                  <span style={{ fontWeight: 700, fontSize: 14, color: C.heading, fontFamily: FONT }}>{clause.title}</span>
-                  <RiskBadge level={clause.risk_level} />
+        <section style={{ marginBottom: 44 }}>
+          <SectionHeader label={`Key Clauses — ${analysis.key_clauses.length}`} accent="#f59e0b" />
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            {analysis.key_clauses.map((clause, i) => {
+              const borderColor = RISK_COLORS[clause.risk_level] ?? C.border;
+              return (
+                <div key={i} style={{
+                  padding: "18px 18px 18px 18px",
+                  borderRadius: 12,
+                  border: `1px solid ${C.border}`,
+                  borderLeft: `4px solid ${borderColor}`,
+                  background: C.surface,
+                }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8, flexWrap: "wrap" }}>
+                    <span style={{ fontWeight: 700, fontSize: 13.5, color: C.heading, fontFamily: FONT, flex: 1 }}>{clause.title}</span>
+                    <RiskBadge level={clause.risk_level} />
+                  </div>
+                  <p style={{ color: C.muted, fontSize: 13.5, lineHeight: 1.65, fontFamily: FONT, margin: 0 }}>
+                    {clause.plain_english}
+                  </p>
+                  {clause.risk_note && (
+                    <p style={{ color: C.text, fontSize: 12.5, lineHeight: 1.6, marginTop: 10, paddingTop: 10, borderTop: `1px solid ${C.border}`, fontFamily: FONT, marginBottom: 0 }}>
+                      {clause.risk_note}
+                    </p>
+                  )}
+                  {clause.us_legal_context && (
+                    <p style={{ color: "rgba(255,255,255,0.3)", fontSize: 12, marginTop: 8, fontStyle: "italic", fontFamily: FONT, marginBottom: 0 }}>
+                      {clause.us_legal_context}
+                    </p>
+                  )}
                 </div>
-                <p style={{ color: C.muted, fontSize: 13.5, lineHeight: 1.65, fontFamily: FONT, margin: 0 }}>
-                  {clause.plain_english}
-                </p>
-                {clause.risk_note && (
-                  <p style={{ color: C.text, fontSize: 13, lineHeight: 1.6, marginTop: 10, paddingTop: 10, borderTop: `1px solid ${C.border}`, fontFamily: FONT, marginBottom: 0 }}>
-                    <strong>Note:</strong> {clause.risk_note}
-                  </p>
-                )}
-                {clause.us_legal_context && (
-                  <p style={{ color: C.muted, fontSize: 12, marginTop: 8, fontStyle: "italic", fontFamily: FONT, marginBottom: 0 }}>
-                    {clause.us_legal_context}
-                  </p>
-                )}
-              </div>
-            ))}
+              );
+            })}
           </div>
         </section>
       )}
 
       {/* Missing Protections */}
       {analysis.missing_protections?.length > 0 && (
-        <section style={{ marginBottom: 32 }}>
-          <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 14, color: C.heading, fontFamily: FONT, margin: "0 0 14px" }}>
-            Missing Protections
-          </h2>
-          <div style={{ padding: 20, borderRadius: 14, border: `1px solid ${C.border}`, background: C.surface }}>
-            <ul style={{ margin: 0, paddingLeft: 20, display: "flex", flexDirection: "column", gap: 8 }}>
+        <section style={{ marginBottom: 44 }}>
+          <SectionHeader label="Missing Protections" accent="#f97316" />
+          <div style={{ padding: "18px 20px", borderRadius: 12, border: `1px solid ${C.border}`, background: C.surface }}>
+            <ul style={{ margin: 0, paddingLeft: 18, display: "flex", flexDirection: "column", gap: 10 }}>
               {analysis.missing_protections.map((item, i) => (
-                <li key={i} style={{ color: C.muted, fontSize: 13.5, lineHeight: 1.6, fontFamily: FONT }}>{item}</li>
+                <li key={i} style={{ color: C.muted, fontSize: 13.5, lineHeight: 1.65, fontFamily: FONT }}>{item}</li>
               ))}
             </ul>
           </div>
@@ -347,22 +374,20 @@ function InlineReport({ analysis }: { analysis: ContrivoxAnalysis }) {
       )}
 
       {/* Overall Recommendation */}
-      <section style={{ marginBottom: 32 }}>
-        <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 14, color: C.heading, fontFamily: FONT, margin: "0 0 14px" }}>
-          Overall Recommendation
-        </h2>
+      <section style={{ marginBottom: 44 }}>
+        <SectionHeader label="Overall Recommendation" accent="#7c3aed" />
         <div style={{
-          padding: 20, borderRadius: 14,
-          border: "1px solid rgba(139,92,246,0.35)", background: "rgba(139,92,246,0.08)",
+          padding: "20px 22px", borderRadius: 12,
+          border: "1px solid rgba(139,92,246,0.3)", background: "rgba(139,92,246,0.07)",
         }}>
-          <p style={{ color: C.text, fontSize: 14, lineHeight: 1.7, margin: 0, fontFamily: FONT }}>
+          <p style={{ color: C.text, fontSize: 14, lineHeight: 1.8, margin: 0, fontFamily: FONT }}>
             {analysis.overall_recommendation}
           </p>
         </div>
       </section>
 
       {analysis.disclaimer && (
-        <p style={{ color: C.muted, fontSize: 12, lineHeight: 1.6, textAlign: "center", opacity: 0.65, fontFamily: FONT, margin: 0 }}>
+        <p style={{ color: "rgba(255,255,255,0.2)", fontSize: 11, lineHeight: 1.6, textAlign: "center", fontFamily: FONT, margin: 0 }}>
           {analysis.disclaimer}
         </p>
       )}
@@ -463,11 +488,37 @@ export default function SuccessContent() {
         @keyframes spin{to{transform:rotate(360deg);}}
         @keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
         @keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
+        @keyframes glowPulse{0%,100%{box-shadow:0 4px 28px rgba(99,102,241,0.45),0 0 0 0 rgba(124,58,237,0.25);}60%{box-shadow:0 6px 36px rgba(99,102,241,0.7),0 0 0 10px rgba(124,58,237,0.0);}}
         .msg-text{transition:opacity .3s ease;}
         .share-btn:hover{opacity:0.85;}
+        .dl-btn{animation:glowPulse 2.8s ease-in-out infinite;}
       `}</style>
 
-      <div style={{ minHeight: "100vh", background: C.bg, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start", padding: "40px 20px 80px" }}>
+      {/* Sticky "Analyse Another" bar — only when full report is visible */}
+      {hasFullReport && (
+        <div style={{
+          position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 50,
+          padding: "12px 20px",
+          background: "rgba(7,7,15,0.88)",
+          backdropFilter: "blur(14px)",
+          WebkitBackdropFilter: "blur(14px)",
+          borderTop: `1px solid ${C.border}`,
+          display: "flex", justifyContent: "center",
+        }}>
+          <a href="/" style={{
+            padding: "9px 32px", borderRadius: 10,
+            background: "rgba(255,255,255,0.06)",
+            border: "0.5px solid rgba(255,255,255,0.14)",
+            color: "rgba(255,255,255,0.65)",
+            fontSize: 13, fontWeight: 600,
+            textDecoration: "none", fontFamily: FONT,
+          }}>
+            ← Analyse Another Contract
+          </a>
+        </div>
+      )}
+
+      <div style={{ minHeight: "100vh", background: C.bg, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start", padding: `40px 20px ${hasFullReport ? "100px" : "80px"}` }}>
 
         {/* Logo */}
         <div style={{ marginBottom: 48 }}>
@@ -545,46 +596,43 @@ export default function SuccessContent() {
                     <button
                       onClick={handleDownload}
                       disabled={downloading}
+                      className={downloading ? undefined : "dl-btn"}
                       style={{
-                        width: "100%", padding: "16px", fontSize: 15, fontWeight: 700,
+                        width: "100%", padding: "18px", fontSize: 16, fontWeight: 700,
                         background: downloading ? "rgba(124,58,237,0.45)" : "linear-gradient(135deg,#7c3aed,#4f46e5)",
-                        color: "white", border: "none", borderRadius: 12,
+                        color: "white", border: "none", borderRadius: 13,
                         cursor: downloading ? "not-allowed" : "pointer",
-                        fontFamily: FONT, marginBottom: 8,
-                        display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-                        boxShadow: downloading ? "none" : "0 4px 24px rgba(99,102,241,0.4)",
-                        letterSpacing: "0.01em", transition: "all .2s",
+                        fontFamily: FONT, marginBottom: 10,
+                        display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
+                        letterSpacing: "0.01em",
                       }}
                     >
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                         <polyline points="7 10 12 15 17 10"/>
                         <line x1="12" y1="15" x2="12" y2="3"/>
                       </svg>
                       {downloading ? "Generating PDF…" : "Download My Report"}
                     </button>
-                    <p style={{ fontSize: 11, color: "rgba(255,255,255,0.22)", fontFamily: FONT, marginBottom: 10 }}>
-                      Download link expires in 24 hours
-                    </p>
-                    {/* Inbox confirmation */}
-                    <p style={{ fontSize: 13, color: "rgba(255,255,255,0.38)", fontFamily: FONT, marginBottom: 20 }}>
+                    <p style={{ fontSize: 13, color: "rgba(255,255,255,0.38)", fontFamily: FONT, marginBottom: 24, textAlign: "center" }}>
                       📩 A copy has been sent to your inbox
                     </p>
                   </>
                 )}
 
-                <a
-                  href="/"
-                  style={{
-                    display: "block", width: "100%", padding: "13px", fontSize: 14, fontWeight: 600,
-                    background: "transparent", color: "rgba(255,255,255,0.6)",
-                    border: "0.5px solid rgba(255,255,255,0.14)", borderRadius: 12,
-                    textDecoration: "none", fontFamily: FONT, marginBottom: 0,
-                    textAlign: "center",
-                  }}
-                >
-                  Analyse Another Contract
-                </a>
+                {!hasFullReport && (
+                  <a
+                    href="/"
+                    style={{
+                      display: "block", width: "100%", padding: "14px", fontSize: 14, fontWeight: 600,
+                      background: "transparent", color: "rgba(255,255,255,0.6)",
+                      border: "0.5px solid rgba(255,255,255,0.14)", borderRadius: 12,
+                      textDecoration: "none", fontFamily: FONT, textAlign: "center",
+                    }}
+                  >
+                    Analyse Another Contract
+                  </a>
+                )}
               </div>
             </div>
 
