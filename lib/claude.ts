@@ -212,7 +212,18 @@ export async function analyseContract(
       .replace(/```json\n?|\n?```/g, "")
       .trim();
 
-    const parsed = JSON.parse(raw);
+    // Try direct parse first; if that fails, extract the JSON object block
+    let parsed: unknown;
+    try {
+      parsed = JSON.parse(raw);
+    } catch {
+      const m = raw.match(/\{[\s\S]*\}/);
+      if (!m) {
+        console.error("[analyseContract] no JSON object in response, first 300 chars:", raw.slice(0, 300));
+        throw new SyntaxError("no JSON");
+      }
+      parsed = JSON.parse(m[0]);
+    }
     return ContrivoxAnalysisSchema.parse(parsed);
   } catch (err) {
     if (err instanceof Anthropic.APIError) {
@@ -220,7 +231,10 @@ export async function analyseContract(
       if (err.status === 529) throw new AppError("overloaded", 503);
       throw new AppError("api_error", 502);
     }
-    if (err instanceof SyntaxError || err instanceof ZodError) throw new AppError("parse_error", 502);
+    if (err instanceof SyntaxError || err instanceof ZodError) {
+      console.error("[analyseContract] parse/schema error:", err instanceof ZodError ? JSON.stringify(err.errors) : err.message);
+      throw new AppError("parse_error", 502);
+    }
     throw new AppError("unknown", 500);
   }
 }

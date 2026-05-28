@@ -2,6 +2,7 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import type { ContrivoxAnalysis } from "@/lib/validation";
+import { Logo } from "@/components/Logo";
 
 const MESSAGES = [
   "Reading your contract...",
@@ -374,13 +375,14 @@ export default function SuccessContent() {
   const searchParams  = useSearchParams();
   const stripeSession = searchParams.get("session_id");
 
-  const [msgIdx, setMsgIdx]           = useState(0);
-  const [msgVisible, setMsgVisible]   = useState(true);
-  const [done, setDone]               = useState(false);
-  const [timedOut, setTimedOut]       = useState(false);
-  const [analysis, setAnalysis]       = useState<ContrivoxAnalysis | null>(null);
-  const [downloading, setDownloading] = useState(false);
-  const [copied, setCopied]           = useState(false);
+  const [msgIdx, setMsgIdx]               = useState(0);
+  const [msgVisible, setMsgVisible]       = useState(true);
+  const [done, setDone]                   = useState(false);
+  const [timedOut, setTimedOut]           = useState(false);
+  const [analysisError, setAnalysisError] = useState(false);
+  const [analysis, setAnalysis]           = useState<ContrivoxAnalysis | null>(null);
+  const [downloading, setDownloading]     = useState(false);
+  const [copied, setCopied]               = useState(false);
 
   const startRef = useRef(Date.now());
   const pollRef  = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -411,6 +413,7 @@ export default function SuccessContent() {
         if (data.status === "done" || data.status === "error") {
           clearInterval(pollRef.current!);
           clearInterval(msgRef.current!);
+          if (data.status === "error") setAnalysisError(true);
           if (data.analysis) setAnalysis(data.analysis as ContrivoxAnalysis);
           setDone(true);
         }
@@ -448,7 +451,7 @@ export default function SuccessContent() {
   }, []);
 
   const linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent("https://contrivox.com")}`;
-  const hasFullReport = analysis && !timedOut;
+  const hasFullReport = analysis && !timedOut && !analysisError;
 
   return (
     <>
@@ -456,6 +459,7 @@ export default function SuccessContent() {
         @import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap');
         *{box-sizing:border-box;margin:0;padding:0;}
         body{background:#07070f;font-family:'DM Sans',sans-serif;}
+        :root{--cvx-heading:#ffffff;}
         @keyframes spin{to{transform:rotate(360deg);}}
         @keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
         @keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
@@ -466,13 +470,8 @@ export default function SuccessContent() {
       <div style={{ minHeight: "100vh", background: C.bg, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start", padding: "40px 20px 80px" }}>
 
         {/* Logo */}
-        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 48 }}>
-          <div style={{ width: 30, height: 30, background: "linear-gradient(135deg,#7c3aed,#4f46e5)", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-              <path d="M3 5h12M3 9h7M3 13h9" stroke="white" strokeWidth="1.6" strokeLinecap="round"/>
-            </svg>
-          </div>
-          <span style={{ fontFamily: FONT_SERIF, fontSize: 18, color: "white", fontWeight: 600 }}>Contrivox</span>
+        <div style={{ marginBottom: 48 }}>
+          <Logo height={28} />
         </div>
 
         {!done ? (
@@ -525,12 +524,18 @@ export default function SuccessContent() {
               </div>
 
               <h1 style={{ fontFamily: FONT_SERIF, fontSize: "clamp(24px,4vw,36px)", color: "white", marginBottom: 12, lineHeight: 1.15 }}>
-                {timedOut ? "Your report is being delivered" : "Your report is ready."}
+                {analysisError
+                  ? "Analysis failed"
+                  : timedOut
+                    ? "Your report is being delivered"
+                    : "Your report is ready."}
               </h1>
               <p style={{ fontSize: 14, color: C.muted, lineHeight: 1.75, marginBottom: 28, fontFamily: FONT, maxWidth: 440 }}>
-                {timedOut
-                  ? "Analysis is taking a bit longer than expected. Your report will be delivered to your email shortly."
-                  : "Your full contract analysis is complete. Download the PDF or read it below."}
+                {analysisError
+                  ? "We couldn't analyse this document. Please try uploading your contract again — if the issue persists, contact support."
+                  : timedOut
+                    ? "Analysis is taking a bit longer than expected. Your report will be delivered to your email shortly."
+                    : "Your full contract analysis is complete. Download the PDF or read it below."}
               </p>
 
               {/* Primary actions */}
