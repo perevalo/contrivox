@@ -4,6 +4,7 @@ import { createSupabaseServiceClient } from "@/lib/supabase/server";
 import { getPostHogServer } from "@/lib/posthog";
 import { analyseContract, type FilePayload } from "@/lib/claude";
 import { sendReportEmail } from "@/lib/email";
+import { generateReportPDFBase64 } from "@/lib/pdf";
 import Stripe from "stripe";
 
 export const runtime = "nodejs";
@@ -163,7 +164,13 @@ async function triggerRealAnalysis(contractSessionId: string, customerEmail: str
   }
 
   if (customerEmail) {
-    const attempt = await sendReportEmail({ to: customerEmail, analysis });
+    let pdfBase64: string | undefined;
+    try {
+      pdfBase64 = await generateReportPDFBase64(analysis);
+    } catch (e) {
+      console.error("[email] PDF generation failed — sending without attachment:", e);
+    }
+    const attempt = await sendReportEmail({ to: customerEmail, analysis, pdfBase64 });
     if (attempt.error) {
       console.error("[email] first attempt failed:", attempt.error, "— retrying in 5s for session:", contractSessionId);
       await new Promise(r => setTimeout(r, 5000));
