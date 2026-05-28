@@ -950,8 +950,9 @@ export default function Contrivox() {
       Analytics.previewShown({ contract_type: prev?.contract_type ?? "unknown", high_risk_count: prev?.high_risk_count ?? 0 });
       setTimeout(() => resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 250);
     } catch (e) {
-      setError("Could not process your contract. Please try again.");
-      Analytics.analysisErrored(e.message);
+      const msg = e?.message;
+      setError(msg && msg !== "Failed to fetch" ? msg : "Could not process your contract. Please try again.");
+      Analytics.analysisErrored(msg);
     } finally {
       loadTimers.forEach(clearTimeout);
       setLoading(false);
