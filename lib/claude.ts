@@ -201,7 +201,7 @@ export async function analyseContract(
   try {
     const message = await client.messages.create({
       model: "claude-sonnet-4-6",
-      max_tokens: 4096,
+      max_tokens: 8192,
       system: buildContrivoxPrompt(),
       messages: [{ role: "user", content: userContent }],
     });
