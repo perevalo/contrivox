@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { waitUntil } from "@vercel/functions";
 import { stripe } from "@/lib/stripe";
 import { createSupabaseServiceClient } from "@/lib/supabase/server";
 import { getPostHogServer } from "@/lib/posthog";
@@ -85,8 +86,11 @@ export async function POST(req: NextRequest) {
 
     if (contractSessionId) {
       const customerEmail = session.customer_details?.email ?? null;
-      await triggerRealAnalysis(contractSessionId, customerEmail).catch(e =>
-        console.error("[webhook] triggerRealAnalysis error:", e)
+      // Respond to Stripe immediately; keep function alive for analysis
+      waitUntil(
+        triggerRealAnalysis(contractSessionId, customerEmail).catch(e =>
+          console.error("[webhook] triggerRealAnalysis error:", e)
+        )
       );
     }
   }
@@ -97,14 +101,22 @@ export async function POST(req: NextRequest) {
 async function triggerRealAnalysis(contractSessionId: string, customerEmail: string | null): Promise<void> {
   const supabase = createSupabaseServiceClient();
 
+  // Atomic idempotency guard: claim the contract by transitioning pending → processing.
+  // If another webhook invocation already claimed it, update returns 0 rows → bail.
   const { data: contract, error: fetchError } = await supabase
     .from("contracts")
-    .select("session_id, file_type, file_storage_path, file_text, media_type")
+    .update({ status: "processing" })
     .eq("session_id", contractSessionId)
-    .single();
+    .in("status", ["pending"])
+    .select("session_id, file_type, file_storage_path, file_text, media_type")
+    .maybeSingle();
 
-  if (fetchError || !contract) {
-    console.error("[analysis] contract not found:", contractSessionId, fetchError?.message);
+  if (fetchError) {
+    console.error("[analysis] contract claim error:", contractSessionId, fetchError.message);
+    return;
+  }
+  if (!contract) {
+    console.log("[analysis] skipped — already claimed or done:", contractSessionId);
     return;
   }
 
