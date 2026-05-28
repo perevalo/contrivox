@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 export async function POST(req: NextRequest) {
+  const limited = await checkRateLimit(req, "revalidate");
+  if (limited) return limited;
+
   const secret = req.headers.get("x-revalidate-secret");
 
   if (!process.env.NEXT_REVALIDATE_SECRET || secret !== process.env.NEXT_REVALIDATE_SECRET) {

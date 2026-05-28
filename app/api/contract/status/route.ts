@@ -9,8 +9,8 @@ export async function GET(req: NextRequest) {
   if (limited) return limited;
 
   const stripeSession = req.nextUrl.searchParams.get("stripe_session");
-  if (!stripeSession) {
-    return NextResponse.json({ error: "Missing stripe_session" }, { status: 400 });
+  if (!stripeSession || !/^cs_(test|live)_[A-Za-z0-9]{20,200}$/.test(stripeSession)) {
+    return NextResponse.json({ error: "Invalid session" }, { status: 400 });
   }
 
   const supabase = createSupabaseServiceClient();

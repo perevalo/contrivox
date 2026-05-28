@@ -23,7 +23,8 @@ export async function POST(req: NextRequest) {
   }
 
   const { email, analysis, pdfBase64 } = input;
-  const refSource = req.headers.get("x-ref-source") ?? "direct";
+  const rawRefSource = req.headers.get("x-ref-source") ?? "";
+  const refSource = /^[a-zA-Z0-9_-]{1,50}$/.test(rawRefSource) ? rawRefSource : "direct";
 
   // Send email via Resend
   const { id, error } = await sendReportEmail({ to: email, analysis, pdfBase64 });

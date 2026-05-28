@@ -16,6 +16,7 @@ function buildLimiters(redis: Redis) {
     checklist:  new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(5,   "1h"), prefix: "cvx:checklist" }),
     contact:    new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(5,   "1h"), prefix: "cvx:contact" }),
     webhook:    new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(100, "1m"), prefix: "cvx:webhook" }),
+    revalidate: new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(20,  "1m"), prefix: "cvx:revalidate" }),
   };
 }
 

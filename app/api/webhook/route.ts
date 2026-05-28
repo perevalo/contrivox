@@ -188,12 +188,12 @@ async function triggerRealAnalysis(contractSessionId: string, customerEmail: str
       await new Promise(r => setTimeout(r, 5000));
       const retry = await sendReportEmail({ to: customerEmail, analysis });
       if (retry.error) {
-        console.error("[email] retry failed for session:", contractSessionId, retry.error);
+        console.error("[email] retry failed for session:", contractSessionId);
       } else {
-        console.log("[email] report sent (retry) to:", customerEmail);
+        console.log("[email] report sent (retry) for session:", contractSessionId);
       }
     } else {
-      console.log("[email] report sent to:", customerEmail);
+      console.log("[email] report sent for session:", contractSessionId);
     }
   }
 }

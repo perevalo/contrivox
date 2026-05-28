@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
     input = analyseInputSchema.parse(body);
   } catch (e) {
     if (e instanceof ZodError) {
-      return NextResponse.json({ error: "Invalid input", details: e.errors }, { status: 422 });
+      return NextResponse.json({ error: "Invalid input" }, { status: 422 });
     }
     return NextResponse.json({ error: "Validation error" }, { status: 422 });
   }

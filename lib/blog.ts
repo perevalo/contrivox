@@ -38,6 +38,14 @@ export interface BlogPost {
   readingTime: number;
 }
 
+function sanitizeBlogHtml(html: string): string {
+  return html
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
+    .replace(/\s+on\w+\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]*)/gi, "")
+    .replace(/javascript\s*:/gi, "blocked:")
+    .replace(/<\/?(?:iframe|object|embed|form|input|button)\b[^>]*>/gi, "");
+}
+
 function calcReadingTime(md: string): number {
   const words = md.replace(/[^a-zA-Z\s]/g, " ").split(/\s+/).filter(Boolean).length;
   return Math.max(1, Math.ceil(words / 200));
@@ -68,7 +76,7 @@ function parsePost(filename: string): BlogPost | null {
     slug,
     title: (data.title as string) ?? slug,
     excerpt: (data.metaDescription as string) ?? "",
-    bodyHtml: String(marked.parse(content)),
+    bodyHtml: sanitizeBlogHtml(String(marked.parse(content))),
     category,
     featured: Boolean(data.featured),
     publishedAt,

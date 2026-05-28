@@ -64,13 +64,12 @@ export async function POST(req: NextRequest) {
     .from("blog_subscribers")
     .upsert({ email_hash: emailHash, acquisition_source: "checklist-cta" }, { onConflict: "email_hash" });
 
-  console.log(`[checklist] Sent to hash ${emailHash.slice(0, 8)}…`);
-
   return NextResponse.json({ ok: true });
 }
 
 function buildChecklistEmail(email: string): string {
-  const unsubUrl = `https://contrivox.com/unsubscribe?e=${encodeURIComponent(email)}`;
+  const token    = createHash("sha256").update(email.toLowerCase().trim()).digest("hex");
+  const unsubUrl = `https://contrivox.com/unsubscribe?token=${token}`;
   return `<!DOCTYPE html>
 <html lang="en">
 <head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/></head>
