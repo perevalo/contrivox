@@ -80,23 +80,24 @@ export default function OGImage() {
           {/* Headline */}
           <div
             style={{
+              display: "flex",
+              flexDirection: "column",
               fontSize: 62,
               fontWeight: 800,
-              color: "white",
               lineHeight: 1.08,
               letterSpacing: "-1.5px",
               marginBottom: 28,
               maxWidth: 860,
             }}
           >
-            Know exactly what
-            <br />
+            <span style={{ color: "white" }}>Know exactly what</span>
             <span style={{ color: "#ef4444" }}>you&apos;re agreeing to.</span>
           </div>
 
           {/* Subtext */}
           <div
             style={{
+              display: "flex",
               fontSize: 24,
               color: "rgba(203,191,255,0.8)",
               lineHeight: 1.5,
@@ -104,8 +105,7 @@ export default function OGImage() {
               maxWidth: 700,
             }}
           >
-            AI reads every clause — red flags, fairness score, and
-            negotiation scripts in 60 seconds.
+            <span>AI reads every clause — red flags, fairness score, and negotiation scripts in 60 seconds.</span>
           </div>
 
           {/* Pill badges */}
