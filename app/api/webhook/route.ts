@@ -7,7 +7,7 @@ import { sendReportEmail } from "@/lib/email";
 import Stripe from "stripe";
 
 export const runtime = "nodejs";
-export const maxDuration = 60;
+export const maxDuration = 300;
 
 export async function POST(req: NextRequest) {
   const body = await req.text();
@@ -82,12 +82,9 @@ export async function POST(req: NextRequest) {
     }
     await ph.shutdown();
 
-    // Fire real analysis in background — do not await (webhook must return 200 immediately)
-    // NOTE: On Vercel serverless, background work after response may be truncated.
-    // For guaranteed execution, migrate to a Supabase DB webhook or queue trigger.
     if (contractSessionId) {
       const customerEmail = session.customer_details?.email ?? null;
-      triggerRealAnalysis(contractSessionId, customerEmail).catch(e =>
+      await triggerRealAnalysis(contractSessionId, customerEmail).catch(e =>
         console.error("[webhook] triggerRealAnalysis error:", e)
       );
     }
