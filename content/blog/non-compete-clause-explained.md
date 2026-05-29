@@ -202,3 +202,11 @@ Read it. Understand it. Negotiate it if needed.
 **[Upload your employment contract to Contrivox →](/)** We'll tell you exactly what your non-compete says, how aggressive it is, and what to watch out for.
 
 *Contrivox provides AI-powered contract explanations, not legal advice. For specific legal guidance on non-compete enforceability in your state, consult a licensed employment attorney.*
+
+---
+
+## Related guides
+
+- [How to Negotiate a Non-Compete Agreement (Without a Lawyer)](/blog/how-to-negotiate-non-compete)
+- [Is a Non-Compete Enforceable in California? (2025)](/blog/non-compete-enforceable-california)
+- [10 Employment Contract Red Flags You Should Never Ignore](/blog/employment-contract-red-flags)

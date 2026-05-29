@@ -233,3 +233,10 @@ You're hiring someone to do real work for real money. The service agreement is w
 **[Upload your service agreement to Contrivox →](/)** Get every clause explained in plain English — instantly.
 
 *Contrivox provides AI-powered contract explanations, not legal advice. For significant commercial contracts, consult a licensed business attorney.*
+
+---
+
+## Related guides
+
+- [Freelance Contract Checklist: Everything Beginners Need to Include](/blog/freelance-contract-checklist)
+- [Termination Clauses Explained in Plain English](/blog/termination-clause-explained)

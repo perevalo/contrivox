@@ -153,3 +153,11 @@ That said, "likely void" and "definitely void in your specific situation" are di
 ---
 
 *Contrivox is not a law firm and does not provide legal advice. This article is for informational purposes only. Always consult a qualified attorney before making decisions based on any contract.*
+
+---
+
+## Related guides
+
+- [Non-Compete Clauses: What Employees Actually Need to Know](/blog/non-compete-clause-explained)
+- [How to Negotiate a Non-Compete Agreement (Without a Lawyer)](/blog/how-to-negotiate-non-compete)
+- [What Happens If You Violate a Non-Compete Agreement? (2025)](/blog/violate-non-compete-agreement)

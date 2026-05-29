@@ -159,3 +159,10 @@ Only if the contract has an opt-out window that hasn't closed. If that window ha
 ---
 
 *Contrivox is not a law firm and does not provide legal advice. This article is for informational purposes only. Always consult a qualified attorney before making decisions based on any contract.*
+
+---
+
+## Related guides
+
+- [The Most Common Contract Clauses Explained in Plain English](/blog/contract-clauses-explained)
+- [Termination Clauses Explained in Plain English](/blog/termination-clause-explained)

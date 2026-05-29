@@ -183,3 +183,10 @@ IP ownership disputes can escalate to litigation. Courts look at the contract la
 ---
 
 *Contrivox is not a law firm and does not provide legal advice. This article is for informational purposes only. Always consult a qualified attorney before making decisions based on any contract.*
+
+---
+
+## Related guides
+
+- [10 Employment Contract Red Flags You Should Never Ignore](/blog/employment-contract-red-flags)
+- [What Is an NDA? Everything You Should Check Before Signing One](/blog/what-is-an-nda)

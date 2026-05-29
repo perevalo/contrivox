@@ -245,3 +245,11 @@ An employment contract shapes more than your job — it can affect your career f
 **[Upload your employment contract to Contrivox →](/)** Get every clause explained in plain English, red flags identified, and a fairness score — instantly.
 
 *Contrivox provides AI-powered contract explanations, not legal advice. For complex employment situations, consult a licensed employment attorney.*
+
+---
+
+## Related guides
+
+- [Non-Compete Clauses: What Employees Actually Need to Know](/blog/non-compete-clause-explained)
+- [How to Negotiate a Non-Compete Agreement (Without a Lawyer)](/blog/how-to-negotiate-non-compete)
+- [IP Assignment Clauses: Does Your Employer Own Your Side Projects?](/blog/ip-assignment-clause-side-projects)

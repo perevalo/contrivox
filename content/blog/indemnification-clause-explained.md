@@ -206,3 +206,10 @@ Read them. Understand them. Negotiate them.
 **[Upload your contract to Contrivox →](/)** We'll identify your indemnification clause, explain it in plain English, and flag anything that looks aggressive.
 
 *Contrivox provides AI-powered contract explanations, not legal advice. For contracts with significant indemnification exposure, consult a licensed attorney.*
+
+---
+
+## Related guides
+
+- [Freelance Contract Checklist: Everything Beginners Need to Include](/blog/freelance-contract-checklist)
+- [The Most Common Contract Clauses Explained in Plain English](/blog/contract-clauses-explained)

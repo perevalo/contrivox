@@ -224,3 +224,10 @@ AI has closed that gap. Not completely — lawyers still matter for complex situ
 **[Try Contrivox on your next contract →](/)** Upload any document, get a plain-English analysis, understand exactly what you're agreeing to.
 
 *Contrivox provides AI-powered contract explanations, not legal advice. For specific legal guidance, consult a licensed attorney in your jurisdiction.*
+
+---
+
+## Related guides
+
+- [The Most Common Contract Clauses Explained in Plain English](/blog/contract-clauses-explained)
+- [What Is an NDA? Everything You Should Check Before Signing One](/blog/what-is-an-nda)

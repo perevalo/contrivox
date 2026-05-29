@@ -238,3 +238,10 @@ Write a strong one, use it consistently, and don't start work without it.
 **Already have a client contract to review?** [Upload it to Contrivox →](/) — we'll flag every clause that could be a problem and explain it in plain English.
 
 *Contrivox provides AI-powered contract explanations, not legal advice. For complex freelance agreements, consult a licensed attorney.*
+
+---
+
+## Related guides
+
+- [Indemnification Clauses Explained Simply (What You're Actually Agreeing To)](/blog/indemnification-clause-explained)
+- [Termination Clauses Explained in Plain English](/blog/termination-clause-explained)

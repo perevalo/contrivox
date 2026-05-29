@@ -261,3 +261,10 @@ You don't need a law degree. You just need a basic understanding of the most com
 **[Upload any contract to Contrivox →](/)** Get a plain-English breakdown of every clause, red flags identified, and a fairness score — in about 30 seconds.
 
 *Contrivox provides AI-powered contract explanations, not legal advice. For specific legal guidance, consult a licensed attorney.*
+
+---
+
+## Related guides
+
+- [Termination Clauses Explained in Plain English](/blog/termination-clause-explained)
+- [How to Understand a Service Agreement Without Legal Knowledge](/blog/service-agreement-review)

@@ -245,3 +245,10 @@ If you'd rather not do it alone, that's exactly what Contrivox is for.
 **[Upload your rental agreement now →](/)** Get a plain-English analysis of every clause, red flags flagged, and a fairness score — in about 30 seconds.
 
 *Contrivox provides AI-powered contract explanations, not legal advice. For complex legal questions, consult a licensed attorney in your state.*
+
+---
+
+## Related guides
+
+- [Termination Clauses Explained in Plain English](/blog/termination-clause-explained)
+- [The Most Common Contract Clauses Explained in Plain English](/blog/contract-clauses-explained)

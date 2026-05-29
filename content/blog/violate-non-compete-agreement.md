@@ -164,3 +164,11 @@ It depends on how the non-compete is written. Some restrict you from working for
 ---
 
 *Contrivox is not a law firm and does not provide legal advice. This article is for informational purposes only. Always consult a qualified attorney before making decisions based on any contract.*
+
+---
+
+## Related guides
+
+- [Non-Compete Clauses: What Employees Actually Need to Know](/blog/non-compete-clause-explained)
+- [Is a Non-Compete Enforceable in California? (2025)](/blog/non-compete-enforceable-california)
+- [How to Negotiate a Non-Compete Agreement (Without a Lawyer)](/blog/how-to-negotiate-non-compete)

@@ -81,6 +81,8 @@ export default function BlogIndex() {
         </section>
       )}
 
+      <BlogCTA style={{ marginBottom: 48 }} />
+
       {/* Conversion CTA */}
       <div style={{ margin: "0 0 48px", padding: "24px 28px", background: "linear-gradient(135deg,rgba(124,58,237,0.12),rgba(79,70,229,0.08))", border: "0.5px solid rgba(124,58,237,0.25)", borderRadius: 14, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 20, flexWrap: "wrap" as const }}>
         <div>
@@ -104,7 +106,6 @@ export default function BlogIndex() {
         )}
       </section>
 
-      <BlogCTA style={{ marginTop: 64 }} />
     </main>
   );
 }

@@ -219,3 +219,11 @@ Spend 10 minutes understanding what you're agreeing to. It's better than finding
 **[Upload your NDA to Contrivox →](/)** Get a plain-English analysis of every clause — flagged, explained, and scored — in about 30 seconds.
 
 *Contrivox provides AI-powered contract explanations, not legal advice. For high-stakes NDA situations, consult a licensed attorney.*
+
+---
+
+## Related guides
+
+- [What to Look for in an NDA Before You Sign](/blog/what-to-look-for-in-nda)
+- [Signing an NDA — What It Actually Means for You](/blog/signing-an-nda)
+- [NDA vs Confidentiality Agreement — What's the Difference?](/blog/nda-vs-confidentiality-agreement)
