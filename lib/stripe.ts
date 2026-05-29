@@ -21,7 +21,14 @@ export const PLANS = {
     label:   "Full Report",
     tier:    "pro" as const,
   },
+  upgrade_usd: {
+    priceId: process.env.STRIPE_PRICE_UPGRADE_USD!,
+    credits: 0,
+    amount:  1500,
+    label:   "Report Upgrade",
+    tier:    "full" as const,
+  },
 } as const;
 
 export type PlanKey = keyof typeof PLANS;
-export type PlanTier = "basic" | "pro";
+export type PlanTier = "basic" | "pro" | "full";

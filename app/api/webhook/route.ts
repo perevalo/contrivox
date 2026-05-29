@@ -86,6 +86,19 @@ export async function POST(req: NextRequest) {
 
     if (contractSessionId) {
       const customerEmail = session.customer_details?.email ?? null;
+
+      // Upgrade flow: promote report_tier to full, no re-analysis needed
+      if (plan.startsWith("upgrade")) {
+        const { error: upgradeError } = await supabase
+          .from("contracts")
+          .update({ report_tier: "full" })
+          .eq("session_id", contractSessionId);
+        if (upgradeError) {
+          console.error("[webhook] upgrade tier error:", upgradeError.message);
+        }
+        return NextResponse.json({ received: true });
+      }
+
       const tier: PlanTier = plan.startsWith("basic") ? "basic" : "pro";
       // Respond to Stripe immediately; keep function alive for analysis
       waitUntil(
@@ -169,7 +182,7 @@ async function triggerRealAnalysis(contractSessionId: string, customerEmail: str
   // Persist real analysis and mark done
   const { error: updateError } = await supabase
     .from("contracts")
-    .update({ analysis, status: "done" })
+    .update({ analysis, status: "done", report_tier: tier === "pro" ? "full" : "basic" })
     .eq("session_id", contractSessionId);
 
   if (updateError) {

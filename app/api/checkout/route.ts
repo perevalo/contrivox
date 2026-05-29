@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
         plan:       planKey,
         session_id: input.sessionId ?? "",
       },
-      success_url:  `${baseUrl}/success?session_id={CHECKOUT_SESSION_ID}&plan=${plan.tier}`,
+      success_url:  `${baseUrl}/success?session_id={CHECKOUT_SESSION_ID}&plan=${input.plan === "upgrade" ? "upgrade" : plan.tier}`,
       cancel_url:   `${baseUrl}/#upload-sec`,
       allow_promotion_codes: true,
       customer_creation: "always",

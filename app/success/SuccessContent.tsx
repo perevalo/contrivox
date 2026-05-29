@@ -221,7 +221,19 @@ function SectionHeader({ label, accent = "#7c3aed" }: { label: string; accent?: 
   );
 }
 
-function InlineReport({ analysis, tier }: { analysis: ContrivoxAnalysis; tier: "basic" | "pro" }) {
+const RISK_ORDER: Record<string, number> = { high: 0, medium: 1, low: 2 };
+
+function InlineReport({ analysis, tier, onUpgrade }: {
+  analysis: ContrivoxAnalysis;
+  tier: "basic" | "full";
+  onUpgrade?: () => void;
+}) {
+  const sortedClauses = [...(analysis.key_clauses ?? [])].sort(
+    (a, b) => (RISK_ORDER[a.risk_level] ?? 2) - (RISK_ORDER[b.risk_level] ?? 2)
+  );
+  const firstClause   = sortedClauses[0];
+  const lockedClauses = sortedClauses.slice(1);
+
   return (
     <div style={{ marginTop: 40, textAlign: "left" }}>
 
@@ -295,10 +307,15 @@ function InlineReport({ analysis, tier }: { analysis: ContrivoxAnalysis; tier: "
                       </span>
                     )}
                   </div>
-                  <p style={{ color: C.muted, fontSize: 13.5, lineHeight: 1.7, fontFamily: FONT, margin: `0 0 ${flag.challengeable && flag.challenge ? 14 : 0}px` }}>
+                  <p style={{
+                    color: C.muted, fontSize: 13.5, lineHeight: 1.7, fontFamily: FONT,
+                    margin: `0 0 ${tier === "full" && flag.challengeable && flag.challenge ? 14 : 0}px`,
+                    filter: tier === "basic" ? "blur(3.5px)" : "none",
+                    userSelect: tier === "basic" ? "none" : "auto",
+                  }}>
                     {flag.why_it_matters}
                   </p>
-                  {tier === "pro" && flag.challengeable && flag.challenge && (
+                  {tier === "full" && flag.challengeable && flag.challenge && (
                     <div style={{
                       padding: "12px 16px", borderRadius: 10,
                       background: "rgba(124,58,237,0.08)", border: "1px solid rgba(124,58,237,0.2)",
@@ -322,11 +339,18 @@ function InlineReport({ analysis, tier }: { analysis: ContrivoxAnalysis; tier: "
       )}
 
       {/* Key Clauses */}
-      {analysis.key_clauses?.length > 0 && (
+      {sortedClauses.length > 0 && (
         <section style={{ marginBottom: 44 }}>
-          <SectionHeader label={`Key Clauses — ${analysis.key_clauses.length}`} accent="#f59e0b" />
+          <SectionHeader label={`Key Clauses — ${sortedClauses.length}`} accent="#f59e0b" />
+
+          {tier === "basic" && (
+            <p style={{ fontSize: 11.5, color: "rgba(255,255,255,0.3)", fontFamily: FONT, marginBottom: 14 }}>
+              Showing 1 of {sortedClauses.length} clause{sortedClauses.length !== 1 ? "s" : ""} — unlock to see all
+            </p>
+          )}
+
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-            {analysis.key_clauses.map((clause, i) => {
+            {(tier === "full" ? sortedClauses : (firstClause ? [firstClause] : [])).map((clause, i) => {
               const borderColor = RISK_COLORS[clause.risk_level] ?? C.border;
               return (
                 <div key={i} style={{
@@ -357,6 +381,40 @@ function InlineReport({ analysis, tier }: { analysis: ContrivoxAnalysis; tier: "
               );
             })}
           </div>
+
+          {/* Locked clauses preview — basic tier only */}
+          {tier === "basic" && lockedClauses.length > 0 && (
+            <div style={{ position: "relative", marginTop: 10, borderRadius: 12, overflow: "hidden" }}>
+              <div style={{ filter: "blur(4px)", userSelect: "none", pointerEvents: "none", display: "flex", flexDirection: "column", gap: 10 }}>
+                {lockedClauses.slice(0, 2).map((clause, i) => {
+                  const borderColor = RISK_COLORS[clause.risk_level] ?? C.border;
+                  return (
+                    <div key={i} style={{
+                      padding: "18px", borderRadius: 12,
+                      border: `1px solid ${C.border}`, borderLeft: `4px solid ${borderColor}`,
+                      background: C.surface,
+                    }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
+                        <span style={{ fontWeight: 700, fontSize: 13.5, color: C.heading, fontFamily: FONT, flex: 1 }}>{clause.title}</span>
+                        <RiskBadge level={clause.risk_level} />
+                      </div>
+                      <p style={{ color: C.muted, fontSize: 13.5, lineHeight: 1.65, fontFamily: FONT, margin: 0 }}>{clause.plain_english}</p>
+                    </div>
+                  );
+                })}
+              </div>
+              <div style={{
+                position: "absolute", inset: 0,
+                background: "linear-gradient(to bottom, rgba(7,7,15,0.05) 0%, rgba(7,7,15,0.82) 55%)",
+                display: "flex", alignItems: "flex-end", justifyContent: "center", padding: 20,
+                borderRadius: 12,
+              }}>
+                <span style={{ fontSize: 13, fontWeight: 700, color: "rgba(167,139,250,0.9)", fontFamily: FONT }}>
+                  🔒 {lockedClauses.length} more clause{lockedClauses.length !== 1 ? "s" : ""} — unlock to read all
+                </span>
+              </div>
+            </div>
+          )}
         </section>
       )}
 
@@ -364,14 +422,65 @@ function InlineReport({ analysis, tier }: { analysis: ContrivoxAnalysis; tier: "
       {analysis.missing_protections?.length > 0 && (
         <section style={{ marginBottom: 44 }}>
           <SectionHeader label="Missing Protections" accent="#f97316" />
-          <div style={{ padding: "18px 20px", borderRadius: 12, border: `1px solid ${C.border}`, background: C.surface }}>
-            <ul style={{ margin: 0, paddingLeft: 18, display: "flex", flexDirection: "column", gap: 10 }}>
-              {analysis.missing_protections.map((item, i) => (
-                <li key={i} style={{ color: C.muted, fontSize: 13.5, lineHeight: 1.65, fontFamily: FONT }}>{item}</li>
-              ))}
-            </ul>
+          <div style={{ position: "relative", borderRadius: 12, overflow: "hidden" }}>
+            <div style={{
+              padding: "18px 20px", borderRadius: 12,
+              border: `1px solid ${C.border}`, background: C.surface,
+              filter: tier === "basic" ? "blur(4px)" : "none",
+              userSelect: tier === "basic" ? "none" : "auto",
+              pointerEvents: tier === "basic" ? "none" : "auto",
+            }}>
+              <ul style={{ margin: 0, paddingLeft: 18, display: "flex", flexDirection: "column", gap: 10 }}>
+                {analysis.missing_protections.map((item, i) => (
+                  <li key={i} style={{ color: C.muted, fontSize: 13.5, lineHeight: 1.65, fontFamily: FONT }}>{item}</li>
+                ))}
+              </ul>
+            </div>
+            {tier === "basic" && (
+              <div style={{
+                position: "absolute", inset: 0,
+                background: "rgba(7,7,15,0.55)",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                borderRadius: 12,
+              }}>
+                <span style={{ fontSize: 13, fontWeight: 700, color: "rgba(167,139,250,0.9)", fontFamily: FONT }}>
+                  🔒 {analysis.missing_protections.length} missing protection{analysis.missing_protections.length !== 1 ? "s" : ""} — unlock to see all
+                </span>
+              </div>
+            )}
           </div>
         </section>
+      )}
+
+      {/* Inline upsell card — basic tier only */}
+      {tier === "basic" && onUpgrade && (
+        <div style={{
+          padding: "28px 24px", borderRadius: 16, marginBottom: 44,
+          background: "rgba(124,58,237,0.07)", border: "1px solid rgba(124,58,237,0.3)",
+          textAlign: "center",
+        }}>
+          <p style={{ fontFamily: FONT_SERIF, fontSize: 22, color: "white", marginBottom: 8, lineHeight: 1.2 }}>
+            Unlock Your Full Report
+          </p>
+          <p style={{ fontSize: 13.5, color: C.muted, lineHeight: 1.65, marginBottom: 6, fontFamily: FONT }}>
+            All clauses explained · Negotiation scripts · Missing protections · PDF download
+          </p>
+          <p style={{ fontSize: 12, color: "rgba(255,255,255,0.28)", marginBottom: 22, fontStyle: "italic", fontFamily: FONT }}>
+            Most users unlock after seeing their risk score.
+          </p>
+          <button
+            onClick={onUpgrade}
+            style={{
+              padding: "14px 40px", fontSize: 15, fontWeight: 700,
+              background: "linear-gradient(135deg,#7c3aed,#4f46e5)",
+              color: "white", border: "none", borderRadius: 12,
+              cursor: "pointer", fontFamily: FONT,
+              boxShadow: "0 4px 24px rgba(99,102,241,0.45)",
+            }}
+          >
+            Unlock Full Report — $15
+          </button>
+        </div>
       )}
 
       {/* Overall Recommendation */}
@@ -400,18 +509,21 @@ function InlineReport({ analysis, tier }: { analysis: ContrivoxAnalysis; tier: "
 export default function SuccessContent() {
   const searchParams  = useSearchParams();
   const stripeSession = searchParams.get("session_id");
-  const tier          = (searchParams.get("plan") === "basic" ? "basic" : "pro") as "basic" | "pro";
+  const urlPlan       = searchParams.get("plan") ?? "basic";
 
-  const [msgIdx, setMsgIdx]               = useState(0);
-  const [msgVisible, setMsgVisible]       = useState(true);
-  const [done, setDone]                   = useState(false);
-  const [slow, setSlow]                   = useState(false);
-  const [timedOut, setTimedOut]           = useState(false);
-  const [analysisError, setAnalysisError] = useState(false);
-  const [analysis, setAnalysis]           = useState<ContrivoxAnalysis | null>(null);
-  const [downloading, setDownloading]     = useState(false);
-  const [copied, setCopied]               = useState(false);
-  const [retryCount, setRetryCount]       = useState(0);
+  const [msgIdx, setMsgIdx]                       = useState(0);
+  const [msgVisible, setMsgVisible]               = useState(true);
+  const [done, setDone]                           = useState(false);
+  const [slow, setSlow]                           = useState(false);
+  const [timedOut, setTimedOut]                   = useState(false);
+  const [analysisError, setAnalysisError]         = useState(false);
+  const [analysis, setAnalysis]                   = useState<ContrivoxAnalysis | null>(null);
+  const [reportTier, setReportTier]               = useState<"basic" | "full">("basic");
+  const [contractSessionId, setContractSessionId] = useState<string | null>(null);
+  const [upgradeLoading, setUpgradeLoading]       = useState(false);
+  const [downloading, setDownloading]             = useState(false);
+  const [copied, setCopied]                       = useState(false);
+  const [retryCount, setRetryCount]               = useState(0);
 
   const startRef = useRef(Date.now());
   const pollRef  = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -450,10 +562,14 @@ export default function SuccessContent() {
         const res  = await fetch(`/api/contract/status?stripe_session=${stripeSession}`);
         const data = await res.json();
         if (data.status === "done" || data.status === "error") {
+          // For upgrade flow, keep polling until webhook promotes report_tier to "full"
+          if (urlPlan === "upgrade" && data.report_tier !== "full") return;
           clearInterval(pollRef.current!);
           clearInterval(msgRef.current!);
           if (data.status === "error") setAnalysisError(true);
           if (data.analysis) setAnalysis(data.analysis as ContrivoxAnalysis);
+          setReportTier((data.report_tier === "full" ? "full" : "basic") as "basic" | "full");
+          setContractSessionId(data.contract_session_id ?? null);
           setDone(true);
         }
       } catch {
@@ -493,8 +609,26 @@ export default function SuccessContent() {
     setRetryCount(c => c + 1);
   }, []);
 
-  const linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent("https://contrivox.com")}`;
+  const handleUpgrade = useCallback(async () => {
+    if (upgradeLoading || !contractSessionId) return;
+    setUpgradeLoading(true);
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ plan: "upgrade", sessionId: contractSessionId }),
+      });
+      if (!res.ok) throw new Error("Checkout failed");
+      const { url } = await res.json();
+      if (url) window.location.href = url;
+    } catch {
+      setUpgradeLoading(false);
+    }
+  }, [upgradeLoading, contractSessionId]);
+
+  const linkedInUrl   = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent("https://contrivox.com")}`;
   const hasFullReport = analysis && !timedOut && !analysisError;
+  const isUpgrade     = urlPlan === "upgrade";
 
   return (
     <>
@@ -512,27 +646,63 @@ export default function SuccessContent() {
         .dl-btn{animation:glowPulse 2.8s ease-in-out infinite;}
       `}</style>
 
-      {/* Sticky "Analyse Another" bar — only when full report is visible */}
+      {/* Sticky bottom bar — upgrade CTA for basic, or "Analyse Another" for full */}
       {hasFullReport && (
         <div style={{
           position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 50,
           padding: "12px 20px",
-          background: "rgba(7,7,15,0.88)",
-          backdropFilter: "blur(14px)",
-          WebkitBackdropFilter: "blur(14px)",
+          background: "rgba(7,7,15,0.92)",
+          backdropFilter: "blur(16px)",
+          WebkitBackdropFilter: "blur(16px)",
           borderTop: `1px solid ${C.border}`,
-          display: "flex", justifyContent: "center",
+          display: "flex", justifyContent: "center", alignItems: "center", gap: 12,
         }}>
-          <a href="/" style={{
-            padding: "9px 32px", borderRadius: 10,
-            background: "rgba(255,255,255,0.06)",
-            border: "0.5px solid rgba(255,255,255,0.14)",
-            color: "rgba(255,255,255,0.65)",
-            fontSize: 13, fontWeight: 600,
-            textDecoration: "none", fontFamily: FONT,
-          }}>
-            ← Analyse Another Contract
-          </a>
+          {reportTier === "basic" ? (
+            <>
+              <div style={{ textAlign: "center" }}>
+                <button
+                  onClick={handleUpgrade}
+                  disabled={upgradeLoading || !contractSessionId}
+                  style={{
+                    padding: "11px 32px", borderRadius: 10,
+                    background: upgradeLoading ? "rgba(124,58,237,0.45)" : "linear-gradient(135deg,#7c3aed,#4f46e5)",
+                    color: "white", border: "none",
+                    fontSize: 14, fontWeight: 700,
+                    cursor: upgradeLoading || !contractSessionId ? "not-allowed" : "pointer",
+                    fontFamily: FONT,
+                    boxShadow: upgradeLoading ? "none" : "0 4px 20px rgba(99,102,241,0.4)",
+                    minHeight: 44,
+                  }}
+                >
+                  {upgradeLoading ? "Redirecting…" : "Unlock Full Report — $15"}
+                </button>
+                <p style={{ fontSize: 11, color: "rgba(255,255,255,0.28)", marginTop: 5, fontFamily: FONT }}>
+                  Most users unlock after seeing their risk score.
+                </p>
+              </div>
+              <a href="/" style={{
+                padding: "9px 18px", borderRadius: 10,
+                background: "rgba(255,255,255,0.04)",
+                border: "0.5px solid rgba(255,255,255,0.1)",
+                color: "rgba(255,255,255,0.4)", fontSize: 12,
+                textDecoration: "none", fontFamily: FONT, fontWeight: 600,
+                flexShrink: 0, whiteSpace: "nowrap",
+              }}>
+                ← New analysis
+              </a>
+            </>
+          ) : (
+            <a href="/" style={{
+              padding: "9px 32px", borderRadius: 10,
+              background: "rgba(255,255,255,0.06)",
+              border: "0.5px solid rgba(255,255,255,0.14)",
+              color: "rgba(255,255,255,0.65)",
+              fontSize: 13, fontWeight: 600,
+              textDecoration: "none", fontFamily: FONT,
+            }}>
+              ← Analyse Another Contract
+            </a>
+          )}
         </div>
       )}
 
@@ -558,12 +728,18 @@ export default function SuccessContent() {
             </div>
 
             <h1 style={{ fontFamily: FONT_SERIF, fontSize: "clamp(22px,4vw,32px)", color: "white", marginBottom: 12, lineHeight: 1.2 }}>
-              {slow ? "Still working on your report…" : "Analysing your contract"}
+              {isUpgrade
+                ? "Unlocking your full report…"
+                : slow
+                  ? "Still working on your report…"
+                  : "Analysing your contract"}
             </h1>
             <p style={{ fontSize: 14, color: C.muted, marginBottom: 32, fontFamily: FONT }}>
-              {slow
-                ? "This contract is taking a bit longer than usual. Please keep this page open — your report will appear here when it's ready."
-                : "This usually takes 60–90 seconds."}
+              {isUpgrade
+                ? "Activating your upgrade — this takes just a moment."
+                : slow
+                  ? "This contract is taking a bit longer than usual. Please keep this page open — your report will appear here when it's ready."
+                  : "This usually takes 60–90 seconds."}
             </p>
 
             <div style={{ display: "inline-flex", alignItems: "center", gap: 9, padding: "10px 20px", background: "rgba(124,58,237,0.08)", border: "0.5px solid rgba(124,58,237,0.2)", borderRadius: 24, minWidth: 300 }}>
@@ -574,7 +750,11 @@ export default function SuccessContent() {
             </div>
 
             <div style={{ display: "flex", gap: 24, justifyContent: "center", marginTop: 48, flexWrap: "wrap" }}>
-              {([["✓", "Payment confirmed", "#4ade80"], ["⏳", "Analysing clauses", "#8b5cf6"], [tier === "pro" ? "✉" : "📊", tier === "pro" ? "Report on its way" : "Results loading", "rgba(255,255,255,0.2)"]] as const).map(([icon, label, color], i) => (
+              {([
+                ["✓", "Payment confirmed", "#4ade80"],
+                ["⏳", isUpgrade ? "Activating upgrade" : "Analysing clauses", "#8b5cf6"],
+                [isUpgrade ? "⚡" : urlPlan === "pro" ? "✉" : "📊", isUpgrade ? "Full report ready soon" : urlPlan === "pro" ? "Report on its way" : "Results loading", "rgba(255,255,255,0.2)"],
+              ] as const).map(([icon, label, color], i) => (
                 <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
                   <div style={{ width: 36, height: 36, borderRadius: "50%", background: i === 0 ? "rgba(74,222,128,0.12)" : i === 1 ? "rgba(139,92,246,0.12)" : "rgba(255,255,255,0.04)", border: `0.5px solid ${color}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 15 }}>{icon}</div>
                   <span style={{ fontSize: 11, color, fontFamily: FONT, textAlign: "center", maxWidth: 80 }}>{label}</span>
@@ -606,14 +786,18 @@ export default function SuccessContent() {
                   ? "We couldn't analyse this document. Please try uploading your contract again — if the issue persists, contact support."
                   : timedOut
                     ? "Your report is still being prepared. Click below to check again, or wait for the email copy to arrive in your inbox."
-                    : tier === "pro"
-                      ? "Your full contract analysis is complete. Download the PDF or read it below."
+                    : reportTier === "full"
+                      ? urlPlan === "upgrade"
+                        ? "Your full report is unlocked. Everything is now visible below."
+                        : urlPlan === "pro"
+                          ? "Your full contract analysis is complete. Download the PDF or read it below."
+                          : "Your full report is ready. Read it below."
                       : "Your contract analysis is ready. Read it below."}
               </p>
 
               {/* Primary actions */}
               <div style={{ width: "100%", maxWidth: 440 }}>
-                {hasFullReport && tier === "pro" && (
+                {hasFullReport && reportTier === "full" && urlPlan !== "upgrade" && urlPlan !== "basic" && (
                   <>
                     <button
                       onClick={handleDownload}
@@ -642,15 +826,29 @@ export default function SuccessContent() {
                   </>
                 )}
 
-                {hasFullReport && tier === "basic" && (
-                  <div style={{ marginBottom: 24, padding: "14px 16px", borderRadius: 12, background: "rgba(124,58,237,0.06)", border: "1px solid rgba(124,58,237,0.2)", textAlign: "center" }}>
-                    <p style={{ fontSize: 12.5, color: "rgba(167,139,250,0.8)", fontFamily: FONT, marginBottom: 8, lineHeight: 1.5 }}>
-                      Want negotiation scripts + PDF emailed to you?
-                    </p>
-                    <a href="/" style={{ fontSize: 12, fontWeight: 700, color: "#a78bfa", fontFamily: FONT, textDecoration: "underline" }}>
-                      Upgrade to Full Report — $29 →
-                    </a>
-                  </div>
+                {/* PDF download for upgrade buyers — email was already sent after original $9 analysis */}
+                {hasFullReport && reportTier === "full" && (urlPlan === "upgrade" || urlPlan === "basic") && (
+                  <button
+                    onClick={handleDownload}
+                    disabled={downloading}
+                    className={downloading ? undefined : "dl-btn"}
+                    style={{
+                      width: "100%", padding: "18px", fontSize: 16, fontWeight: 700,
+                      background: downloading ? "rgba(124,58,237,0.45)" : "linear-gradient(135deg,#7c3aed,#4f46e5)",
+                      color: "white", border: "none", borderRadius: 13,
+                      cursor: downloading ? "not-allowed" : "pointer",
+                      fontFamily: FONT, marginBottom: 24,
+                      display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
+                      letterSpacing: "0.01em",
+                    }}
+                  >
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                      <polyline points="7 10 12 15 17 10"/>
+                      <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                    {downloading ? "Generating PDF…" : "Download My Report"}
+                  </button>
                 )}
 
                 {timedOut && (
@@ -689,7 +887,13 @@ export default function SuccessContent() {
             </div>
 
             {/* Inline full report */}
-            {hasFullReport && <InlineReport analysis={analysis} tier={tier} />}
+            {hasFullReport && (
+              <InlineReport
+                analysis={analysis}
+                tier={reportTier}
+                onUpgrade={reportTier === "basic" ? handleUpgrade : undefined}
+              />
+            )}
 
             {/* Share section */}
             <div style={{ background: "rgba(255,255,255,0.025)", border: `0.5px solid ${C.border}`, borderRadius: 12, padding: "16px 18px", marginTop: 32 }}>
