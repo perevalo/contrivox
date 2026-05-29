@@ -4,6 +4,7 @@ import { stripe, type PlanTier } from "@/lib/stripe";
 import { createSupabaseServiceClient } from "@/lib/supabase/server";
 import { getPostHogServer } from "@/lib/posthog";
 import { analyseContract, type FilePayload } from "@/lib/claude";
+import type { ContrivoxAnalysis } from "@/lib/validation";
 import { sendReportEmail } from "@/lib/email";
 import { generateReportPDFBase64 } from "@/lib/pdf";
 import Stripe from "stripe";
@@ -87,14 +88,42 @@ export async function POST(req: NextRequest) {
     if (contractSessionId) {
       const customerEmail = session.customer_details?.email ?? null;
 
-      // Upgrade flow: promote report_tier to full, no re-analysis needed
+      // Upgrade flow: promote report_tier to full, then email the report
       if (plan.startsWith("upgrade")) {
-        const { error: upgradeError } = await supabase
+        const { data: upgraded, error: upgradeError } = await supabase
           .from("contracts")
           .update({ report_tier: "full" })
-          .eq("session_id", contractSessionId);
+          .eq("session_id", contractSessionId)
+          .select("analysis")
+          .maybeSingle();
         if (upgradeError) {
           console.error("[webhook] upgrade tier error:", upgradeError.message);
+        }
+        if (customerEmail && upgraded?.analysis) {
+          const analysis = upgraded.analysis as ContrivoxAnalysis;
+          waitUntil(
+            (async () => {
+              let pdfBase64: string | undefined;
+              try {
+                pdfBase64 = await generateReportPDFBase64(analysis);
+              } catch (e) {
+                console.error("[email] upgrade PDF generation failed — sending without attachment:", e);
+              }
+              const attempt = await sendReportEmail({ to: customerEmail, analysis, pdfBase64 });
+              if (attempt.error) {
+                console.error("[email] upgrade email failed:", attempt.error, "— retrying in 5s for session:", contractSessionId);
+                await new Promise(r => setTimeout(r, 5000));
+                const retry = await sendReportEmail({ to: customerEmail, analysis });
+                if (retry.error) {
+                  console.error("[email] upgrade email retry failed for session:", contractSessionId);
+                } else {
+                  console.log("[email] upgrade report sent (retry) for session:", contractSessionId);
+                }
+              } else {
+                console.log("[email] upgrade report sent for session:", contractSessionId);
+              }
+            })().catch(e => console.error("[webhook] upgrade email error:", e))
+          );
         }
         return NextResponse.json({ received: true });
       }
