@@ -12,7 +12,19 @@
       "Bash(where pnpm *)",
       "Bash(where yarn *)",
       "Bash(node *)",
-      "Bash(Select-Object -ExpandProperty FullName)"
+      "Bash(Select-Object -ExpandProperty FullName)",
+      "Bash(git *)",
+      "Bash(npx supabase *)",
+      "Bash(cd *)",
+      "Bash(curl -s --max-time 15 https://contrivox.com)",
+      "Bash(xargs -I{} sh -c 'echo \"=== {} ===\"; grep -E \"publishedAt|featured|author\" \"{}\"')",
+      "Bash(powershell *)",
+      "Bash(Sort-Object Length -Descending)",
+      "Bash(Select-Object -First 1 FullName)",
+      "Bash(cd /d \"D:\\\\Alex\\\\contrivox\")",
+      "Bash(find app *)",
+      "Bash(Select-String \"@vercel/functions\")",
+      "Bash(npm list *)"
     ]
   }
 }
