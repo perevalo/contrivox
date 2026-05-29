@@ -15,7 +15,8 @@ const MESSAGES = [
   "Preparing your report...",
 ];
 
-const TIMEOUT_MS = 120_000;
+const TIMEOUT_MS = 240_000;
+const SLOW_MS    = 90_000;
 
 // Dark-theme colour tokens
 const C = {
@@ -403,11 +404,13 @@ export default function SuccessContent() {
   const [msgIdx, setMsgIdx]               = useState(0);
   const [msgVisible, setMsgVisible]       = useState(true);
   const [done, setDone]                   = useState(false);
+  const [slow, setSlow]                   = useState(false);
   const [timedOut, setTimedOut]           = useState(false);
   const [analysisError, setAnalysisError] = useState(false);
   const [analysis, setAnalysis]           = useState<ContrivoxAnalysis | null>(null);
   const [downloading, setDownloading]     = useState(false);
   const [copied, setCopied]               = useState(false);
+  const [retryCount, setRetryCount]       = useState(0);
 
   const startRef = useRef(Date.now());
   const pollRef  = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -415,6 +418,14 @@ export default function SuccessContent() {
 
   useEffect(() => {
     if (!stripeSession) return;
+
+    // Reset transient states on each retry
+    setSlow(false);
+    setTimedOut(false);
+    setAnalysisError(false);
+    setAnalysis(null);
+    setDone(false);
+    startRef.current = Date.now();
 
     msgRef.current = setInterval(() => {
       setMsgVisible(false);
@@ -425,13 +436,15 @@ export default function SuccessContent() {
     }, 8000);
 
     const poll = async () => {
-      if (Date.now() - startRef.current >= TIMEOUT_MS) {
+      const elapsed = Date.now() - startRef.current;
+      if (elapsed >= TIMEOUT_MS) {
         clearInterval(pollRef.current!);
         clearInterval(msgRef.current!);
         setTimedOut(true);
         setDone(true);
         return;
       }
+      if (elapsed >= SLOW_MS) setSlow(true);
       try {
         const res  = await fetch(`/api/contract/status?stripe_session=${stripeSession}`);
         const data = await res.json();
@@ -454,7 +467,7 @@ export default function SuccessContent() {
       if (pollRef.current) clearInterval(pollRef.current);
       if (msgRef.current)  clearInterval(msgRef.current);
     };
-  }, [stripeSession]);
+  }, [stripeSession, retryCount]);
 
   const handleDownload = useCallback(async () => {
     if (!analysis || downloading) return;
@@ -473,6 +486,10 @@ export default function SuccessContent() {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }).catch(() => {});
+  }, []);
+
+  const handleRetry = useCallback(() => {
+    setRetryCount(c => c + 1);
   }, []);
 
   const linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent("https://contrivox.com")}`;
@@ -540,10 +557,12 @@ export default function SuccessContent() {
             </div>
 
             <h1 style={{ fontFamily: FONT_SERIF, fontSize: "clamp(22px,4vw,32px)", color: "white", marginBottom: 12, lineHeight: 1.2 }}>
-              Analysing your contract
+              {slow ? "Still working on your report…" : "Analysing your contract"}
             </h1>
             <p style={{ fontSize: 14, color: C.muted, marginBottom: 32, fontFamily: FONT }}>
-              This usually takes 60 seconds.
+              {slow
+                ? "This contract is taking a bit longer than usual. Please keep this page open — your report will appear here when it's ready."
+                : "This usually takes 60–90 seconds."}
             </p>
 
             <div style={{ display: "inline-flex", alignItems: "center", gap: 9, padding: "10px 20px", background: "rgba(124,58,237,0.08)", border: "0.5px solid rgba(124,58,237,0.2)", borderRadius: 24, minWidth: 300 }}>
@@ -578,14 +597,14 @@ export default function SuccessContent() {
                 {analysisError
                   ? "Analysis failed"
                   : timedOut
-                    ? "Your report is being delivered"
+                    ? "Still processing your report…"
                     : "Your report is ready."}
               </h1>
               <p style={{ fontSize: 14, color: C.muted, lineHeight: 1.75, marginBottom: 28, fontFamily: FONT, maxWidth: 440 }}>
                 {analysisError
                   ? "We couldn't analyse this document. Please try uploading your contract again — if the issue persists, contact support."
                   : timedOut
-                    ? "Analysis is taking a bit longer than expected. Your report will be delivered to your email shortly."
+                    ? "Your report is still being prepared. Click below to check again, or wait for the email copy to arrive in your inbox."
                     : "Your full contract analysis is complete. Download the PDF or read it below."}
               </p>
 
@@ -620,7 +639,26 @@ export default function SuccessContent() {
                   </>
                 )}
 
-                {!hasFullReport && (
+                {timedOut && (
+                  <button
+                    onClick={handleRetry}
+                    style={{
+                      width: "100%", padding: "15px", fontSize: 15, fontWeight: 700,
+                      background: "linear-gradient(135deg,#7c3aed,#4f46e5)",
+                      color: "white", border: "none", borderRadius: 13,
+                      cursor: "pointer", fontFamily: FONT, marginBottom: 10,
+                      display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
+                    }}
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/>
+                      <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+                    </svg>
+                    Check again
+                  </button>
+                )}
+
+                {!hasFullReport && !timedOut && (
                   <a
                     href="/"
                     style={{
