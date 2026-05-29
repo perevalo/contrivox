@@ -11,7 +11,7 @@ const SITE = "https://contrivox.com";
 export const metadata: Metadata = {
   title: "Contract Review AI — Red Flags, Fairness Score & Negotiation Scripts | Contrivox",
   description:
-    "Upload any contract — employment, NDA, lease, or freelance — and get a plain-English analysis, red flags, fairness score, and negotiation scripts in 60 seconds. $9.",
+    "Upload any contract — employment, NDA, lease, or freelance — and get a plain-English analysis, red flags, fairness score, and negotiation scripts in 60 seconds. From $9.",
   keywords: [
     "contract analysis", "non-compete checker", "NDA review", "lease analyser",
     "employment contract red flags", "contract review AI", "is my non-compete enforceable",
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   alternates: { canonical: SITE },
   openGraph: {
     title: "Contract Review AI — Red Flags, Fairness Score & Negotiation Scripts | Contrivox",
-    description: "Upload any contract — employment, NDA, lease, or freelance — and get a plain-English analysis, red flags, fairness score, and negotiation scripts in 60 seconds. $9.",
+    description: "Upload any contract — employment, NDA, lease, or freelance — and get a plain-English analysis, red flags, fairness score, and negotiation scripts in 60 seconds. From $9.",
     url: SITE,
     siteName: "Contrivox",
     type: "website",
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Contract Review AI — Red Flags, Fairness Score & Negotiation Scripts | Contrivox",
-    description: "Upload any contract — employment, NDA, lease, or freelance — and get a plain-English analysis, red flags, fairness score, and negotiation scripts in 60 seconds. $9.",
+    description: "Upload any contract — employment, NDA, lease, or freelance — and get a plain-English analysis, red flags, fairness score, and negotiation scripts in 60 seconds. From $9.",
   },
   robots: { index: true, follow: true },
   metadataBase: new URL(SITE),

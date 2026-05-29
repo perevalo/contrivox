@@ -86,7 +86,7 @@ const T = {
     faq6q: "What contract types do you support?",
     faq6a: "Employment agreements, NDAs and non-disclosure agreements, freelance and independent contractor contracts, service agreements, and residential leases. Contract types are detected automatically — just upload.",
     cta_band: "Know exactly what you're signing.",
-    cta_urgency: "The average employment dispute costs $18,000. A $9 scan or $29 full report takes 60 seconds.",
+    cta_urgency: "The average employment dispute costs $18,000. A report takes 60 seconds — from $9.",
     cta_trust: "Secure payment via Stripe · No subscription · No account required",
     footer_copy: `© ${new Date().getFullYear()} Contrivox`,
     account_title: "My Analyses", account_empty: "No saved analyses yet. Upload a contract to get started.",
@@ -1504,7 +1504,7 @@ export default function Contrivox() {
               {t.cta_urgency}
             </p>
             <button onClick={()=>{ Analytics.ctaClicked("cta_band"); document.getElementById("upload-sec")?.scrollIntoView({behavior:"smooth"}); }} style={{ padding:"16px 40px", fontSize:15.5, fontWeight:700, background:COLORS.accentGrad, color:"white", border:"none", borderRadius:12, cursor:"pointer", fontFamily:"'DM Sans',sans-serif", boxShadow:"0 5px 30px rgba(99,102,241,0.38)", animation:"glow 3s infinite", letterSpacing:"0.01em", minHeight:52, marginTop:10 }}>
-              Check My Contract — $9
+              Check My Contract — from $9
             </button>
             <p style={{ marginTop:12, fontSize:11.5, color:COLORS.faint, fontFamily:"'DM Sans',sans-serif" }}>{t.cta_trust}</p>
             <div style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:20, marginTop:18, flexWrap:"wrap" }}>

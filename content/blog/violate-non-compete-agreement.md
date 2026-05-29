@@ -157,7 +157,7 @@ It depends on how the non-compete is written. Some restrict you from working for
 
 > **Not sure how enforceable your non-compete is?**
 > Upload your contract to Contrivox and get a full plain-English analysis — red flags, fairness score, and negotiation scripts — in 60 seconds.
-> $9. No subscription. No account needed.
+> From $9. No subscription. No account needed.
 >
 > **[Check My Contract →](/)**
 

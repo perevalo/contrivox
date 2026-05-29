@@ -193,7 +193,7 @@ export default function SampleReportPage() {
             display: "inline-flex",
             alignItems: "center",
           }}>
-            Check My Contract — $9
+            Check My Contract — from $9
           </Link>
         </div>
       </nav>
@@ -399,7 +399,7 @@ export default function SampleReportPage() {
         }}>
           <h2 style={{ fontSize: 22, fontWeight: 700, marginBottom: 12, color: "var(--cvx-heading)", fontFamily: FONT_SERIF }}>Ready to check your contract?</h2>
           <p style={{ color: "var(--cvx-muted)", fontSize: 15, marginBottom: 24, fontFamily: FONT }}>
-            Upload your contract and get a full analysis like this one — in 60 seconds, for $9.
+            Upload your contract and get a full analysis like this one — in 60 seconds, starting from $9.
           </p>
           <Link href="/" style={{
             display: "inline-flex",
@@ -414,7 +414,7 @@ export default function SampleReportPage() {
             minHeight: 48,
             fontFamily: FONT,
           }}>
-            Check My Contract — $9 · 60 seconds
+            Check My Contract — from $9 · 60 seconds
           </Link>
           <p style={{ color: "var(--cvx-muted)", fontSize: 13, marginTop: 12, fontFamily: FONT }}>
             Secure payment via Stripe. No subscription. No account required.

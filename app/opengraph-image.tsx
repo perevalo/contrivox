@@ -111,7 +111,7 @@ export default function OGImage() {
           {/* Pill badges */}
           <div style={{ display: "flex", gap: 14 }}>
             {[
-              { text: "$9 one-time", color: "#7c3aed", bg: "rgba(124,58,237,0.18)", border: "rgba(124,58,237,0.4)" },
+              { text: "From $9", color: "#7c3aed", bg: "rgba(124,58,237,0.18)", border: "rgba(124,58,237,0.4)" },
               { text: "60 seconds", color: "#a78bfa", bg: "rgba(167,139,250,0.12)", border: "rgba(167,139,250,0.3)" },
               { text: "No subscription", color: "#a78bfa", bg: "rgba(167,139,250,0.12)", border: "rgba(167,139,250,0.3)" },
             ].map((pill) => (

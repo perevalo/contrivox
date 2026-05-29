@@ -114,7 +114,7 @@ function buildChecklistEmail(email: string): string {
   <tr><td style="padding:0 32px 32px;text-align:center;">
     <a href="https://contrivox.com/#upload-sec"
        style="display:inline-block;padding:14px 32px;background:linear-gradient(135deg,#7c3aed,#4f46e5);color:#ffffff;text-decoration:none;border-radius:10px;font-size:14px;font-weight:700;letter-spacing:0.2px;">
-      Check My Contract &mdash; $9
+      Check My Contract &mdash; from $9
     </a>
   </td></tr>
 

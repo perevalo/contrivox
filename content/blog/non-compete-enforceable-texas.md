@@ -150,7 +150,7 @@ Emergency injunctive proceedings can move quickly — within weeks. Full litigat
 
 > **Have a Texas non-compete in your contract?**
 > Upload it to Contrivox and get a full plain-English analysis — red flags, fairness score, and negotiation scripts — in 60 seconds.
-> $9. No subscription. No account needed.
+> From $9. No subscription. No account needed.
 >
 > **[Check My Contract →](/)**
 

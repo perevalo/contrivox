@@ -85,7 +85,7 @@ export default function BlogIndex() {
       <div style={{ margin: "0 0 48px", padding: "24px 28px", background: "linear-gradient(135deg,rgba(124,58,237,0.12),rgba(79,70,229,0.08))", border: "0.5px solid rgba(124,58,237,0.25)", borderRadius: 14, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 20, flexWrap: "wrap" as const }}>
         <div>
           <p style={{ fontFamily: "'Fraunces',serif", fontSize: 18, color: "var(--cvx-heading)", margin: "0 0 6px", lineHeight: 1.2 }}>Have a contract to review right now?</p>
-          <p style={{ fontSize: 13, color: "var(--cvx-muted)", margin: 0 }}>Upload it and get a plain-English report in 60 seconds — $9, no subscription.</p>
+          <p style={{ fontSize: 13, color: "var(--cvx-muted)", margin: 0 }}>Upload it and get a plain-English report in 60 seconds — from \$9, no subscription.</p>
         </div>
         <a href="/#upload-sec" style={{ flexShrink: 0, padding: "11px 22px", fontSize: 13, fontWeight: 700, background: "linear-gradient(135deg,#7c3aed,#4f46e5)", color: "white", borderRadius: 10, textDecoration: "none", whiteSpace: "nowrap" as const }}>
           Check My Contract →

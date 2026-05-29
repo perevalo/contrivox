@@ -176,7 +176,7 @@ IP ownership disputes can escalate to litigation. Courts look at the contract la
 
 > **Have an IP assignment clause in your employment contract?**
 > Upload it to Contrivox and get a full plain-English analysis — red flags, fairness score, and negotiation scripts — in 60 seconds.
-> $9. No subscription. No account needed.
+> From $9. No subscription. No account needed.
 >
 > **[Check My Contract →](/)**
 

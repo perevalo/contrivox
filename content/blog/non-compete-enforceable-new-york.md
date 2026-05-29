@@ -152,7 +152,7 @@ Almost certainly not as written. A three-year, continent-wide restriction is far
 
 > **Have a New York non-compete in your contract?**
 > Upload it to Contrivox and get a full plain-English analysis — red flags, fairness score, and negotiation scripts — in 60 seconds.
-> $9. No subscription. No account needed.
+> From $9. No subscription. No account needed.
 >
 > **[Check My Contract →](/)**
 

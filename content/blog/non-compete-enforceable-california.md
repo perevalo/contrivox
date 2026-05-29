@@ -146,7 +146,7 @@ That said, "likely void" and "definitely void in your specific situation" are di
 
 > **Found a non-compete in your contract?**
 > Upload it to Contrivox and get a full plain-English analysis — red flags, fairness score, and negotiation scripts — in 60 seconds.
-> $9. No subscription. No account needed.
+> From $9. No subscription. No account needed.
 >
 > **[Check My Contract →](/)**
 

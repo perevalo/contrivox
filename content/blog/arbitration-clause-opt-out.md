@@ -152,7 +152,7 @@ Only if the contract has an opt-out window that hasn't closed. If that window ha
 
 > **Found an arbitration clause in your contract?**
 > Upload it to Contrivox and get a full plain-English analysis — red flags, fairness score, and negotiation scripts — in 60 seconds.
-> $9. No subscription. No account needed.
+> From $9. No subscription. No account needed.
 >
 > **[Check My Contract →](/)**
 
