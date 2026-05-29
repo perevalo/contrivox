@@ -279,66 +279,7 @@ function InlineReport({ analysis, tier, onUpgrade }: {
         </div>
       </div>
 
-      {/* Red Flags */}
-      {analysis.red_flags?.length > 0 && (
-        <section style={{ marginBottom: 44 }}>
-          <SectionHeader label={`Red Flags — ${analysis.red_flags.length}`} accent="#ef4444" />
-          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            {analysis.red_flags.map((flag, i) => {
-              const borderColor = flag.urgency === "high" ? "#ef4444" : flag.urgency === "medium" ? "#f59e0b" : "#22c55e";
-              return (
-                <div key={i} style={{
-                  padding: "20px 20px 20px 20px",
-                  borderRadius: 12,
-                  border: `1px solid ${C.border}`,
-                  borderLeft: `4px solid ${borderColor}`,
-                  background: flag.urgency === "high" ? "rgba(239,68,68,0.04)" : C.surface,
-                }}>
-                  <div style={{ display: "flex", alignItems: "flex-start", gap: 10, marginBottom: 10, flexWrap: "wrap" }}>
-                    <span style={{ fontWeight: 700, fontSize: 14, color: C.heading, fontFamily: FONT, flex: 1 }}>{flag.issue}</span>
-                    {flag.urgency && (
-                      <span style={{
-                        padding: "2px 10px", borderRadius: 999, flexShrink: 0,
-                        fontSize: 11, fontWeight: 600, fontFamily: FONT,
-                        color: borderColor, background: `${borderColor}18`,
-                        border: `1px solid ${borderColor}40`,
-                      }}>
-                        {flag.urgency === "high" ? "High" : flag.urgency === "medium" ? "Medium" : "Low"}
-                      </span>
-                    )}
-                  </div>
-                  <p style={{
-                    color: C.muted, fontSize: 13.5, lineHeight: 1.7, fontFamily: FONT,
-                    margin: `0 0 ${tier === "full" && flag.challengeable && flag.challenge ? 14 : 0}px`,
-                    filter: tier === "basic" ? "blur(3.5px)" : "none",
-                    userSelect: tier === "basic" ? "none" : "auto",
-                  }}>
-                    {flag.why_it_matters}
-                  </p>
-                  {tier === "full" && flag.challengeable && flag.challenge && (
-                    <div style={{
-                      padding: "12px 16px", borderRadius: 10,
-                      background: "rgba(124,58,237,0.08)", border: "1px solid rgba(124,58,237,0.2)",
-                    }}>
-                      <div style={{
-                        fontSize: 10, fontWeight: 700, color: "#a78bfa", marginBottom: 6,
-                        textTransform: "uppercase", letterSpacing: 1, fontFamily: FONT,
-                      }}>
-                        Negotiation Script
-                      </div>
-                      <p style={{ color: "#c4b5fd", fontSize: 13.5, lineHeight: 1.7, fontStyle: "italic", fontFamily: FONT, margin: 0 }}>
-                        &ldquo;{flag.challenge}&rdquo;
-                      </p>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </section>
-      )}
-
-      {/* Key Clauses */}
+      {/* Key Clauses — shown first so the free top clause appears before any blurred content */}
       {sortedClauses.length > 0 && (
         <section style={{ marginBottom: 44 }}>
           <SectionHeader label={`Key Clauses — ${sortedClauses.length}`} accent="#f59e0b" />
@@ -415,6 +356,65 @@ function InlineReport({ analysis, tier, onUpgrade }: {
               </div>
             </div>
           )}
+        </section>
+      )}
+
+      {/* Red Flags */}
+      {analysis.red_flags?.length > 0 && (
+        <section style={{ marginBottom: 44 }}>
+          <SectionHeader label={`Red Flags — ${analysis.red_flags.length}`} accent="#ef4444" />
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            {analysis.red_flags.map((flag, i) => {
+              const borderColor = flag.urgency === "high" ? "#ef4444" : flag.urgency === "medium" ? "#f59e0b" : "#22c55e";
+              return (
+                <div key={i} style={{
+                  padding: "20px 20px 20px 20px",
+                  borderRadius: 12,
+                  border: `1px solid ${C.border}`,
+                  borderLeft: `4px solid ${borderColor}`,
+                  background: flag.urgency === "high" ? "rgba(239,68,68,0.04)" : C.surface,
+                }}>
+                  <div style={{ display: "flex", alignItems: "flex-start", gap: 10, marginBottom: 10, flexWrap: "wrap" }}>
+                    <span style={{ fontWeight: 700, fontSize: 14, color: C.heading, fontFamily: FONT, flex: 1 }}>{flag.issue}</span>
+                    {flag.urgency && (
+                      <span style={{
+                        padding: "2px 10px", borderRadius: 999, flexShrink: 0,
+                        fontSize: 11, fontWeight: 600, fontFamily: FONT,
+                        color: borderColor, background: `${borderColor}18`,
+                        border: `1px solid ${borderColor}40`,
+                      }}>
+                        {flag.urgency === "high" ? "High" : flag.urgency === "medium" ? "Medium" : "Low"}
+                      </span>
+                    )}
+                  </div>
+                  <p style={{
+                    color: C.muted, fontSize: 13.5, lineHeight: 1.7, fontFamily: FONT,
+                    margin: `0 0 ${tier === "full" && flag.challengeable && flag.challenge ? 14 : 0}px`,
+                    filter: tier === "basic" ? "blur(3.5px)" : "none",
+                    userSelect: tier === "basic" ? "none" : "auto",
+                  }}>
+                    {flag.why_it_matters}
+                  </p>
+                  {tier === "full" && flag.challengeable && flag.challenge && (
+                    <div style={{
+                      padding: "12px 16px", borderRadius: 10,
+                      background: "rgba(124,58,237,0.08)", border: "1px solid rgba(124,58,237,0.2)",
+                    }}>
+                      <div style={{
+                        fontSize: 10, fontWeight: 700, color: "#a78bfa", marginBottom: 6,
+                        textTransform: "uppercase", letterSpacing: 1, fontFamily: FONT,
+                      }}>
+                        Negotiation Script
+                      </div>
+                      <p style={{ color: "#c4b5fd", fontSize: 13.5, lineHeight: 1.7, fontStyle: "italic", fontFamily: FONT, margin: 0 }}>
+                        &ldquo;{flag.challenge}&rdquo;
+                      </p>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
         </section>
       )}
 
@@ -521,6 +521,7 @@ export default function SuccessContent() {
   const [reportTier, setReportTier]               = useState<"basic" | "full">("basic");
   const [contractSessionId, setContractSessionId] = useState<string | null>(null);
   const [upgradeLoading, setUpgradeLoading]       = useState(false);
+  const [unlockBanner, setUnlockBanner]           = useState(false);
   const [downloading, setDownloading]             = useState(false);
   const [copied, setCopied]                       = useState(false);
   const [retryCount, setRetryCount]               = useState(0);
@@ -548,28 +549,36 @@ export default function SuccessContent() {
       }, 300);
     }, 8000);
 
+    const isUpgradePoll = urlPlan === "upgrade";
+    const activeTimeout = isUpgradePoll ? 120_000 : TIMEOUT_MS;
+    const pollInterval  = isUpgradePoll ? 2000 : 5000;
+
     const poll = async () => {
       const elapsed = Date.now() - startRef.current;
-      if (elapsed >= TIMEOUT_MS) {
+      if (elapsed >= activeTimeout) {
         clearInterval(pollRef.current!);
         clearInterval(msgRef.current!);
         setTimedOut(true);
         setDone(true);
         return;
       }
-      if (elapsed >= SLOW_MS) setSlow(true);
+      if (!isUpgradePoll && elapsed >= SLOW_MS) setSlow(true);
       try {
         const res  = await fetch(`/api/contract/status?stripe_session=${stripeSession}`);
         const data = await res.json();
         if (data.status === "done" || data.status === "error") {
           // For upgrade flow, keep polling until webhook promotes report_tier to "full"
-          if (urlPlan === "upgrade" && data.report_tier !== "full") return;
+          if (isUpgradePoll && data.report_tier !== "full") return;
           clearInterval(pollRef.current!);
           clearInterval(msgRef.current!);
           if (data.status === "error") setAnalysisError(true);
           if (data.analysis) setAnalysis(data.analysis as ContrivoxAnalysis);
           setReportTier((data.report_tier === "full" ? "full" : "basic") as "basic" | "full");
           setContractSessionId(data.contract_session_id ?? null);
+          if (isUpgradePoll && data.report_tier === "full") {
+            setUnlockBanner(true);
+            setTimeout(() => setUnlockBanner(false), 2500);
+          }
           setDone(true);
         }
       } catch {
@@ -578,7 +587,7 @@ export default function SuccessContent() {
     };
 
     poll();
-    pollRef.current = setInterval(poll, 5000);
+    pollRef.current = setInterval(poll, pollInterval);
 
     return () => {
       if (pollRef.current) clearInterval(pollRef.current);
@@ -644,6 +653,8 @@ export default function SuccessContent() {
         .msg-text{transition:opacity .3s ease;}
         .share-btn:hover{opacity:0.85;}
         .dl-btn{animation:glowPulse 2.8s ease-in-out infinite;}
+        @keyframes checkPop{0%{opacity:0;transform:scale(0.3)}70%{transform:scale(1.2)}100%{opacity:1;transform:scale(1)}}
+        @keyframes bannerSlide{0%{opacity:0;transform:translateX(-50%) translateY(-12px)}15%{opacity:1;transform:translateX(-50%) translateY(0)}80%{opacity:1;transform:translateX(-50%) translateY(0)}100%{opacity:0;transform:translateX(-50%) translateY(-8px)}}
       `}</style>
 
       {/* Sticky bottom bar — upgrade CTA for basic, or "Analyse Another" for full */}
@@ -703,6 +714,29 @@ export default function SuccessContent() {
               ← Analyse Another Contract
             </a>
           )}
+        </div>
+      )}
+
+      {/* Unlock success banner */}
+      {unlockBanner && (
+        <div style={{
+          position: "fixed", top: 20, left: "50%", zIndex: 100,
+          padding: "12px 22px",
+          background: "rgba(34,197,94,0.12)",
+          border: "1px solid rgba(34,197,94,0.35)",
+          borderRadius: 12,
+          display: "flex", alignItems: "center", gap: 10,
+          backdropFilter: "blur(14px)",
+          WebkitBackdropFilter: "blur(14px)",
+          animation: "bannerSlide 2.5s ease forwards",
+          pointerEvents: "none",
+        }}>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4ade80" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ animation: "checkPop 0.4s ease forwards", flexShrink: 0 }}>
+            <path d="M20 6L9 17l-5-5"/>
+          </svg>
+          <span style={{ fontSize: 14, fontWeight: 700, color: "#4ade80", fontFamily: FONT, whiteSpace: "nowrap" }}>
+            Full report unlocked
+          </span>
         </div>
       )}
 

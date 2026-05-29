@@ -35,6 +35,7 @@ export async function POST(req: NextRequest) {
         price: plan.priceId,
         quantity: 1,
       }],
+      ...(input.plan === "upgrade" ? { payment_method_types: ["card", "link"] as const } : {}),
       metadata: {
         user_id:    input.userId ?? "",
         credits:    String(plan.credits),
