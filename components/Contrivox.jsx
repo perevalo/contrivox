@@ -77,8 +77,8 @@ const T = {
     faq1a: "No. Contrivox identifies clauses and explains them in plain English. Always consult a qualified attorney before signing any contract — especially before refusing terms or renegotiating an offer.",
     faq2q: "What file types can I upload?",
     faq2a: "PDF, JPG, PNG, GIF, WEBP, TXT, and DOCX.",
-    faq3q: "What do I get for $9?",
-    faq3a: "The complete analysis: every clause explained in plain English, all red flags with real-world impact, missing protections listed, word-for-word negotiation scripts, and your full fairness score with reasoning. Instant delivery — one-time payment, no subscription.",
+    faq3q: "What's the difference between Basic ($9) and Full Report ($29)?",
+    faq3a: "Basic ($9): your Fairness Score, all red flags explained, key clause breakdown, and overall recommendation — displayed on-screen instantly. Full Report ($29): everything in Basic plus word-for-word negotiation scripts for every problematic clause, a PDF report emailed to you, and a PDF you can download. One-time payment, no subscription, either way.",
     faq4q: "Is my contract private?",
     faq4a: "Yes. Your document is encrypted in transit, processed privately in memory, and deleted after your report is generated. We never sell or share your contract data. See our privacy policy for full details.",
     faq5q: "How is this different from asking ChatGPT?",
@@ -86,7 +86,7 @@ const T = {
     faq6q: "What contract types do you support?",
     faq6a: "Employment agreements, NDAs and non-disclosure agreements, freelance and independent contractor contracts, service agreements, and residential leases. Contract types are detected automatically — just upload.",
     cta_band: "Know exactly what you're signing.",
-    cta_urgency: "The average employment dispute costs $18,000. A $9 report takes 60 seconds.",
+    cta_urgency: "The average employment dispute costs $18,000. A $9 scan or $29 full report takes 60 seconds.",
     cta_trust: "Secure payment via Stripe · No subscription · No account required",
     footer_copy: `© ${new Date().getFullYear()} Contrivox`,
     account_title: "My Analyses", account_empty: "No saved analyses yet. Upload a contract to get started.",
@@ -679,26 +679,74 @@ function PreviewCard({ preview, onUnlock, unlockLoading, t }) {
 
       </div>
 
-      {/* CTA */}
-      <div style={{ padding:"12px 22px 24px" }}>
-        <p style={{ textAlign:"center", fontSize:12.5, color:COLORS.muted, fontFamily:"'DM Sans',sans-serif", marginBottom:12, lineHeight:1.5 }}>
+      {/* CTA — two-tier pricing */}
+      <div style={{ padding:"16px 18px 22px" }}>
+        <p style={{ textAlign:"center", fontSize:12.5, color:COLORS.muted, fontFamily:"'DM Sans',sans-serif", marginBottom:16, lineHeight:1.5 }}>
           {totalIssues > 0
-            ? `You have ${totalIssues} issue${totalIssues !== 1 ? "s" : ""} that need your attention before you sign.`
-            : "Verify this contract is safe to sign."
+            ? `${totalIssues} issue${totalIssues !== 1 ? "s" : ""} found. Choose how deep you want to go.`
+            : "Choose your report to see full details."
           }
         </p>
-        <button
-          onClick={onUnlock}
-          disabled={unlockLoading}
-          style={{ width:"100%", padding:"16px", fontSize:15, fontWeight:700, background:unlockLoading?COLORS.surface:COLORS.accentGrad, color:unlockLoading?COLORS.faint:"white", border:"none", borderRadius:12, cursor:unlockLoading?"not-allowed":"pointer", fontFamily:"'DM Sans',sans-serif", boxShadow:unlockLoading?"none":"0 4px 28px rgba(99,102,241,0.5)", letterSpacing:"0.01em", transition:"all .2s", marginBottom:8 }}
-        >
-          {unlockLoading ? "Redirecting to checkout…" : t.unlock_btn}
-        </button>
-        <p style={{ textAlign:"center", fontSize:12, color:COLORS.muted, fontFamily:"'DM Sans',sans-serif", marginBottom:8 }}>
-          ⏱ Your report will be ready in 60 seconds
-        </p>
+
+        <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, marginBottom:14 }}>
+
+          {/* Basic $9 */}
+          <div style={{ border:`0.5px solid ${COLORS.border}`, borderRadius:12, padding:"16px 14px", background:"rgba(255,255,255,0.02)", display:"flex", flexDirection:"column" }}>
+            <div style={{ fontSize:10, fontWeight:700, color:COLORS.muted, fontFamily:"'DM Sans',sans-serif", letterSpacing:"0.07em", textTransform:"uppercase", marginBottom:6 }}>Basic</div>
+            <div style={{ fontSize:28, fontWeight:700, color:COLORS.heading, fontFamily:"'Fraunces',serif", marginBottom:14, lineHeight:1 }}>$9</div>
+            <ul style={{ listStyle:"none", padding:0, margin:"0 0 16px", display:"flex", flexDirection:"column", gap:7, flex:1 }}>
+              {[
+                ["✓","Fairness score",false],
+                ["✓","Red flags list",false],
+                ["✓","Key clauses",false],
+                ["✓","Recommendations",false],
+                ["–","No negotiation scripts",true],
+                ["–","No PDF / email",true],
+              ].map(([icon, label, dim], i) => (
+                <li key={i} style={{ fontSize:11.5, color:dim?COLORS.faint:COLORS.muted, fontFamily:"'DM Sans',sans-serif", display:"flex", alignItems:"center", gap:5, lineHeight:1.3 }}>
+                  <span style={{ color:dim?"rgba(255,255,255,0.2)":"#4ade80", flexShrink:0, fontSize:10 }}>{icon}</span> {label}
+                </li>
+              ))}
+            </ul>
+            <button
+              onClick={() => onUnlock("basic")}
+              disabled={!!unlockLoading}
+              style={{ width:"100%", padding:"11px 8px", fontSize:12.5, fontWeight:700, background:unlockLoading?"rgba(255,255,255,0.03)":"rgba(255,255,255,0.08)", color:unlockLoading?COLORS.faint:COLORS.text, border:`0.5px solid ${COLORS.border}`, borderRadius:9, cursor:unlockLoading?"not-allowed":"pointer", fontFamily:"'DM Sans',sans-serif", transition:"all .15s" }}
+            >
+              {unlockLoading==="basic" ? "Redirecting…" : "Get Basic →"}
+            </button>
+          </div>
+
+          {/* Pro $29 */}
+          <div style={{ border:"0.5px solid rgba(139,92,246,0.45)", borderRadius:12, padding:"16px 14px", background:"rgba(124,58,237,0.07)", display:"flex", flexDirection:"column", position:"relative" }}>
+            <div style={{ position:"absolute", top:-10, left:"50%", transform:"translateX(-50%)", background:COLORS.accentGrad, color:"white", fontSize:9, fontWeight:700, padding:"3px 10px", borderRadius:999, letterSpacing:"0.08em", whiteSpace:"nowrap", fontFamily:"'DM Sans',sans-serif" }}>★ RECOMMENDED</div>
+            <div style={{ fontSize:10, fontWeight:700, color:"#a78bfa", fontFamily:"'DM Sans',sans-serif", letterSpacing:"0.07em", textTransform:"uppercase", marginBottom:6 }}>Full Report</div>
+            <div style={{ fontSize:28, fontWeight:700, color:COLORS.heading, fontFamily:"'Fraunces',serif", marginBottom:14, lineHeight:1 }}>$29</div>
+            <ul style={{ listStyle:"none", padding:0, margin:"0 0 16px", display:"flex", flexDirection:"column", gap:7, flex:1 }}>
+              {[
+                ["✓","Everything in Basic"],
+                ["✓","Negotiation scripts"],
+                ["✓","PDF emailed to you"],
+                ["✓","PDF download"],
+              ].map(([icon, label], i) => (
+                <li key={i} style={{ fontSize:11.5, color:COLORS.muted, fontFamily:"'DM Sans',sans-serif", display:"flex", alignItems:"center", gap:5, lineHeight:1.3 }}>
+                  <span style={{ color:"#a78bfa", flexShrink:0, fontSize:10 }}>{icon}</span> {label}
+                </li>
+              ))}
+            </ul>
+            <button
+              onClick={() => onUnlock("pro")}
+              disabled={!!unlockLoading}
+              style={{ width:"100%", padding:"11px 8px", fontSize:12.5, fontWeight:700, background:unlockLoading?COLORS.surface:COLORS.accentGrad, color:unlockLoading?COLORS.faint:"white", border:"none", borderRadius:9, cursor:unlockLoading?"not-allowed":"pointer", fontFamily:"'DM Sans',sans-serif", boxShadow:unlockLoading?"none":"0 4px 20px rgba(99,102,241,0.45)", transition:"all .15s" }}
+            >
+              {unlockLoading==="pro" ? "Redirecting…" : "Get Full Report →"}
+            </button>
+          </div>
+
+        </div>
+
         <p style={{ textAlign:"center", fontSize:11, color:COLORS.faint, fontFamily:"'DM Sans',sans-serif", display:"flex", alignItems:"center", justifyContent:"center", gap:5, margin:0 }}>
-          <IconLock size={10} color="currentColor"/> {t.unlock_trust}
+          <IconLock size={10} color="currentColor"/> Secure · Stripe · One-time · No subscription
         </p>
       </div>
     </div>
@@ -849,7 +897,7 @@ export default function Contrivox() {
   const [showAuth, setShowAuth]           = useState(false);
   const [showHist, setShowHist]           = useState(false);
   const [sessionId, setSessionId]         = useState(null);
-  const [unlockLoading, setUnlockLoading] = useState(false);
+  const [unlockLoading, setUnlockLoading] = useState(null); // null | "basic" | "pro"
   const [barWidths, setBarWidths]         = useState([0, 0, 0]);
   const fileRef    = useRef();
   const resultsRef = useRef();
@@ -959,22 +1007,22 @@ export default function Contrivox() {
     }
   };
 
-  const handleUnlock = async () => {
+  const handleUnlock = async (plan) => {
     if (unlockLoading) return;
     Analytics.unlockClicked();
-    setUnlockLoading(true);
+    setUnlockLoading(plan);
     try {
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan: "starter", sessionId }),
+        body: JSON.stringify({ plan, sessionId }),
       });
       if (!res.ok) throw new Error("Checkout failed");
       const { url } = await res.json();
       if (url) window.location.href = url;
     } catch (e) {
       setError("Could not start checkout. Please try again.");
-      setUnlockLoading(false);
+      setUnlockLoading(null);
     }
   };
 

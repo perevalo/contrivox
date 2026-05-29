@@ -39,7 +39,7 @@ export const analyseInputSchema = z.object({
 });
 
 export const checkoutInputSchema = z.object({
-  plan:      z.enum(["starter"]),
+  plan:      z.enum(["basic", "pro"]),
   userId:    z.string().uuid().nullish(),
   sessionId: z.string().uuid().nullish(),
 });

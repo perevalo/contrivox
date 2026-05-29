@@ -221,7 +221,7 @@ function SectionHeader({ label, accent = "#7c3aed" }: { label: string; accent?: 
   );
 }
 
-function InlineReport({ analysis }: { analysis: ContrivoxAnalysis }) {
+function InlineReport({ analysis, tier }: { analysis: ContrivoxAnalysis; tier: "basic" | "pro" }) {
   return (
     <div style={{ marginTop: 40, textAlign: "left" }}>
 
@@ -298,7 +298,7 @@ function InlineReport({ analysis }: { analysis: ContrivoxAnalysis }) {
                   <p style={{ color: C.muted, fontSize: 13.5, lineHeight: 1.7, fontFamily: FONT, margin: `0 0 ${flag.challengeable && flag.challenge ? 14 : 0}px` }}>
                     {flag.why_it_matters}
                   </p>
-                  {flag.challengeable && flag.challenge && (
+                  {tier === "pro" && flag.challengeable && flag.challenge && (
                     <div style={{
                       padding: "12px 16px", borderRadius: 10,
                       background: "rgba(124,58,237,0.08)", border: "1px solid rgba(124,58,237,0.2)",
@@ -400,6 +400,7 @@ function InlineReport({ analysis }: { analysis: ContrivoxAnalysis }) {
 export default function SuccessContent() {
   const searchParams  = useSearchParams();
   const stripeSession = searchParams.get("session_id");
+  const tier          = (searchParams.get("plan") === "basic" ? "basic" : "pro") as "basic" | "pro";
 
   const [msgIdx, setMsgIdx]               = useState(0);
   const [msgVisible, setMsgVisible]       = useState(true);
@@ -573,7 +574,7 @@ export default function SuccessContent() {
             </div>
 
             <div style={{ display: "flex", gap: 24, justifyContent: "center", marginTop: 48, flexWrap: "wrap" }}>
-              {([["✓", "Payment confirmed", "#4ade80"], ["⏳", "Analysing clauses", "#8b5cf6"], ["✉", "Report on its way", "rgba(255,255,255,0.2)"]] as const).map(([icon, label, color], i) => (
+              {([["✓", "Payment confirmed", "#4ade80"], ["⏳", "Analysing clauses", "#8b5cf6"], [tier === "pro" ? "✉" : "📊", tier === "pro" ? "Report on its way" : "Results loading", "rgba(255,255,255,0.2)"]] as const).map(([icon, label, color], i) => (
                 <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
                   <div style={{ width: 36, height: 36, borderRadius: "50%", background: i === 0 ? "rgba(74,222,128,0.12)" : i === 1 ? "rgba(139,92,246,0.12)" : "rgba(255,255,255,0.04)", border: `0.5px solid ${color}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 15 }}>{icon}</div>
                   <span style={{ fontSize: 11, color, fontFamily: FONT, textAlign: "center", maxWidth: 80 }}>{label}</span>
@@ -605,12 +606,14 @@ export default function SuccessContent() {
                   ? "We couldn't analyse this document. Please try uploading your contract again — if the issue persists, contact support."
                   : timedOut
                     ? "Your report is still being prepared. Click below to check again, or wait for the email copy to arrive in your inbox."
-                    : "Your full contract analysis is complete. Download the PDF or read it below."}
+                    : tier === "pro"
+                      ? "Your full contract analysis is complete. Download the PDF or read it below."
+                      : "Your contract analysis is ready. Read it below."}
               </p>
 
               {/* Primary actions */}
               <div style={{ width: "100%", maxWidth: 440 }}>
-                {hasFullReport && (
+                {hasFullReport && tier === "pro" && (
                   <>
                     <button
                       onClick={handleDownload}
@@ -637,6 +640,17 @@ export default function SuccessContent() {
                       📩 A copy has been sent to your inbox
                     </p>
                   </>
+                )}
+
+                {hasFullReport && tier === "basic" && (
+                  <div style={{ marginBottom: 24, padding: "14px 16px", borderRadius: 12, background: "rgba(124,58,237,0.06)", border: "1px solid rgba(124,58,237,0.2)", textAlign: "center" }}>
+                    <p style={{ fontSize: 12.5, color: "rgba(167,139,250,0.8)", fontFamily: FONT, marginBottom: 8, lineHeight: 1.5 }}>
+                      Want negotiation scripts + PDF emailed to you?
+                    </p>
+                    <a href="/" style={{ fontSize: 12, fontWeight: 700, color: "#a78bfa", fontFamily: FONT, textDecoration: "underline" }}>
+                      Upgrade to Full Report — $29 →
+                    </a>
+                  </div>
                 )}
 
                 {timedOut && (
@@ -675,7 +689,7 @@ export default function SuccessContent() {
             </div>
 
             {/* Inline full report */}
-            {hasFullReport && <InlineReport analysis={analysis} />}
+            {hasFullReport && <InlineReport analysis={analysis} tier={tier} />}
 
             {/* Share section */}
             <div style={{ background: "rgba(255,255,255,0.025)", border: `0.5px solid ${C.border}`, borderRadius: 12, padding: "16px 18px", marginTop: 32 }}>

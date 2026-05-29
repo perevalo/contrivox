@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { waitUntil } from "@vercel/functions";
-import { stripe } from "@/lib/stripe";
+import { stripe, type PlanTier } from "@/lib/stripe";
 import { createSupabaseServiceClient } from "@/lib/supabase/server";
 import { getPostHogServer } from "@/lib/posthog";
 import { analyseContract, type FilePayload } from "@/lib/claude";
@@ -86,9 +86,10 @@ export async function POST(req: NextRequest) {
 
     if (contractSessionId) {
       const customerEmail = session.customer_details?.email ?? null;
+      const tier: PlanTier = plan.startsWith("basic") ? "basic" : "pro";
       // Respond to Stripe immediately; keep function alive for analysis
       waitUntil(
-        triggerRealAnalysis(contractSessionId, customerEmail).catch(e =>
+        triggerRealAnalysis(contractSessionId, customerEmail, tier).catch(e =>
           console.error("[webhook] triggerRealAnalysis error:", e)
         )
       );
@@ -98,7 +99,7 @@ export async function POST(req: NextRequest) {
   return NextResponse.json({ received: true });
 }
 
-async function triggerRealAnalysis(contractSessionId: string, customerEmail: string | null): Promise<void> {
+async function triggerRealAnalysis(contractSessionId: string, customerEmail: string | null, tier: PlanTier): Promise<void> {
   const supabase = createSupabaseServiceClient();
 
   // Atomic idempotency guard: claim the contract by transitioning pending → processing.
@@ -175,7 +176,7 @@ async function triggerRealAnalysis(contractSessionId: string, customerEmail: str
     console.error("[analysis] db update error:", updateError.message);
   }
 
-  if (customerEmail) {
+  if (tier === "pro" && customerEmail) {
     let pdfBase64: string | undefined;
     try {
       pdfBase64 = await generateReportPDFBase64(analysis);

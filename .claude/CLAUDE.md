@@ -1,6 +1,6 @@
 # CLAUDE.md — Contrivox Agent Constitution
 # Loaded on every session. Do not delete or shorten.
-# Last updated: 2025-05
+# Last updated: 2026-05
 
 ---
 
@@ -14,7 +14,13 @@ correctly, and with production-quality code every time.
 · Stripe (payments) · Claude API (Sonnet) · Resend (email) · jsPDF (client PDF)
 · Vercel (hosting) · Upstash Redis (rate limiting)
 
-**Languages supported**: EN · PT-BR · ES · FR · DE · IT · UK · PL · AR · ZH · JA · RU
+**Languages supported**: EN (primary) — multilingual UI removed; analysis is English only
+
+**Pricing tiers**:
+- **Basic ($9)** — Full Sonnet analysis displayed on-screen: score, red flags, key clauses, missing protections, recommendation. No PDF, no email, no negotiation scripts.
+- **Pro ($29)** — Everything in Basic + negotiation scripts + PDF emailed + PDF downloadable.
+
+Plan keys: `basic_usd` / `pro_usd` in `lib/stripe.ts`. Tier flows from Stripe metadata → webhook → success URL `?plan=basic|pro`.
 
 ---
 

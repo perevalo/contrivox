@@ -7,12 +7,21 @@ export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 });
 
 export const PLANS = {
-  starter_usd: {
-    priceId: process.env.STRIPE_PRICE_STARTER_USD!,
+  basic_usd: {
+    priceId: process.env.STRIPE_PRICE_BASIC_USD!,
     credits: 1,
     amount:  900,
-    label:   "Single Analysis",
+    label:   "Basic Analysis",
+    tier:    "basic" as const,
+  },
+  pro_usd: {
+    priceId: process.env.STRIPE_PRICE_PRO_USD!,
+    credits: 1,
+    amount:  2900,
+    label:   "Full Report",
+    tier:    "pro" as const,
   },
 } as const;
 
 export type PlanKey = keyof typeof PLANS;
+export type PlanTier = "basic" | "pro";
