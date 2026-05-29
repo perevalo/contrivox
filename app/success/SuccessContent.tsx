@@ -489,21 +489,14 @@ function InlineReport({ analysis, tier, onUpgrade }: {
         <div style={{
           padding: "20px 22px", borderRadius: 12,
           border: "1px solid rgba(139,92,246,0.3)", background: "rgba(139,92,246,0.07)",
-          position: "relative", overflow: "hidden",
         }}>
           <p style={{
             color: C.text, fontSize: 14, lineHeight: 1.8, margin: 0, fontFamily: FONT,
-            ...(tier === "basic" ? { maxHeight: "3.6em", overflow: "hidden" } : {}),
+            filter: tier === "basic" ? "blur(4px)" : "none",
+            userSelect: tier === "basic" ? "none" : "auto",
           }}>
             {analysis.overall_recommendation}
           </p>
-          {tier === "basic" && (
-            <div style={{
-              position: "absolute", bottom: 0, left: 0, right: 0, height: "2.8em",
-              background: "linear-gradient(to bottom, transparent, #07070f)",
-              pointerEvents: "none",
-            }} />
-          )}
         </div>
       </section>
 
