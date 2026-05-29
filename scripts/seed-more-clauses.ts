@@ -1304,6 +1304,70 @@ const MORE_CLAUSES: ClauseSeed[] = [
     related_clause_slugs: ["equity-compensation-clause", "earn-out-clause", "representations-and-warranties-clause"],
     jurisdictions: ["us-general"],
   },
+
+  // ── NEW: HIGH-TRAFFIC NDA & COMPETITION CLAUSES ───────────────────────────
+  {
+    slug: "nda-clause",
+    name: "NDA Clause",
+    also_known_as: [
+      "nda",
+      "non-disclosure clause",
+      "confidentiality clause",
+      "secrecy clause",
+      "CDA clause",
+    ],
+    category: "general",
+    search_volume_tier: "high",
+    definition_seed:
+      "An NDA clause (non-disclosure agreement clause) is a contractual provision requiring one or both parties to keep specified information confidential and not disclose it to third parties. It defines what information is protected, the duration of the obligation, and the consequences of unauthorized disclosure. NDA clauses appear as standalone agreements or embedded within employment, service, or partnership contracts.",
+    key_risks: [
+      "Overly broad definitions of 'confidential information' that cover publicly known data or the employee's own pre-existing knowledge",
+      "Indefinite duration clauses that create perpetual confidentiality obligations for ordinary business information",
+      "One-sided NDAs that impose all obligations on the receiving party with no reciprocal protection",
+      "No exclusions for legally required disclosures, attorney consultations, or whistleblower reports",
+      "Liquidated damages clauses specifying disproportionately large penalties per breach",
+      "Scope creep — NDA language that functions as a de facto non-compete by restricting use of skills and knowledge gained",
+    ],
+    related_clause_slugs: [
+      "non-compete-clause",
+      "non-solicitation-clause",
+      "ip-assignment-clause",
+      "non-disparagement-clause",
+      "governing-law-clause",
+    ],
+    jurisdictions: ["us-general", "us-california", "uk", "eu"],
+  },
+  {
+    slug: "anticompetition-clause",
+    name: "Anticompetition Clause",
+    also_known_as: [
+      "anti-competition clause",
+      "noncompetition clause",
+      "anticompete clause",
+      "competition restriction clause",
+      "covenant against competition",
+    ],
+    category: "commercial",
+    search_volume_tier: "medium",
+    definition_seed:
+      "An anticompetition clause (also called a noncompetition clause) is a contractual provision that restricts a party from engaging in competitive business activities. In employment contracts, it prevents employees from working for competitors after leaving. In commercial and M&A contracts, it prevents sellers or partners from launching competing ventures. Unlike standard employment non-competes, commercial anticompetition clauses often survive for longer periods and cover broader geographic territories.",
+    key_risks: [
+      "In employment contexts, overly broad restrictions that effectively bar someone from working in their entire field",
+      "In M&A contexts, restrictions that extend beyond the period needed to protect goodwill purchased in the transaction",
+      "Vague definitions of 'competitive activity' that could capture tangential work unrelated to actual competition",
+      "Lack of geographic limitation making the restriction practically unworkable",
+      "Enforceability varies dramatically by jurisdiction — California voids most anticompetition clauses outright",
+      "In commercial contexts, antitrust law may render certain anticompetition provisions illegal if they restrain trade unreasonably",
+    ],
+    related_clause_slugs: [
+      "non-compete-clause",
+      "non-solicitation-clause",
+      "nda-clause",
+      "exclusivity-clause",
+      "most-favored-nation-clause",
+    ],
+    jurisdictions: ["us-general", "us-california", "uk", "eu"],
+  },
 ];
 
 async function main() {

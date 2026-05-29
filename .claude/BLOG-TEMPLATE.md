@@ -169,7 +169,7 @@ For [high-stakes situations relevant to the topic], consult a licensed attorney.
 - Related guides section always goes at the very bottom, before the conclusion heading
 - Never link the same URL twice in the body
 
-### Blog articles available to link to (20 as of 2026-05-29)
+### Blog articles available to link to (32 as of 2026-05-29)
 
 | Title | Slug |
 |---|---|
@@ -193,6 +193,18 @@ For [high-stakes situations relevant to the topic], consult a licensed attorney.
 | Can AI Help You Understand Legal Contracts? (Yes — Here's How) | `ai-contract-analysis` |
 | Arbitration Clause: What It Really Means and Can You Opt Out? | `arbitration-clause-opt-out` |
 | IP Assignment Clauses: Does Your Employer Own Your Side Projects? | `ip-assignment-clause-side-projects` |
+| The FTC Non-Compete Ban: What It Was and What Applies Now | `ftc-non-compete-ban` |
+| What Is an NDA Form? The Document Explained in Plain English | `what-is-an-nda-form` |
+| Is a Non-Compete Agreement Enforceable? A Plain-English State Guide | `is-a-non-compete-enforceable` |
+| What Is an NDA Used For? 7 Real-World Situations Explained | `what-is-an-nda-used-for` |
+| What a Non-Compete Agreement Contains — Annotated in Plain English | `non-compete-agreement-template` |
+| NDA in Business: When Companies Use Them and What They Need to Cover | `nda-in-business` |
+| NDA in a Relationship: What a Personal Confidentiality Agreement Actually Means | `nda-in-a-relationship` |
+| Termination Clause Examples: 5 Real Clauses Annotated in Plain English | `termination-clause-examples` |
+| Is a Non-Compete Enforceable in Texas? (2025) | `non-compete-enforceable-texas` |
+| Is a Non-Compete Enforceable in Florida? (2025) | `non-compete-enforceable-florida` |
+| NDA Clause — Definition, Risks & Red Flags | `nda-clause` (clauses page) |
+| Anticompetition Clause — Definition, Risks & Red Flags | `anticompetition-clause` (clauses page) |
 
 ---
 
