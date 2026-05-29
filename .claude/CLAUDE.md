@@ -256,4 +256,21 @@ Before any production deploy, verify:
 
 ---
 
+## ✍️ BLOG ARTICLES
+
+When writing any blog article — new or revised — ALWAYS read `.claude/BLOG-TEMPLATE.md`
+first. It contains:
+- Exact frontmatter schema with all required fields
+- Valid `suggestedCategory` values (case-sensitive)
+- Canonical article structure (Quick summary → body → FAQ → Related guides → CTA → disclaimer)
+- Word count targets by article type
+- Full list of existing blog slugs for internal linking
+- CTA formats and copy rules
+- Checklist before writing
+- What NOT to do
+
+Do not write a blog article from memory. Read the template, then write.
+
+---
+
 *This file is the source of truth. When in doubt, re-read this file.*
