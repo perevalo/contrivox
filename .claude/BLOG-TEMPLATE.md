@@ -1,6 +1,6 @@
 # Contrivox Blog Article Template
 # Consult this file every time a new blog article is requested.
-# Last updated: 2026-05-30
+# Last updated: 2026-05-30 (v2)
 
 ---
 
@@ -169,7 +169,7 @@ For [high-stakes situations relevant to the topic], consult a licensed attorney.
 - Related guides section always goes at the very bottom, before the conclusion heading
 - Never link the same URL twice in the body
 
-### Blog articles available to link to (47 as of 2026-05-30)
+### Blog articles available to link to (52 as of 2026-05-30)
 
 | Title | Slug |
 |---|---|
@@ -210,6 +210,11 @@ For [high-stakes situations relevant to the topic], consult a licensed attorney.
 | Does a Non-Compete Apply If You Were Fired? What Your State Says | `non-compete-fired` |
 | Freelance Contract Red Flags: 9 Warning Signs Before You Start Work | `freelance-contract-red-flags` |
 | Severance Clause: What It Means and What to Check Before Signing | `severance-clause-explained` |
+| Is a Non-Compete Enforceable in Illinois? (2025) | `non-compete-enforceable-illinois` |
+| Arbitration Clause: What It Means, How It Works, and What You Give Up | `arbitration-clause-explained` |
+| IP Assignment Clause Explained: Who Owns What You Create at Work | `ip-assignment-clause-explained` |
+| Force Majeure Clause Explained: What Counts and What Doesn't | `force-majeure-clause-explained` |
+| Governing Law Clause Explained: Why the Chosen State Changes Everything | `governing-law-clause-explained` |
 | NDA Clause — Definition, Risks & Red Flags | `nda-clause` (clauses page) |
 | Anticompetition Clause — Definition, Risks & Red Flags | `anticompetition-clause` (clauses page) |
 | Early Termination Clause — Definition, Risks & Red Flags | `early-termination-clause` (clauses page) |
