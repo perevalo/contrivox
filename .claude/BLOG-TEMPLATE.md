@@ -169,7 +169,7 @@ For [high-stakes situations relevant to the topic], consult a licensed attorney.
 - Related guides section always goes at the very bottom, before the conclusion heading
 - Never link the same URL twice in the body
 
-### Blog articles available to link to (32 as of 2026-05-29)
+### Blog articles available to link to (31 as of 2026-05-29)
 
 | Title | Slug |
 |---|---|
@@ -201,7 +201,6 @@ For [high-stakes situations relevant to the topic], consult a licensed attorney.
 | NDA in Business: When Companies Use Them and What They Need to Cover | `nda-in-business` |
 | NDA in a Relationship: What a Personal Confidentiality Agreement Actually Means | `nda-in-a-relationship` |
 | Termination Clause Examples: 5 Real Clauses Annotated in Plain English | `termination-clause-examples` |
-| Is a Non-Compete Enforceable in Texas? (2025) | `non-compete-enforceable-texas` |
 | Is a Non-Compete Enforceable in Florida? (2025) | `non-compete-enforceable-florida` |
 | NDA Clause — Definition, Risks & Red Flags | `nda-clause` (clauses page) |
 | Anticompetition Clause — Definition, Risks & Red Flags | `anticompetition-clause` (clauses page) |
