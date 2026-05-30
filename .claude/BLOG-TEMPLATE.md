@@ -1,6 +1,6 @@
 # Contrivox Blog Article Template
 # Consult this file every time a new blog article is requested.
-# Last updated: 2026-05-29
+# Last updated: 2026-05-30
 
 ---
 
@@ -169,7 +169,7 @@ For [high-stakes situations relevant to the topic], consult a licensed attorney.
 - Related guides section always goes at the very bottom, before the conclusion heading
 - Never link the same URL twice in the body
 
-### Blog articles available to link to (31 as of 2026-05-29)
+### Blog articles available to link to (47 as of 2026-05-30)
 
 | Title | Slug |
 |---|---|
@@ -202,8 +202,24 @@ For [high-stakes situations relevant to the topic], consult a licensed attorney.
 | NDA in a Relationship: What a Personal Confidentiality Agreement Actually Means | `nda-in-a-relationship` |
 | Termination Clause Examples: 5 Real Clauses Annotated in Plain English | `termination-clause-examples` |
 | Is a Non-Compete Enforceable in Florida? (2025) | `non-compete-enforceable-florida` |
+| Immediate Termination Clause: What It Means and When It Can Be Used | `immediate-termination-clause` |
+| How to Negotiate Your Contract: A Plain-English Guide to Pushing Back | `negotiating-your-contract` |
+| Lease Agreement Clauses Explained: What Every Tenant Should Know | `lease-agreement-clauses-explained` |
+| How to Get Out of a Non-Compete Agreement: Your Actual Options | `how-to-get-out-of-a-non-compete` |
+| Non-Compete Agreements and Independent Contractors: What You Need to Know | `non-compete-independent-contractor` |
+| Does a Non-Compete Apply If You Were Fired? What Your State Says | `non-compete-fired` |
+| Freelance Contract Red Flags: 9 Warning Signs Before You Start Work | `freelance-contract-red-flags` |
+| Severance Clause: What It Means and What to Check Before Signing | `severance-clause-explained` |
 | NDA Clause — Definition, Risks & Red Flags | `nda-clause` (clauses page) |
 | Anticompetition Clause — Definition, Risks & Red Flags | `anticompetition-clause` (clauses page) |
+| Early Termination Clause — Definition, Risks & Red Flags | `early-termination-clause` (clauses page) |
+| Rent Escalation Clause — Definition, Risks & Red Flags | `rent-escalation-clause` (clauses page) |
+| Security Deposit Clause — Definition, Risks & Red Flags | `security-deposit-clause` (clauses page) |
+| Exit Clause — Definition, Risks & Red Flags | `exit-clause` (clauses page) |
+| Payment Terms Clause — Definition, Risks & Red Flags | `payment-terms-clause` (clauses page) |
+| Scope of Work Clause — Definition, Risks & Red Flags | `scope-of-work-clause` (clauses page) |
+| Kill Fee Clause — Definition, Risks & Red Flags | `kill-fee-clause` (clauses page) |
+| Intellectual Property Clause — Definition, Risks & Red Flags | `intellectual-property-clause` (clauses page) |
 
 ---
 
