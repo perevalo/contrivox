@@ -1310,7 +1310,7 @@ const MORE_CLAUSES: ClauseSeed[] = [
     slug: "early-termination-clause",
     name: "Early Termination Clause",
     also_known_as: ["break clause", "lease break clause", "early exit clause", "early termination provision"],
-    category: "rental",
+    category: "general",
     search_volume_tier: "high",
     definition_seed: "Allows a party to end a lease or contract before the agreed expiry date, subject to defined conditions — typically a notice period, a financial penalty, or both. In residential leases, early termination clauses define the tenant's cost to exit early. In commercial contracts, they allow either party to terminate on notice without establishing cause.",
     key_risks: [
@@ -1326,7 +1326,7 @@ const MORE_CLAUSES: ClauseSeed[] = [
     slug: "rent-escalation-clause",
     name: "Rent Escalation Clause",
     also_known_as: ["rent increase clause", "escalator clause", "CPI rent clause", "annual rent increase provision"],
-    category: "rental",
+    category: "general",
     search_volume_tier: "high",
     definition_seed: "Permits the landlord to increase the rent at defined intervals — typically annually — according to a fixed percentage, a formula tied to the Consumer Price Index (CPI), or the landlord's discretion within statutory limits. Common in both residential and commercial leases of more than one year.",
     key_risks: [
@@ -1342,7 +1342,7 @@ const MORE_CLAUSES: ClauseSeed[] = [
     slug: "security-deposit-clause",
     name: "Security Deposit Clause",
     also_known_as: ["deposit clause", "rental deposit provision", "tenancy deposit clause"],
-    category: "rental",
+    category: "general",
     search_volume_tier: "high",
     definition_seed: "Requires the tenant to pay a sum of money at lease inception, held by the landlord as security against unpaid rent, damage, or breach. The clause governs the amount, permitted deductions, return timeline, and interest obligations. Most US states heavily regulate security deposits by statute.",
     key_risks: [
