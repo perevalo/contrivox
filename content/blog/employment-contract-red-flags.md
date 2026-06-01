@@ -201,6 +201,22 @@ If there are no carve-outs at all, ask for them.
 
 ---
 
+## Common Employment Contract Red Flags
+
+Even careful readers miss certain patterns because they're written in standard-sounding language. These red flags appear frequently in contracts that cause problems later — and they tend to cluster alongside the more obvious issues above.
+
+**Stacked restrictive covenants.** Some contracts include both a [non-compete clause](/clauses/non-compete-clause) and a non-solicitation agreement. Each might seem reasonable on its own. Together, they can leave you with almost no industry or professional network you can move into after leaving. Read them as a combined restriction, not separately.
+
+**Vague "cause" definitions.** When a contract says you can be terminated "for cause," the definition of cause matters enormously. Phrases like "conduct detrimental to the company" or "breach of professional standards" give the employer wide discretion to fire you while classifying it as for-cause — and denying severance. A [well-drafted termination clause](/blog/termination-clause-explained) specifies exactly what triggers immediate dismissal versus what requires notice or a performance improvement process first.
+
+**Non-disparagement clauses that only run one way.** It's common for contracts to prohibit negative statements about the company after you leave. The red flag is when only you are bound by it. The company retains the right to characterize your departure however it chooses — including to future employers who call for a reference — while you stay silent. Ask that any non-disparagement provision apply equally to both parties.
+
+**Extended probationary periods with reduced protections.** A 60- to 90-day probationary period is standard. Problems arise when that window runs 6 months or longer, or when the contract states that normal notice requirements, severance provisions, or performance improvement processes don't apply during it. Check exactly what protections kick in, and when.
+
+**No clear dispute jurisdiction.** Where will disagreements be resolved? Contracts that require disputes to be litigated in the company's home state — across the country from where you actually work — make it economically impractical to enforce your rights even when you're in the right. If a jurisdiction clause is missing entirely, get it clarified in writing before you sign.
+
+---
+
 ## What to Do When You Find a Red Flag
 
 **Don't panic, and don't automatically decline.** Red flags are starting points for negotiation, not deal-breakers by default.
