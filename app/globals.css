@@ -93,13 +93,13 @@
 :root,
 [data-theme="dark"] {
   /* ── Backgrounds / Surfaces ─────────────────────────────────────────── */
-  --cvx-bg:        #0d0f12;
+  --cvx-bg:        #0D0F14;
   --cvx-bg-subtle: #111318;
-  --cvx-surface:   rgba(255,255,255,0.05);
-  --cvx-surface-2: rgba(255,255,255,0.08);
+  --cvx-surface:   #13161E;
+  --cvx-surface-2: #1A1E2A;
   --cvx-surface-3: rgba(255,255,255,0.12);
   --cvx-surface-4: rgba(255,255,255,0.17);
-  --cvx-nav:       rgba(13,15,18,0.92);
+  --cvx-nav:       rgba(13,15,20,0.85);
   --cvx-modal:     #13151a;
   --cvx-overlay:   rgba(0,0,0,0.82);
 
@@ -157,9 +157,9 @@
 
   /* ── Utility ─────────────────────────────────────────────────────────── */
   --cvx-paywall-grad: linear-gradient(to bottom,
-    rgba(13,15,18,0.00)  0%,
-    rgba(13,15,18,0.85) 20%,
-    rgba(13,15,18,1.00) 40%);
+    rgba(13,15,20,0.00)  0%,
+    rgba(13,15,20,0.85) 20%,
+    rgba(13,15,20,1.00) 40%);
 
   /* ── Upload widget ───────────────────────────────────────────────────── */
   --cvx-upload-label:         #CBD5E1;

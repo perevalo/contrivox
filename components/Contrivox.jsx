@@ -888,7 +888,7 @@ function HistoryPanel({ t, account, onClose, onLoad }) {
 function FaqItem({ q, a, initialOpen = false }) {
   const [open, setOpen] = useState(initialOpen);
   return (
-    <div style={{ borderBottom:`0.5px solid ${COLORS.border}`, padding:"17px 0" }}>
+    <div style={{ background:COLORS.surface, border:"1px solid rgba(255,255,255,0.06)", borderRadius:12, padding:"20px", marginBottom:8 }}>
       <button onClick={()=>{ const next=!open; setOpen(next); if(next) Analytics.faqOpened(q); }} style={{ width:"100%", display:"flex", justifyContent:"space-between", alignItems:"center", background:"none", border:"none", cursor:"pointer", textAlign:"left", padding:0, gap:12 }}>
         <span style={{ fontSize:14, fontWeight:500, color:COLORS.text, fontFamily:"'DM Sans',sans-serif", lineHeight:1.4 }}>{q}</span>
         <span style={{ color:COLORS.faint, fontSize:20, flexShrink:0, transition:"transform .2s", transform:open?"rotate(45deg)":"rotate(0)" }}>+</span>
@@ -917,12 +917,19 @@ export default function Contrivox() {
   const [unlockLoading, setUnlockLoading] = useState(null); // null | "basic" | "pro"
   const [dropHover, setDropHover]         = useState(false);
   const [barWidths, setBarWidths]         = useState([0, 0, 0]);
+  const [navScrolled, setNavScrolled]     = useState(false);
   const fileRef    = useRef();
   const resultsRef = useRef();
   const statsRef   = useRef();
   const t = T.en;
 
   useEffect(() => { setAccount(getAccount()); }, []);
+
+  useEffect(() => {
+    const onScroll = () => setNavScrolled(window.scrollY > 80);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   useEffect(() => {
     if (!result) return;
@@ -1058,7 +1065,7 @@ export default function Contrivox() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,400;1,9..144,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
         *{box-sizing:border-box;margin:0;padding:0;}
         html{scroll-behavior:smooth;}
         body{background:var(--cvx-bg);font-family:'DM Sans',sans-serif;-webkit-text-size-adjust:100%;}
@@ -1086,25 +1093,27 @@ export default function Contrivox() {
         @keyframes pulse{0%,100%{opacity:0.4}50%{opacity:1}}
         @keyframes glow{0%,100%{box-shadow:var(--shadow-accent)}50%{box-shadow:var(--shadow-accent-lg)}}
         .fear-card{transition:border-color var(--dur-base) var(--ease-standard),transform var(--dur-base) var(--ease-standard),box-shadow var(--dur-base) var(--ease-standard);}
-        .fear-card:hover{border-color:var(--cvx-danger-border)!important;transform:translateY(-2px);box-shadow:var(--shadow-md);}
+        .fear-card:hover{border-color:rgba(255,255,255,0.14)!important;transform:translateY(-2px);box-shadow:var(--shadow-md);}
         .how-card{transition:background var(--dur-base) var(--ease-standard),transform var(--dur-base) var(--ease-standard),box-shadow var(--dur-base) var(--ease-standard);}
         .how-card:hover{background:var(--cvx-surface-2)!important;transform:translateY(-2px);box-shadow:var(--shadow-md);}
         .testimonial-card{transition:border-color var(--dur-base) var(--ease-standard),transform var(--dur-base) var(--ease-standard),box-shadow var(--dur-base) var(--ease-standard);}
         .testimonial-card:hover{border-color:var(--cvx-accent-border)!important;transform:translateY(-2px);box-shadow:var(--shadow-md);}
         .nav-link{transition:color var(--dur-fast) var(--ease-standard);}
         .nav-link:hover{color:var(--cvx-heading)!important;}
-        .nav-cta-btn{transition:box-shadow var(--dur-fast) var(--ease-standard),transform var(--dur-fast) var(--ease-standard);}
-        .nav-cta-btn:hover{box-shadow:var(--shadow-accent-lg)!important;transform:translateY(-1px);}
-        .analyse-cta:hover:not(:disabled){box-shadow:var(--shadow-accent-lg)!important;transform:translateY(-1px);}
-        .analyse-cta{transition:box-shadow var(--dur-base) var(--ease-standard),transform var(--dur-base) var(--ease-standard);}
+        .nav-cta-btn{transition:filter var(--dur-fast) var(--ease-standard),box-shadow var(--dur-fast) var(--ease-standard),transform var(--dur-fast) var(--ease-standard);}
+        .nav-cta-btn:hover{filter:brightness(110%);box-shadow:var(--shadow-accent-lg)!important;transform:translateY(-1px);}
+        .nav-cta-btn:active{filter:brightness(90%);transform:translateY(0px)!important;box-shadow:var(--shadow-accent)!important;}
+        .analyse-cta{transition:filter var(--dur-fast) var(--ease-standard),box-shadow var(--dur-base) var(--ease-standard),transform var(--dur-base) var(--ease-standard);}
+        .analyse-cta:hover:not(:disabled){filter:brightness(110%);box-shadow:var(--shadow-accent-lg)!important;transform:translateY(-1px);}
+        .analyse-cta:active:not(:disabled){filter:brightness(90%);transform:translateY(0px)!important;box-shadow:var(--shadow-sm)!important;}
+        .analyse-cta:focus-visible{outline:2px solid var(--cvx-accent);outline-offset:2px;}
         .trust-pill{transition:background var(--dur-fast),border-color var(--dur-fast);}
         .trust-pill:hover{background:var(--cvx-surface-2)!important;border-color:var(--cvx-border-strong)!important;}
         .hero-stat-card{cursor:default;transition:transform var(--dur-base) var(--ease-standard),box-shadow var(--dur-base) var(--ease-standard),border-color var(--dur-base) var(--ease-standard);}
         .hero-stat-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);border-color:var(--cvx-border-strong)!important;}
-        .risk-stat-card{transition:transform var(--dur-base) var(--ease-standard),box-shadow var(--dur-base) var(--ease-standard),border-color var(--dur-base) var(--ease-standard);}
-        .risk-stat-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);border-color:var(--cvx-border-strong)!important;}
-        .analyse-cta:active:not(:disabled){transform:translateY(1px)!important;box-shadow:var(--shadow-sm)!important;}
-        .nav-cta-btn:active{transform:translateY(1px)!important;box-shadow:var(--shadow-accent)!important;}
+        .upload-box{transition:border-color 300ms ease,box-shadow 300ms ease;}
+        .upload-box:hover{border-color:rgba(139,92,246,0.6)!important;box-shadow:0 0 80px rgba(139,92,246,0.10)!important;}
+        @media(max-width:767px){.upload-box{padding:24px!important;}}
       `}</style>
 
       {showAuth && <AuthModal t={t} onClose={()=>setShowAuth(false)} onAuth={acc=>{ setAccount(acc); Analytics.signUpCompleted(acc.email); }}/>}
@@ -1113,7 +1122,7 @@ export default function Contrivox() {
       <div style={{ minHeight:"100vh", background:COLORS.bg, backgroundImage:"radial-gradient(ellipse 65% 38% at 50% -4%, rgba(109,40,217,0.22) 0%, transparent 55%), radial-gradient(ellipse 35% 25% at 90% 90%, rgba(239,68,68,0.07) 0%, transparent 50%)" }}>
 
         {/* NAV */}
-        <nav style={{ position:"sticky", top:0, zIndex:90, backdropFilter:"blur(18px)", background:COLORS.nav, borderBottom:`0.5px solid ${COLORS.border}`, padding:"0 20px" }}>
+        <nav style={{ position:"sticky", top:0, zIndex:90, padding:"0 20px", backdropFilter:navScrolled?"blur(12px)":"none", background:navScrolled?"rgba(13,15,20,0.85)":"transparent", borderBottom:navScrolled?"1px solid rgba(255,255,255,0.06)":"none", transition:"all 200ms ease" }}>
           <div style={{ maxWidth:980, margin:"0 auto", display:"flex", alignItems:"center", justifyContent:"space-between", height:58 }}>
             <ContrivoxLogo size={19}/>
             <div className="nav-links" style={{ display:"flex", alignItems:"center", gap:2 }}>
@@ -1139,36 +1148,37 @@ export default function Contrivox() {
         </nav>
 
         {/* HERO */}
-        <section style={{ padding:"96px 20px 52px", textAlign:"center" }}>
+        <section style={{ padding:"96px 20px 48px", textAlign:"center" }}>
           <div style={{ maxWidth:680, margin:"0 auto" }}>
-            <a href="/sample-report" target="_blank" onClick={()=>Analytics.ctaClicked("hero_badge")} style={{ display:"inline-flex", alignItems:"center", gap:7, marginBottom:22, padding:"4px 14px", background:"rgba(124,58,237,0.09)", borderRadius:20, border:"0.5px solid rgba(124,58,237,0.22)", textDecoration:"none" }}>
-              <span style={{ width:5, height:5, borderRadius:"50%", background:"var(--cvx-accent)", animation:"pulse 2s infinite", flexShrink:0 }}/>
-              <span style={{ fontSize:10.5, fontWeight:700, color:"#a78bfa", letterSpacing:"0.08em", textTransform:"uppercase", fontFamily:"'DM Sans',sans-serif" }}>{t.hero_badge}</span>
-            </a>
-            <h1 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(36px,7vw,66px)", color:COLORS.heading, lineHeight:1.05, marginBottom:20, fontWeight:700, letterSpacing:"-0.02em" }}>
+            <h1 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(36px,7vw,66px)", color:COLORS.heading, lineHeight:1, marginBottom:32, fontWeight:900, letterSpacing:"-0.02em" }}>
               {t.hero_h1a}<br/>
               <em style={{ color:COLORS.danger, fontStyle:"italic" }}>{t.hero_h1b}</em>
             </h1>
-            <p style={{ fontSize:"clamp(14.5px,1.9vw,17px)", color:COLORS.muted, lineHeight:1.76, maxWidth:500, margin:"0 auto 14px", fontFamily:"'DM Sans',sans-serif" }}>{t.hero_sub}</p>
-            <p style={{ fontSize:12, color:COLORS.muted, fontFamily:"'DM Sans',sans-serif", textAlign:"center", margin:"0 auto 10px" }}>From $9 — no subscription, no account required.</p>
-            <p style={{ fontSize:13, color:COLORS.text, marginBottom:32, fontFamily:"'DM Sans',sans-serif" }}>{t.hero_social}</p>
+            <p style={{ fontSize:"clamp(14.5px,1.9vw,17px)", color:COLORS.muted, lineHeight:1.76, maxWidth:500, margin:"0 auto", fontFamily:"'DM Sans',sans-serif" }}>{t.hero_sub}</p>
+            <button onClick={scrollToUpload} className="analyse-cta" style={{ display:"inline-block", marginTop:40, padding:"14px 36px", fontSize:15, fontWeight:700, background:COLORS.accentGrad, color:"white", border:"none", borderRadius:"var(--r-cta)", cursor:"pointer", fontFamily:"'DM Sans',sans-serif", boxShadow:"var(--shadow-accent)", letterSpacing:"0.02em", minHeight:48 }}>
+              Check My Contract — from $9
+            </button>
+            <p style={{ marginTop:10, fontSize:13, color:COLORS.muted, fontFamily:"'DM Sans',sans-serif" }}>
+              <span style={{ color:"#f59e0b" }}>★★★★★</span>{" "}Joined by 12,400+ professionals
+            </p>
 
             {/* Stats */}
-            <div className="hero-stats" style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:8, maxWidth:520, margin:"0 auto 28px" }}>
+            <div className="hero-stats" style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:8, maxWidth:520, margin:"64px auto 0" }}>
               {[[t.stat1v,t.stat1l,"based on 12,400+ contracts analyzed"],[t.stat2v,t.stat2l,"based on 12,400+ contracts analyzed"],[t.stat3v,t.stat3l,"U.S. Bureau of Labor Statistics"]].map(([v,l,src],i)=>(
-                <div key={i} className="hero-stat-card" style={{ background:COLORS.surface, border:`0.5px solid ${COLORS.border}`, borderRadius:12, padding:"13px 10px" }}>
-                  <div style={{ fontSize:"clamp(19px,3.2vw,28px)", fontWeight:700, color:COLORS.danger, fontFamily:"'Fraunces',serif", marginBottom:4, fontVariantNumeric:"tabular-nums", letterSpacing:"-0.01em" }}>{v}</div>
-                  <div style={{ fontSize:"clamp(9px,1vw,10.5px)", color:COLORS.muted, lineHeight:1.5, fontFamily:"'DM Sans',sans-serif" }}>{l}</div>
-                  <div style={{ fontSize:9, color:COLORS.faint, fontFamily:"'DM Sans',sans-serif", marginTop:5, lineHeight:1.4 }}>{src}</div>
+                <div key={i} className="hero-stat-card" style={{ background:COLORS.surface, border:`1px solid ${COLORS.border}`, borderRadius:12, padding:"20px 12px", textAlign:"center" }}>
+                  <div style={{ fontSize:60, fontWeight:900, color:COLORS.danger, fontFamily:"'Fraunces',serif", lineHeight:1, fontVariantNumeric:"tabular-nums", letterSpacing:"-0.02em" }}>{v}</div>
+                  <div style={{ fontSize:12, color:COLORS.muted, lineHeight:1.5, fontFamily:"'DM Sans',sans-serif", marginTop:4 }}>{l}</div>
+                  <div style={{ fontSize:10, color:COLORS.faint, fontFamily:"'DM Sans',sans-serif", marginTop:4, lineHeight:1.4, opacity:0.6 }}>{src}</div>
                 </div>
               ))}
             </div>
 
           </div>
         </section>
+        <hr style={{ border:"none", borderTop:"1px solid rgba(255,255,255,0.06)", margin:0 }}/>
 
         {/* FEAR SECTION */}
-        <section style={{ padding:"0 20px 72px" }}>
+        <section style={{ padding:"64px 20px 80px" }}>
           <div className="fear-grid" style={{ maxWidth:900, margin:"0 auto", display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(250px,1fr))", gap:12 }}>
             {[[t.fear1t,t.fear1b],[t.fear2t,t.fear2b],[t.fear3t,t.fear3b]].map(([title,body],i)=>{
               const fearIcons = [
@@ -1177,7 +1187,7 @@ export default function Contrivox() {
                 <IconClock size={18} color="#f87171"/>,
               ];
               return (
-                <div key={i} className="fear-card" style={{ background:"rgba(239,68,68,0.04)", border:"0.5px solid rgba(239,68,68,0.20)", borderRadius:14, padding:"22px 20px" }}>
+                <div key={i} className="fear-card" style={{ background:COLORS.surface, border:"1px solid rgba(255,255,255,0.06)", borderRadius:12, padding:"24px" }}>
                   <div style={{ width:38, height:38, borderRadius:9, background:"rgba(239,68,68,0.09)", border:"0.5px solid rgba(239,68,68,0.18)", display:"flex", alignItems:"center", justifyContent:"center", marginBottom:16 }}>
                     {fearIcons[i]}
                   </div>
@@ -1188,9 +1198,10 @@ export default function Contrivox() {
             })}
           </div>
         </section>
+        <hr style={{ border:"none", borderTop:"1px solid rgba(255,255,255,0.06)", margin:0 }}/>
 
         {/* TRUST STRIP */}
-        <section style={{ padding:"0 20px 40px" }}>
+        <section style={{ padding:"40px 20px" }}>
           <div style={{ maxWidth:820, margin:"0 auto" }}>
             <p style={{ fontSize:11, color:COLORS.faint, textAlign:"center", letterSpacing:"0.07em", textTransform:"uppercase", fontFamily:"'DM Sans',sans-serif", marginBottom:16 }}>{t.trust_label}</p>
             <div style={{ display:"flex", flexWrap:"wrap", justifyContent:"center", gap:"8px 14px" }}>
@@ -1200,11 +1211,12 @@ export default function Contrivox() {
             </div>
           </div>
         </section>
+        <hr style={{ border:"none", borderTop:"1px solid rgba(255,255,255,0.06)", margin:0 }}/>
 
         {/* RISK STATS */}
-        <section ref={statsRef} style={{ padding:"0 20px 60px" }}>
+        <section ref={statsRef} style={{ padding:"64px 20px" }}>
           <div style={{ maxWidth:820, margin:"0 auto" }}>
-            <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(22px,3.5vw,32px)", color:COLORS.heading, textAlign:"center", marginBottom:8, fontWeight:600, letterSpacing:"-0.01em" }}>{t.risk_stats_title}</h2>
+            <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(22px,3.5vw,32px)", color:COLORS.heading, textAlign:"center", marginBottom:8, fontWeight:700, letterSpacing:"-0.01em", lineHeight:1.2 }}>{t.risk_stats_title}</h2>
             <p style={{ fontSize:13, color:COLORS.muted, textAlign:"center", marginBottom:20, fontFamily:"'DM Sans',sans-serif" }}>
               Based on{" "}
               <span style={{ color:COLORS.text, fontWeight:500 }}>
@@ -1238,24 +1250,25 @@ export default function Contrivox() {
                 const statColor = pct >= 70 ? "#f59e0b" : "var(--cvx-accent)";
                 const barColor  = pct >= 70 ? "#f59e0b" : "var(--cvx-accent)";
                 return (
-                  <div key={i} className="risk-stat-card" style={{ background:"rgba(255,255,255,0.03)", border:`0.5px solid rgba(255,255,255,0.07)`, borderRadius:14, padding:"20px 18px", textAlign:"center" }}>
-                    <div style={{ fontSize:"clamp(28px,4vw,42px)", fontWeight:700, color:statColor, fontFamily:"'Fraunces',serif", marginBottom:6, lineHeight:1, fontVariantNumeric:"tabular-nums", letterSpacing:"-0.01em" }}>{stat}</div>
+                  <div key={i} className="risk-stat-card" style={{ background:"transparent", padding:"24px 16px", textAlign:"center" }}>
+                    <div style={{ fontSize:60, fontWeight:900, color:statColor, fontFamily:"'Fraunces',serif", lineHeight:1, fontVariantNumeric:"tabular-nums", letterSpacing:"-0.02em" }}>{stat}</div>
                     {/* Animated progress bar */}
                     <div style={{ height:6, background:"rgba(255,255,255,0.08)", borderRadius:3, margin:"10px 0 12px", overflow:"hidden" }}>
                       <div style={{ height:"100%", width: barWidths[i] + "%", background:barColor, borderRadius:3, transition:"width 800ms ease" }}/>
                     </div>
-                    <div style={{ fontSize:12, color:COLORS.muted, lineHeight:1.6, fontFamily:"'DM Sans',sans-serif" }}>{desc}</div>
+                    <div style={{ fontSize:12, color:COLORS.muted, lineHeight:1.6, fontFamily:"'DM Sans',sans-serif", marginTop:4, opacity:0.7 }}>{desc}</div>
                   </div>
                 );
               })}
             </div>
           </div>
         </section>
+        <hr style={{ border:"none", borderTop:"1px solid rgba(255,255,255,0.06)", margin:0 }}/>
 
         {/* UPLOAD */}
-        <section id="upload-sec" style={{ padding:"0 20px 60px" }}>
+        <section id="upload-sec" style={{ padding:"48px 20px 80px" }}>
           <div style={{ maxWidth:660, margin:"0 auto" }}>
-            <div style={{ background:"rgba(255,255,255,0.024)", border:`0.5px solid ${COLORS.border}`, borderRadius:20, padding:"26px 24px", backdropFilter:"blur(12px)" }}>
+            <div className="upload-box" style={{ background:"#1A1E2A", border:"1px solid rgba(139,92,246,0.3)", borderRadius:16, padding:"32px", boxShadow:"0 0 60px rgba(139,92,246,0.06)" }}>
               <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:22, color:COLORS.heading, marginBottom:4, fontWeight:700 }}>{t.upload_title}</h2>
               <p style={{ fontSize:12, color:"var(--cvx-upload-label)", margin:"0 0 18px", fontFamily:"'DM Sans',sans-serif" }}>{t.upload_formats}</p>
 
@@ -1315,7 +1328,7 @@ export default function Contrivox() {
                 onClick={analyse}
                 disabled={loading}
                 className="analyse-cta"
-                style={{ width:"100%", padding:"16px", fontSize:15, fontWeight:700, borderRadius:"var(--r-cta)", border:file&&!loading?"1.5px solid transparent":"1.5px solid var(--cvx-upload-cta-idle-bd)", cursor:loading?"wait":"pointer", background:file&&!loading?COLORS.accentGrad:"var(--cvx-upload-cta-idle-bg)", color:file&&!loading?"white":"var(--cvx-upload-cta-idle-text)", letterSpacing:"0.02em", touchAction:"manipulation", WebkitTapHighlightColor:"transparent", minHeight:52, boxShadow:file&&!loading?"var(--shadow-accent)":"none" }}
+                style={{ width:"100%", padding:"16px", fontSize:16, fontWeight:600, borderRadius:"var(--r-cta)", border:file&&!loading?"1.5px solid transparent":"1.5px solid var(--cvx-upload-cta-idle-bd)", cursor:loading?"wait":"pointer", background:file&&!loading?COLORS.accentGrad:"var(--cvx-upload-cta-idle-bg)", color:file&&!loading?"white":"var(--cvx-upload-cta-idle-text)", letterSpacing:"0.02em", touchAction:"manipulation", WebkitTapHighlightColor:"transparent", minHeight:56, height:56, boxShadow:file&&!loading?"var(--shadow-accent)":"none" }}
               >
                 {loading ? (
                   <span style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:10 }}>
@@ -1337,6 +1350,8 @@ export default function Contrivox() {
             </div>
           </div>
         </section>
+
+        <hr style={{ border:"none", borderTop:"1px solid rgba(255,255,255,0.06)", margin:0 }}/>
 
         {/* PREVIEW CARD (shown after upload, before payment) */}
         {preview && !result && (
@@ -1409,9 +1424,9 @@ export default function Contrivox() {
         )}
 
         {/* HOW IT WORKS */}
-        <section id="how" style={{ padding:"80px 20px 60px", background:"rgba(255,255,255,0.013)" }}>
+        <section id="how" style={{ padding:"96px 20px 80px" }}>
           <div style={{ maxWidth:860, margin:"0 auto" }}>
-            <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(26px,4vw,40px)", color:COLORS.heading, textAlign:"center", marginBottom:8, fontWeight:600, letterSpacing:"-0.01em" }}>{t.how_title}</h2>
+            <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(26px,4vw,40px)", color:COLORS.heading, textAlign:"center", marginBottom:8, fontWeight:700, letterSpacing:"-0.01em", lineHeight:1.2 }}>{t.how_title}</h2>
             <p style={{ fontSize:13, color:COLORS.muted, textAlign:"center", marginBottom:40, fontFamily:"'DM Sans',sans-serif" }}>60 seconds from upload to full report.</p>
             <div className="how-grid" style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(210px,1fr))", gap:12 }}>
               {[[t.how1t,t.how1b,"01"],[t.how2t,t.how2b,"02"],[t.how3t,t.how3b,"03"]].map(([title,body,n],i)=>{
@@ -1421,7 +1436,7 @@ export default function Contrivox() {
                   <IconClipboard size={18} color="rgba(167,139,250,0.9)"/>,
                 ];
                 return (
-                  <div key={i} className="how-card" style={{ background:COLORS.surface, border:`0.5px solid ${COLORS.border}`, borderRadius:14, padding:"22px 20px", position:"relative" }}>
+                  <div key={i} className="how-card" style={{ background:COLORS.surface, border:"1px solid rgba(255,255,255,0.06)", borderRadius:12, padding:"24px", position:"relative" }}>
                     <div style={{ position:"absolute", top:18, right:18, fontSize:11, fontWeight:700, color:"rgba(139,92,246,0.4)", letterSpacing:"0.1em", fontFamily:"'DM Sans',sans-serif" }}>{n}</div>
                     <div style={{ width:38, height:38, borderRadius:9, background:"rgba(139,92,246,0.1)", border:"0.5px solid rgba(139,92,246,0.2)", display:"flex", alignItems:"center", justifyContent:"center", marginBottom:16 }}>
                       {howIcons[i]}
@@ -1434,9 +1449,10 @@ export default function Contrivox() {
             </div>
           </div>
         </section>
+        <hr style={{ border:"none", borderTop:"1px solid rgba(255,255,255,0.06)", margin:0 }}/>
 
         {/* REPORT MOCKUP */}
-        <section style={{ padding:"60px 20px", background:"rgba(255,255,255,0.013)" }}>
+        <section style={{ padding:"64px 20px" }}>
           <div style={{ maxWidth:760, margin:"0 auto", textAlign:"center" }}>
             <p style={{ fontSize:13, fontWeight:600, color:COLORS.muted, letterSpacing:"0.06em", textTransform:"uppercase", fontFamily:"'DM Sans',sans-serif", marginBottom:24 }}>Here's what your report looks like</p>
             <div style={{ transform:"rotate(-1deg)", boxShadow:"0 32px 80px rgba(0,0,0,0.55), 0 8px 24px rgba(0,0,0,0.35)", borderRadius:18, overflow:"hidden", border:`0.5px solid ${COLORS.border}`, background:"#101018" }}>
@@ -1490,10 +1506,12 @@ export default function Contrivox() {
           </div>
         </section>
 
+        <hr style={{ border:"none", borderTop:"1px solid rgba(255,255,255,0.06)", margin:0 }}/>
+
         {/* TESTIMONIALS */}
-        <section style={{ padding:"60px 20px 80px" }}>
+        <section style={{ padding:"80px 20px 64px" }}>
           <div style={{ maxWidth:900, margin:"0 auto" }}>
-            <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(26px,4vw,40px)", color:COLORS.heading, textAlign:"center", marginBottom:8, fontWeight:600, letterSpacing:"-0.01em" }}>{t.test_title}</h2>
+            <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(26px,4vw,40px)", color:COLORS.heading, textAlign:"center", marginBottom:8, fontWeight:700, letterSpacing:"-0.01em", lineHeight:1.2 }}>{t.test_title}</h2>
             <p style={{ fontSize:14, color:COLORS.muted, textAlign:"center", marginBottom:16, fontFamily:"'DM Sans',sans-serif" }}>What people found in their contracts.</p>
             <p style={{ textAlign:"center", fontSize:12, color:COLORS.muted, fontFamily:"'DM Sans',sans-serif", marginBottom:28 }}>
               <span style={{ color:"#f59e0b" }}>★★★★★</span>{" "}Rated 4.9 by our users
@@ -1503,9 +1521,8 @@ export default function Contrivox() {
                 [t.t1n, t.t1r, t.t1t, "IP Assignment Clause"],
                 [t.t2n, t.t2r, t.t2t, "Non-Compete Clause"],
                 [t.t3n, t.t3r, t.t3t, "Auto-Renewal Clause"],
-              ].map(([name, role, text, badge], i) => (
-                <div key={i} className="testimonial-card" style={{ background:COLORS.surface, border:`1px solid var(--cvx-border)`, borderRadius:"var(--r-lg)", padding:"20px 18px", display:"flex", flexDirection:"column" }}>
-                  <span style={{ display:"inline-block", alignSelf:"flex-start", marginBottom:12, padding:"3px 10px", fontSize:10, fontWeight:700, letterSpacing:"0.07em", textTransform:"uppercase", color:"var(--cvx-accent)", background:"rgba(124,58,237,0.12)", border:"1px solid rgba(124,58,237,0.30)", borderRadius:20, fontFamily:"'DM Sans',sans-serif" }}>{badge}</span>
+              ].map(([name, role, text], i) => (
+                <div key={i} className="testimonial-card" style={{ background:COLORS.surface, border:"1px solid rgba(255,255,255,0.08)", borderLeft:"3px solid var(--cvx-accent)", borderRadius:12, padding:"24px", display:"flex", flexDirection:"column" }}>
                   <div style={{ marginBottom:12, color:"#f59e0b", fontSize:12, letterSpacing:"2px" }}>★★★★★</div>
                   <p style={{ fontSize:13, color:COLORS.text, lineHeight:1.74, marginBottom:16, fontStyle:"italic", fontFamily:"'DM Sans',sans-serif", flex:1 }}>"{text}"</p>
                   <div style={{ borderTop:`0.5px solid ${COLORS.border}`, paddingTop:12 }}>
@@ -1518,10 +1535,12 @@ export default function Contrivox() {
           </div>
         </section>
 
+        <hr style={{ border:"none", borderTop:"1px solid rgba(255,255,255,0.06)", margin:0 }}/>
+
         {/* FAQ */}
-        <section id="faq" style={{ padding:"72px 20px", background:"rgba(255,255,255,0.013)" }}>
+        <section id="faq" style={{ padding:"64px 20px" }}>
           <div style={{ maxWidth:620, margin:"0 auto" }}>
-            <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(26px,4vw,38px)", color:COLORS.heading, textAlign:"center", marginBottom:36, fontWeight:600 }}>{t.faq_title}</h2>
+            <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(26px,4vw,38px)", color:COLORS.heading, textAlign:"center", marginBottom:36, fontWeight:700, letterSpacing:"-0.01em", lineHeight:1.2 }}>{t.faq_title}</h2>
             <FaqItem q={t.faq3q} a={t.faq3a} initialOpen={true}/>
             <FaqItem q={t.faq4q} a={t.faq4a}/>
             <FaqItem q={t.faq5q} a={t.faq5a}/>
@@ -1531,11 +1550,13 @@ export default function Contrivox() {
           </div>
         </section>
 
+        <hr style={{ border:"none", borderTop:"1px solid rgba(255,255,255,0.06)", margin:0 }}/>
+
         {/* CTA */}
-        <section style={{ padding:"96px 20px 80px", textAlign:"center", background:"rgba(99,102,241,0.05)", borderTop:"0.5px solid rgba(99,102,241,0.14)" }}>
+        <section style={{ padding:"80px 20px 96px", textAlign:"center" }}>
           <div style={{ maxWidth:520, margin:"0 auto" }}>
             <ContrivoxLogo size={20}/>
-            <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(24px,4vw,40px)", color:COLORS.heading, margin:"20px 0 10px", lineHeight:1.15, fontWeight:600, letterSpacing:"-0.01em" }}>{t.cta_band}</h2>
+            <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(24px,4vw,40px)", color:COLORS.heading, margin:"20px 0 10px", lineHeight:1.2, fontWeight:700, letterSpacing:"-0.01em" }}>{t.cta_band}</h2>
             <p style={{ fontSize:14, color:COLORS.muted, marginBottom:10, lineHeight:1.7, fontFamily:"'DM Sans',sans-serif" }}>
               {t.cta_urgency}
             </p>
