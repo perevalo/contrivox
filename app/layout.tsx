@@ -3,6 +3,7 @@ import Script from "next/script";
 import "./globals.css";
 import { PostHogProvider } from "@/components/PostHogProvider";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import StickyMobileCTA from "@/components/StickyMobileCTA";
 
 const GA_ID = "G-NP37VTZ5KQ";
 
@@ -86,7 +87,10 @@ export default function RootLayout({
       </head>
       <body>
         <ThemeProvider>
-          <PostHogProvider>{children}</PostHogProvider>
+          <PostHogProvider>
+            {children}
+            <StickyMobileCTA />
+          </PostHogProvider>
         </ThemeProvider>
         <Script src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} strategy="afterInteractive"/>
         <Script id="gtag-init" strategy="afterInteractive">{`
