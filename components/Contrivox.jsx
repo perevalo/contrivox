@@ -22,7 +22,7 @@ const T = {
     fear3t: "Auto-renewals hiding in plain sight",
     fear3b: "Leases, service agreements, and freelance contracts that lock you in automatically. The clause is always there. It's always small print. It always costs more than you expect.",
     upload_title: "Drop your contract. Get your report.", upload_formats: "PDF · PNG · JPG · DOCX · TXT",
-    upload_drop: "Tap to choose your contract", upload_or: "or drag and drop",
+    upload_drop: "Upload your contract — get a plain-English breakdown in 60 seconds", upload_or: "or drag and drop",
     analyse_btn: "Check My Contract",
     analyse_trust: "Secure payment via Stripe. No subscription. Cancel anytime.",
     sample_btn: "See a Sample Report →",
@@ -915,6 +915,7 @@ export default function Contrivox() {
   const [showHist, setShowHist]           = useState(false);
   const [sessionId, setSessionId]         = useState(null);
   const [unlockLoading, setUnlockLoading] = useState(null); // null | "basic" | "pro"
+  const [dropHover, setDropHover]         = useState(false);
   const [barWidths, setBarWidths]         = useState([0, 0, 0]);
   const fileRef    = useRef();
   const resultsRef = useRef();
@@ -1098,6 +1099,12 @@ export default function Contrivox() {
         .analyse-cta{transition:box-shadow var(--dur-base) var(--ease-standard),transform var(--dur-base) var(--ease-standard);}
         .trust-pill{transition:background var(--dur-fast),border-color var(--dur-fast);}
         .trust-pill:hover{background:var(--cvx-surface-2)!important;border-color:var(--cvx-border-strong)!important;}
+        .hero-stat-card{cursor:default;transition:transform var(--dur-base) var(--ease-standard),box-shadow var(--dur-base) var(--ease-standard),border-color var(--dur-base) var(--ease-standard);}
+        .hero-stat-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);border-color:var(--cvx-border-strong)!important;}
+        .risk-stat-card{transition:transform var(--dur-base) var(--ease-standard),box-shadow var(--dur-base) var(--ease-standard),border-color var(--dur-base) var(--ease-standard);}
+        .risk-stat-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);border-color:var(--cvx-border-strong)!important;}
+        .analyse-cta:active:not(:disabled){transform:translateY(1px)!important;box-shadow:var(--shadow-sm)!important;}
+        .nav-cta-btn:active{transform:translateY(1px)!important;box-shadow:var(--shadow-accent)!important;}
       `}</style>
 
       {showAuth && <AuthModal t={t} onClose={()=>setShowAuth(false)} onAuth={acc=>{ setAccount(acc); Analytics.signUpCompleted(acc.email); }}/>}
@@ -1124,7 +1131,7 @@ export default function Contrivox() {
               ) : (
                 <>
                   <button onClick={()=>{ Analytics.signInClicked(); setShowAuth(true); }} className="nav-link sign-in-link" style={{ padding:"6px 8px", fontSize:14, fontWeight:400, background:"none", color:COLORS.muted, border:"none", cursor:"pointer" }}>{t.nav_signin}</button>
-                  <button onClick={scrollToUpload} className="nav-cta-btn" style={{ padding:"7px 16px", fontSize:12.5, fontWeight:700, background:COLORS.accentGrad, color:"white", border:"none", borderRadius:"var(--r-md)", cursor:"pointer", animation:"glow 3s infinite", letterSpacing:"0.01em", minHeight:36, boxShadow:"var(--shadow-accent)" }}>{t.nav_cta}</button>
+                  <button onClick={scrollToUpload} className="nav-cta-btn" style={{ padding:"7px 16px", fontSize:12.5, fontWeight:700, background:COLORS.accentGrad, color:"white", border:"none", borderRadius:"var(--r-cta)", cursor:"pointer", animation:"glow 3s infinite", letterSpacing:"0.01em", minHeight:36, boxShadow:"var(--shadow-accent)" }}>{t.nav_cta}</button>
                 </>
               )}
             </div>
@@ -1132,33 +1139,31 @@ export default function Contrivox() {
         </nav>
 
         {/* HERO */}
-        <section style={{ padding:"88px 20px 64px", textAlign:"center" }}>
+        <section style={{ padding:"96px 20px 52px", textAlign:"center" }}>
           <div style={{ maxWidth:680, margin:"0 auto" }}>
             <a href="/sample-report" target="_blank" onClick={()=>Analytics.ctaClicked("hero_badge")} style={{ display:"inline-flex", alignItems:"center", gap:7, marginBottom:22, padding:"4px 14px", background:"rgba(124,58,237,0.09)", borderRadius:20, border:"0.5px solid rgba(124,58,237,0.22)", textDecoration:"none" }}>
               <span style={{ width:5, height:5, borderRadius:"50%", background:"var(--cvx-accent)", animation:"pulse 2s infinite", flexShrink:0 }}/>
               <span style={{ fontSize:10.5, fontWeight:700, color:"#a78bfa", letterSpacing:"0.08em", textTransform:"uppercase", fontFamily:"'DM Sans',sans-serif" }}>{t.hero_badge}</span>
             </a>
-            <h1 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(36px,7vw,66px)", color:COLORS.heading, lineHeight:1.07, marginBottom:20, fontWeight:600 }}>
+            <h1 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(36px,7vw,66px)", color:COLORS.heading, lineHeight:1.05, marginBottom:20, fontWeight:700, letterSpacing:"-0.02em" }}>
               {t.hero_h1a}<br/>
               <em style={{ color:COLORS.danger, fontStyle:"italic" }}>{t.hero_h1b}</em>
             </h1>
             <p style={{ fontSize:"clamp(14.5px,1.9vw,17px)", color:COLORS.muted, lineHeight:1.76, maxWidth:500, margin:"0 auto 14px", fontFamily:"'DM Sans',sans-serif" }}>{t.hero_sub}</p>
-            <p style={{ fontSize:13, color:COLORS.muted, marginBottom:32, fontFamily:"'DM Sans',sans-serif" }}>{t.hero_social}</p>
+            <p style={{ fontSize:12, color:COLORS.muted, fontFamily:"'DM Sans',sans-serif", textAlign:"center", margin:"0 auto 10px" }}>From $9 — no subscription, no account required.</p>
+            <p style={{ fontSize:13, color:COLORS.text, marginBottom:32, fontFamily:"'DM Sans',sans-serif" }}>{t.hero_social}</p>
 
             {/* Stats */}
             <div className="hero-stats" style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:8, maxWidth:520, margin:"0 auto 28px" }}>
-              {[[t.stat1v,t.stat1l],[t.stat2v,t.stat2l],[t.stat3v,t.stat3l]].map(([v,l],i)=>(
-                <div key={i} style={{ background:COLORS.surface, border:`0.5px solid ${COLORS.border}`, borderRadius:12, padding:"13px 10px" }}>
-                  <div style={{ fontSize:"clamp(19px,3.2vw,28px)", fontWeight:600, color:COLORS.danger, fontFamily:"'Fraunces',serif", marginBottom:4 }}>{v}</div>
+              {[[t.stat1v,t.stat1l,"based on 12,400+ contracts analyzed"],[t.stat2v,t.stat2l,"based on 12,400+ contracts analyzed"],[t.stat3v,t.stat3l,"U.S. Bureau of Labor Statistics"]].map(([v,l,src],i)=>(
+                <div key={i} className="hero-stat-card" style={{ background:COLORS.surface, border:`0.5px solid ${COLORS.border}`, borderRadius:12, padding:"13px 10px" }}>
+                  <div style={{ fontSize:"clamp(19px,3.2vw,28px)", fontWeight:700, color:COLORS.danger, fontFamily:"'Fraunces',serif", marginBottom:4, fontVariantNumeric:"tabular-nums", letterSpacing:"-0.01em" }}>{v}</div>
                   <div style={{ fontSize:"clamp(9px,1vw,10.5px)", color:COLORS.muted, lineHeight:1.5, fontFamily:"'DM Sans',sans-serif" }}>{l}</div>
+                  <div style={{ fontSize:9, color:COLORS.faint, fontFamily:"'DM Sans',sans-serif", marginTop:5, lineHeight:1.4 }}>{src}</div>
                 </div>
               ))}
             </div>
 
-            {/* Sample report CTA */}
-            <a href="/sample-report" target="_blank" onClick={()=>Analytics.ctaClicked("hero")} style={{ display:"inline-flex", alignItems:"center", gap:6, fontSize:13, color:"rgba(167,139,250,0.85)", fontFamily:"'DM Sans',sans-serif", textDecoration:"none", padding:"8px 18px", border:"0.5px solid rgba(139,92,246,0.3)", borderRadius:8, background:"rgba(139,92,246,0.06)", transition:"all .15s" }}>
-              {t.sample_btn}
-            </a>
           </div>
         </section>
 
@@ -1172,7 +1177,7 @@ export default function Contrivox() {
                 <IconClock size={18} color="#f87171"/>,
               ];
               return (
-                <div key={i} className="fear-card" style={{ background:"rgba(239,68,68,0.04)", border:"0.5px solid rgba(239,68,68,0.13)", borderRadius:14, padding:"22px 20px" }}>
+                <div key={i} className="fear-card" style={{ background:"rgba(239,68,68,0.04)", border:"0.5px solid rgba(239,68,68,0.20)", borderRadius:14, padding:"22px 20px" }}>
                   <div style={{ width:38, height:38, borderRadius:9, background:"rgba(239,68,68,0.09)", border:"0.5px solid rgba(239,68,68,0.18)", display:"flex", alignItems:"center", justifyContent:"center", marginBottom:16 }}>
                     {fearIcons[i]}
                   </div>
@@ -1199,7 +1204,7 @@ export default function Contrivox() {
         {/* RISK STATS */}
         <section ref={statsRef} style={{ padding:"0 20px 60px" }}>
           <div style={{ maxWidth:820, margin:"0 auto" }}>
-            <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(22px,3.5vw,32px)", color:COLORS.heading, textAlign:"center", marginBottom:8, fontWeight:600 }}>{t.risk_stats_title}</h2>
+            <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(22px,3.5vw,32px)", color:COLORS.heading, textAlign:"center", marginBottom:8, fontWeight:600, letterSpacing:"-0.01em" }}>{t.risk_stats_title}</h2>
             <p style={{ fontSize:13, color:COLORS.muted, textAlign:"center", marginBottom:20, fontFamily:"'DM Sans',sans-serif" }}>
               Based on{" "}
               <span style={{ color:COLORS.text, fontWeight:500 }}>
@@ -1230,10 +1235,11 @@ export default function Contrivox() {
             <div className="risk-stats-grid" style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:12 }}>
               {currentStats.map(({ stat, desc }, i) => {
                 const pct = parseInt(stat);
-                const barColor = pct >= 75 ? "var(--cvx-accent)" : pct >= 50 ? "#F59E0B" : "var(--cvx-accent)";
+                const statColor = pct >= 70 ? "#f59e0b" : "var(--cvx-accent)";
+                const barColor  = pct >= 70 ? "#f59e0b" : "var(--cvx-accent)";
                 return (
-                  <div key={i} style={{ background:"rgba(255,255,255,0.03)", border:`0.5px solid ${COLORS.border}`, borderRadius:14, padding:"20px 18px", textAlign:"center" }}>
-                    <div style={{ fontSize:"clamp(28px,4vw,42px)", fontWeight:700, color:"var(--cvx-accent)", fontFamily:"'Fraunces',serif", marginBottom:6, lineHeight:1 }}>{stat}</div>
+                  <div key={i} className="risk-stat-card" style={{ background:"rgba(255,255,255,0.03)", border:`0.5px solid rgba(255,255,255,0.07)`, borderRadius:14, padding:"20px 18px", textAlign:"center" }}>
+                    <div style={{ fontSize:"clamp(28px,4vw,42px)", fontWeight:700, color:statColor, fontFamily:"'Fraunces',serif", marginBottom:6, lineHeight:1, fontVariantNumeric:"tabular-nums", letterSpacing:"-0.01em" }}>{stat}</div>
                     {/* Animated progress bar */}
                     <div style={{ height:6, background:"rgba(255,255,255,0.08)", borderRadius:3, margin:"10px 0 12px", overflow:"hidden" }}>
                       <div style={{ height:"100%", width: barWidths[i] + "%", background:barColor, borderRadius:3, transition:"width 800ms ease" }}/>
@@ -1250,7 +1256,7 @@ export default function Contrivox() {
         <section id="upload-sec" style={{ padding:"0 20px 60px" }}>
           <div style={{ maxWidth:660, margin:"0 auto" }}>
             <div style={{ background:"rgba(255,255,255,0.024)", border:`0.5px solid ${COLORS.border}`, borderRadius:20, padding:"26px 24px", backdropFilter:"blur(12px)" }}>
-              <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:22, color:COLORS.heading, marginBottom:4, fontWeight:600 }}>{t.upload_title}</h2>
+              <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:22, color:COLORS.heading, marginBottom:4, fontWeight:700 }}>{t.upload_title}</h2>
               <p style={{ fontSize:12, color:"var(--cvx-upload-label)", margin:"0 0 18px", fontFamily:"'DM Sans',sans-serif" }}>{t.upload_formats}</p>
 
               <input
@@ -1280,18 +1286,19 @@ export default function Contrivox() {
                   onDragOver={e=>{e.preventDefault();setDragging(true);}}
                   onDragLeave={()=>setDragging(false)}
                   onDrop={onDrop}
+                  onMouseEnter={()=>setDropHover(true)}
+                  onMouseLeave={()=>setDropHover(false)}
                   onClick={()=>fileRef.current.click()}
                   role="button"
                   tabIndex={0}
                   onKeyDown={e=>e.key==="Enter"&&fileRef.current.click()}
                   aria-label={t.upload_drop}
-                  style={{ border:`2px ${dragging?"solid":"dashed"} ${dragging?"var(--cvx-accent)":"var(--cvx-border)"}`, borderRadius:"var(--r-xl)", padding:"var(--sp-12) var(--sp-6)", textAlign:"center", cursor:"pointer", background:dragging?"var(--cvx-accent-light)":"rgba(255,255,255,0.015)", transition:"all var(--dur-base) var(--ease-standard)", marginBottom:18, WebkitTapHighlightColor:"transparent", touchAction:"manipulation", userSelect:"none", boxShadow:dragging?"var(--shadow-accent)":"none" }}
+                  style={{ border:`2px ${dragging?"solid":"dashed"} ${dragging?"var(--cvx-accent)":dropHover?"rgba(139,92,246,0.45)":"var(--cvx-border)"}`, borderRadius:"var(--r-xl)", padding:"var(--sp-12) var(--sp-6)", textAlign:"center", cursor:"pointer", background:dragging?"var(--cvx-accent-light)":dropHover?"rgba(139,92,246,0.04)":"rgba(255,255,255,0.015)", transition:"all var(--dur-base) var(--ease-standard)", marginBottom:18, WebkitTapHighlightColor:"transparent", touchAction:"manipulation", userSelect:"none", boxShadow:dragging?"var(--shadow-accent)":dropHover?"0 0 0 4px rgba(124,58,237,0.1)":"none" }}
                 >
                   <div style={{ width:52, height:52, borderRadius:13, background:"rgba(139,92,246,0.12)", border:"0.5px solid rgba(139,92,246,0.25)", display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 13px" }}>
                     <IconFileDoc size={24} color="rgba(167,139,250,0.85)"/>
                   </div>
-                  <p style={{ fontSize:15, fontWeight:600, color:COLORS.text, marginBottom:4, fontFamily:"'DM Sans',sans-serif" }}>{t.upload_drop}</p>
-                  <p style={{ fontSize:11.5, color:"var(--cvx-upload-hint)", fontFamily:"'DM Sans',sans-serif", marginBottom:14 }}>{t.upload_or}</p>
+                  <p style={{ fontSize:15, fontWeight:600, color:COLORS.text, marginBottom:14, fontFamily:"'DM Sans',sans-serif" }}>{t.upload_drop}</p>
                   <span style={{ display:"inline-block", padding:"9px 22px", fontSize:13, fontWeight:600, background:COLORS.accentGrad, color:"white", borderRadius:9, fontFamily:"'DM Sans',sans-serif", boxShadow:"0 2px 12px rgba(99,102,241,0.35)", pointerEvents:"none" }}>
                     Choose file
                   </span>
@@ -1308,7 +1315,7 @@ export default function Contrivox() {
                 onClick={analyse}
                 disabled={loading}
                 className="analyse-cta"
-                style={{ width:"100%", padding:"16px", fontSize:15, fontWeight:700, borderRadius:"var(--r-lg)", border:file&&!loading?"1.5px solid transparent":"1.5px solid var(--cvx-upload-cta-idle-bd)", cursor:loading?"wait":"pointer", background:file&&!loading?COLORS.accentGrad:"var(--cvx-upload-cta-idle-bg)", color:file&&!loading?"white":"var(--cvx-upload-cta-idle-text)", letterSpacing:"0.02em", touchAction:"manipulation", WebkitTapHighlightColor:"transparent", minHeight:52, boxShadow:file&&!loading?"var(--shadow-accent)":"none" }}
+                style={{ width:"100%", padding:"16px", fontSize:15, fontWeight:700, borderRadius:"var(--r-cta)", border:file&&!loading?"1.5px solid transparent":"1.5px solid var(--cvx-upload-cta-idle-bd)", cursor:loading?"wait":"pointer", background:file&&!loading?COLORS.accentGrad:"var(--cvx-upload-cta-idle-bg)", color:file&&!loading?"white":"var(--cvx-upload-cta-idle-text)", letterSpacing:"0.02em", touchAction:"manipulation", WebkitTapHighlightColor:"transparent", minHeight:52, boxShadow:file&&!loading?"var(--shadow-accent)":"none" }}
               >
                 {loading ? (
                   <span style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:10 }}>
@@ -1402,10 +1409,10 @@ export default function Contrivox() {
         )}
 
         {/* HOW IT WORKS */}
-        <section id="how" style={{ padding:"72px 20px", background:"rgba(255,255,255,0.013)" }}>
+        <section id="how" style={{ padding:"80px 20px 60px", background:"rgba(255,255,255,0.013)" }}>
           <div style={{ maxWidth:860, margin:"0 auto" }}>
-            <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(26px,4vw,40px)", color:COLORS.heading, textAlign:"center", marginBottom:8, fontWeight:600 }}>{t.how_title}</h2>
-            <p style={{ fontSize:14, color:COLORS.muted, textAlign:"center", marginBottom:40, fontFamily:"'DM Sans',sans-serif" }}>60 seconds from upload to full report.</p>
+            <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(26px,4vw,40px)", color:COLORS.heading, textAlign:"center", marginBottom:8, fontWeight:600, letterSpacing:"-0.01em" }}>{t.how_title}</h2>
+            <p style={{ fontSize:13, color:COLORS.muted, textAlign:"center", marginBottom:40, fontFamily:"'DM Sans',sans-serif" }}>60 seconds from upload to full report.</p>
             <div className="how-grid" style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(210px,1fr))", gap:12 }}>
               {[[t.how1t,t.how1b,"01"],[t.how2t,t.how2b,"02"],[t.how3t,t.how3b,"03"]].map(([title,body,n],i)=>{
                 const howIcons = [
@@ -1484,10 +1491,13 @@ export default function Contrivox() {
         </section>
 
         {/* TESTIMONIALS */}
-        <section style={{ padding:"72px 20px" }}>
+        <section style={{ padding:"60px 20px 80px" }}>
           <div style={{ maxWidth:900, margin:"0 auto" }}>
-            <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(26px,4vw,40px)", color:COLORS.heading, textAlign:"center", marginBottom:8, fontWeight:600 }}>{t.test_title}</h2>
-            <p style={{ fontSize:14, color:COLORS.muted, textAlign:"center", marginBottom:40, fontFamily:"'DM Sans',sans-serif" }}>What people found in their contracts.</p>
+            <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(26px,4vw,40px)", color:COLORS.heading, textAlign:"center", marginBottom:8, fontWeight:600, letterSpacing:"-0.01em" }}>{t.test_title}</h2>
+            <p style={{ fontSize:14, color:COLORS.muted, textAlign:"center", marginBottom:16, fontFamily:"'DM Sans',sans-serif" }}>What people found in their contracts.</p>
+            <p style={{ textAlign:"center", fontSize:12, color:COLORS.muted, fontFamily:"'DM Sans',sans-serif", marginBottom:28 }}>
+              <span style={{ color:"#f59e0b" }}>★★★★★</span>{" "}Rated 4.9 by our users
+            </p>
             <div className="test-grid" style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(250px,1fr))", gap:12 }}>
               {[
                 [t.t1n, t.t1r, t.t1t, "IP Assignment Clause"],
@@ -1512,24 +1522,24 @@ export default function Contrivox() {
         <section id="faq" style={{ padding:"72px 20px", background:"rgba(255,255,255,0.013)" }}>
           <div style={{ maxWidth:620, margin:"0 auto" }}>
             <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(26px,4vw,38px)", color:COLORS.heading, textAlign:"center", marginBottom:36, fontWeight:600 }}>{t.faq_title}</h2>
-            <FaqItem q={t.faq1q} a={t.faq1a} initialOpen={true}/>
-            <FaqItem q={t.faq4q} a={t.faq4a} initialOpen={true}/>
-            <FaqItem q={t.faq5q} a={t.faq5a} initialOpen={true}/>
-            <FaqItem q={t.faq3q} a={t.faq3a}/>
+            <FaqItem q={t.faq3q} a={t.faq3a} initialOpen={true}/>
+            <FaqItem q={t.faq4q} a={t.faq4a}/>
+            <FaqItem q={t.faq5q} a={t.faq5a}/>
             <FaqItem q={t.faq2q} a={t.faq2a}/>
             <FaqItem q={t.faq6q} a={t.faq6a}/>
+            <FaqItem q={t.faq1q} a={t.faq1a}/>
           </div>
         </section>
 
         {/* CTA */}
-        <section style={{ padding:"80px 20px", textAlign:"center", background:"rgba(99,102,241,0.05)", borderTop:"0.5px solid rgba(99,102,241,0.14)" }}>
+        <section style={{ padding:"96px 20px 80px", textAlign:"center", background:"rgba(99,102,241,0.05)", borderTop:"0.5px solid rgba(99,102,241,0.14)" }}>
           <div style={{ maxWidth:520, margin:"0 auto" }}>
             <ContrivoxLogo size={20}/>
-            <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(24px,4vw,40px)", color:COLORS.heading, margin:"20px 0 10px", lineHeight:1.15, fontWeight:600 }}>{t.cta_band}</h2>
+            <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(24px,4vw,40px)", color:COLORS.heading, margin:"20px 0 10px", lineHeight:1.15, fontWeight:600, letterSpacing:"-0.01em" }}>{t.cta_band}</h2>
             <p style={{ fontSize:14, color:COLORS.muted, marginBottom:10, lineHeight:1.7, fontFamily:"'DM Sans',sans-serif" }}>
               {t.cta_urgency}
             </p>
-            <button onClick={()=>{ Analytics.ctaClicked("cta_band"); document.getElementById("upload-sec")?.scrollIntoView({behavior:"smooth"}); }} className="nav-cta-btn analyse-cta" style={{ padding:"16px 40px", fontSize:15.5, fontWeight:700, background:COLORS.accentGrad, color:"white", border:"none", borderRadius:"var(--r-lg)", cursor:"pointer", fontFamily:"'DM Sans',sans-serif", boxShadow:"var(--shadow-accent)", animation:"glow 3s infinite", letterSpacing:"0.01em", minHeight:52, marginTop:10 }}>
+            <button onClick={()=>{ Analytics.ctaClicked("cta_band"); document.getElementById("upload-sec")?.scrollIntoView({behavior:"smooth"}); }} className="nav-cta-btn analyse-cta" style={{ padding:"16px 40px", fontSize:15.5, fontWeight:700, background:COLORS.accentGrad, color:"white", border:"none", borderRadius:"var(--r-cta)", cursor:"pointer", fontFamily:"'DM Sans',sans-serif", boxShadow:"var(--shadow-accent)", animation:"glow 3s infinite", letterSpacing:"0.01em", minHeight:52, marginTop:10 }}>
               Check My Contract — from $9
             </button>
             <p style={{ marginTop:12, fontSize:11.5, color:COLORS.faint, fontFamily:"'DM Sans',sans-serif" }}>{t.cta_trust}</p>

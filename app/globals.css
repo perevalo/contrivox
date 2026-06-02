@@ -31,8 +31,8 @@
   --sp-12: 48px; --sp-16: 64px; --sp-20: 80px; --sp-24: 96px;
 
   /* ── Border radius scale ────────────────────────────────────────────── */
-  --r-none: 0;    --r-xs: 3px;   --r-sm: 6px;   --r-md: 10px;
-  --r-lg: 14px;   --r-xl: 20px;  --r-2xl: 28px; --r-full: 9999px;
+  --r-none: 0;    --r-xs: 3px;   --r-sm: 6px;   --r-cta: 8px;
+  --r-md: 10px;   --r-lg: 14px;  --r-xl: 20px;  --r-2xl: 28px; --r-full: 9999px;
 
   /* ── Z-index scale ──────────────────────────────────────────────────── */
   --z-base:   1;
@@ -93,14 +93,14 @@
 :root,
 [data-theme="dark"] {
   /* ── Backgrounds / Surfaces ─────────────────────────────────────────── */
-  --cvx-bg:        #09090f;
-  --cvx-bg-subtle: #0d0d14;
+  --cvx-bg:        #0d0f12;
+  --cvx-bg-subtle: #111318;
   --cvx-surface:   rgba(255,255,255,0.05);
   --cvx-surface-2: rgba(255,255,255,0.08);
   --cvx-surface-3: rgba(255,255,255,0.12);
   --cvx-surface-4: rgba(255,255,255,0.17);
-  --cvx-nav:       rgba(9,9,15,0.92);
-  --cvx-modal:     #101018;
+  --cvx-nav:       rgba(13,15,18,0.92);
+  --cvx-modal:     #13151a;
   --cvx-overlay:   rgba(0,0,0,0.82);
 
   /* ── Brand ──────────────────────────────────────────────────────────── */
@@ -157,9 +157,9 @@
 
   /* ── Utility ─────────────────────────────────────────────────────────── */
   --cvx-paywall-grad: linear-gradient(to bottom,
-    rgba(9,9,15,0.00)  0%,
-    rgba(9,9,15,0.85) 20%,
-    rgba(9,9,15,1.00) 40%);
+    rgba(13,15,18,0.00)  0%,
+    rgba(13,15,18,0.85) 20%,
+    rgba(13,15,18,1.00) 40%);
 
   /* ── Upload widget ───────────────────────────────────────────────────── */
   --cvx-upload-label:         #CBD5E1;
