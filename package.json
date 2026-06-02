@@ -32,6 +32,7 @@
     "@supabase/supabase-js": "^2.43.4",
     "@upstash/ratelimit": "^1.2.1",
     "@upstash/redis": "^1.31.5",
+    "@vercel/analytics": "^2.0.1",
     "@vercel/functions": "^3.6.1",
     "gray-matter": "^4.0.3",
     "jspdf": "^4.2.1",
