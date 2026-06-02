@@ -318,20 +318,36 @@ const pushHistory = entry => {
 
 // ─── UI constants ─────────────────────────────────────────────────────────────
 const COLORS = {
-  bg:          "var(--cvx-bg)",
-  surface:     "var(--cvx-surface)",
-  border:      "var(--cvx-border)",
-  accent:      "var(--cvx-accent)",
-  accentGrad:  "var(--cvx-accent-grad)",
-  danger:      "var(--cvx-danger)",
-  text:        "var(--cvx-text)",
-  muted:       "var(--cvx-muted)",
-  faint:       "var(--cvx-faint)",
-  heading:     "var(--cvx-heading)",
-  nav:         "var(--cvx-nav)",
-  modal:       "var(--cvx-modal)",
-  overlay:     "var(--cvx-overlay)",
-  inputBg:     "var(--cvx-input-bg)",
+  bg:            "var(--cvx-bg)",
+  bgSubtle:      "var(--cvx-bg-subtle)",
+  surface:       "var(--cvx-surface)",
+  surface2:      "var(--cvx-surface-2)",
+  surface3:      "var(--cvx-surface-3)",
+  border:        "var(--cvx-border)",
+  borderStrong:  "var(--cvx-border-strong)",
+  borderFocus:   "var(--cvx-border-focus)",
+  accent:        "var(--cvx-accent)",
+  accentGrad:    "var(--cvx-accent-grad)",
+  accentLight:   "var(--cvx-accent-light)",
+  accentBorder:  "var(--cvx-accent-border)",
+  danger:        "var(--cvx-danger)",
+  dangerBg:      "var(--cvx-danger-bg)",
+  dangerBorder:  "var(--cvx-danger-border)",
+  warning:       "var(--cvx-warning)",
+  warningBg:     "var(--cvx-warning-bg)",
+  warningBorder: "var(--cvx-warning-border)",
+  success:       "var(--cvx-success)",
+  successBg:     "var(--cvx-success-bg)",
+  successBorder: "var(--cvx-success-border)",
+  text:          "var(--cvx-text)",
+  muted:         "var(--cvx-muted)",
+  faint:         "var(--cvx-faint)",
+  disabled:      "var(--cvx-disabled)",
+  heading:       "var(--cvx-heading)",
+  nav:           "var(--cvx-nav)",
+  modal:         "var(--cvx-modal)",
+  overlay:       "var(--cvx-overlay)",
+  inputBg:       "var(--cvx-input-bg)",
 };
 
 // ─── SVG Icons ────────────────────────────────────────────────────────────────
@@ -425,11 +441,12 @@ function ContrivoxLogo({ size=22 }) {
     >
       <defs>
         <linearGradient id="cvx-icon-g" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#7c3aed" />
+          <stop offset="0%"   stopColor="#9333ea" />
+          <stop offset="48%"  stopColor="#7c3aed" />
           <stop offset="100%" stopColor="#4f46e5" />
         </linearGradient>
-        <radialGradient id="cvx-icon-s" cx="30%" cy="25%" r="70%">
-          <stop offset="0%" stopColor="white" stopOpacity="0.15" />
+        <radialGradient id="cvx-icon-s" cx="28%" cy="22%" r="65%">
+          <stop offset="0%" stopColor="white" stopOpacity="0.22" />
           <stop offset="100%" stopColor="white" stopOpacity="0" />
         </radialGradient>
       </defs>
@@ -455,7 +472,7 @@ function ContrivoxLogo({ size=22 }) {
 // ─── Score ring ───────────────────────────────────────────────────────────────
 function ScoreRing({ score, label, t }) {
   const r=46, c=2*Math.PI*r, dash=(score/100)*c;
-  const col = score>=70?"#22c55e":score>=50?"#eab308":score>=30?"#f97316":"#ef4444";
+  const col = score>=85?"var(--cvx-score-fair)":score>=70?"var(--cvx-score-acceptable)":score>=50?"var(--cvx-score-concerning)":score>=30?"var(--cvx-score-unfair)":"var(--cvx-score-dangerous)";
   const translatedLabel = t.score_label_map?.[label] || label;
   return (
     <div style={{ display:"flex", flexDirection:"column", alignItems:"center", gap:7 }}>
@@ -474,31 +491,31 @@ function ScoreRing({ score, label, t }) {
 
 function Badge({ level, t }) {
   const m = {
-    high: { bg:"rgba(239,68,68,0.14)",   c:"#f87171", l:t.risk_high },
-    medium:{ bg:"rgba(234,179,8,0.13)",   c:"#fbbf24", l:t.risk_med  },
-    low:  { bg:"rgba(34,197,94,0.12)",    c:"#4ade80", l:t.risk_low  },
+    high:   { bg:"var(--cvx-danger-bg)",  c:"var(--cvx-danger)",  bd:"1px solid var(--cvx-danger-border)",  l:t.risk_high },
+    medium: { bg:"var(--cvx-warning-bg)", c:"var(--cvx-warning)", bd:"1px solid var(--cvx-warning-border)", l:t.risk_med  },
+    low:    { bg:"var(--cvx-success-bg)", c:"var(--cvx-success)", bd:"1px solid var(--cvx-success-border)", l:t.risk_low  },
   };
   const s = m[level]||m.low;
-  return <span style={{ background:s.bg, color:s.c, fontSize:10, fontWeight:700, padding:"2px 7px", borderRadius:20, letterSpacing:"0.05em", textTransform:"uppercase", fontFamily:"'DM Sans',sans-serif", whiteSpace:"nowrap" }}>{s.l}</span>;
+  return <span style={{ background:s.bg, color:s.c, border:s.bd, fontSize:10, fontWeight:700, padding:"3px 9px", borderRadius:"var(--r-full)", letterSpacing:"0.06em", textTransform:"uppercase", fontFamily:"'DM Sans',sans-serif", whiteSpace:"nowrap", flexShrink:0 }}>{s.l}</span>;
 }
 
 function ClauseCard({ clause, t }) {
   const [open, setOpen] = useState(false);
   return (
-    <div style={{ background:"rgba(255,255,255,0.035)", border:`0.5px solid ${COLORS.border}`, borderRadius:10, marginBottom:7, overflow:"hidden" }}>
-      <button onClick={()=>setOpen(o=>!o)} style={{ width:"100%", display:"flex", alignItems:"center", justifyContent:"space-between", padding:"11px 14px", cursor:"pointer", gap:9, background:"none", border:"none", textAlign:"left" }}>
-        <div style={{ display:"flex", alignItems:"center", gap:8, flex:1, minWidth:0 }}>
+    <div style={{ background:"var(--cvx-surface)", border:`1px solid var(--cvx-border)`, borderRadius:"var(--r-lg)", marginBottom:"var(--sp-2)", overflow:"hidden", transition:"background var(--dur-fast) var(--ease-standard), border-color var(--dur-fast) var(--ease-standard)" }}>
+      <button onClick={()=>setOpen(o=>!o)} style={{ width:"100%", display:"flex", alignItems:"center", justifyContent:"space-between", padding:"12px 15px", cursor:"pointer", gap:9, background:"none", border:"none", textAlign:"left" }}>
+        <div style={{ display:"flex", alignItems:"center", gap:9, flex:1, minWidth:0 }}>
           <Badge level={clause.risk_level} t={t}/>
-          <span style={{ fontSize:13, fontWeight:500, color:COLORS.text, fontFamily:"'DM Sans',sans-serif", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{clause.title}</span>
+          <span style={{ fontSize:13.5, fontWeight:500, color:COLORS.text, fontFamily:"'DM Sans',sans-serif", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{clause.title}</span>
         </div>
-        <span style={{ color:COLORS.faint, fontSize:18, flexShrink:0 }}>{open?"−":"+"}</span>
+        <span style={{ color:COLORS.faint, fontSize:16, flexShrink:0, transition:"transform var(--dur-fast) var(--ease-standard)", transform:open?"rotate(45deg)":"rotate(0)" }}>+</span>
       </button>
       {open && (
-        <div style={{ padding:"0 14px 13px", borderTop:`0.5px solid ${COLORS.faint}` }}>
-          <p style={{ margin:"10px 0 0", fontSize:13, lineHeight:1.72, color:COLORS.muted, fontFamily:"'DM Sans',sans-serif" }}>{clause.plain_english}</p>
+        <div style={{ padding:"0 15px 14px", borderTop:`1px solid var(--cvx-border)` }}>
+          <p style={{ margin:"11px 0 0", fontSize:13, lineHeight:1.75, color:COLORS.muted, fontFamily:"'DM Sans',sans-serif" }}>{clause.plain_english}</p>
           {clause.risk_note && (
-            <div style={{ marginTop:8, padding:"8px 11px", background:"rgba(239,68,68,0.07)", borderLeft:"2px solid rgba(239,68,68,0.35)", borderRadius:"0 6px 6px 0" }}>
-              <p style={{ margin:0, fontSize:12, color:"#f87171", fontFamily:"'DM Sans',sans-serif" }}>{clause.risk_note}</p>
+            <div style={{ marginTop:10, padding:"9px 12px", background:"var(--cvx-danger-bg)", borderLeft:"3px solid var(--cvx-danger-border)", borderRadius:"0 var(--r-sm) var(--r-sm) 0" }}>
+              <p style={{ margin:0, fontSize:12.5, color:"var(--cvx-danger)", fontFamily:"'DM Sans',sans-serif" }}>{clause.risk_note}</p>
             </div>
           )}
         </div>
@@ -510,23 +527,23 @@ function ClauseCard({ clause, t }) {
 function FlagCard({ flag, t }) {
   const [show, setShow] = useState(false);
   return (
-    <div style={{ background:"rgba(239,68,68,0.04)", border:"0.5px solid rgba(239,68,68,0.16)", borderRadius:10, padding:"13px 14px", marginBottom:7 }}>
-      <p style={{ margin:"0 0 5px", fontSize:13, fontWeight:600, color:COLORS.text, fontFamily:"'DM Sans',sans-serif" }}>{flag.issue}</p>
-      <p style={{ margin:0, fontSize:12.5, color:COLORS.muted, lineHeight:1.68, fontFamily:"'DM Sans',sans-serif" }}>{flag.why_it_matters}</p>
+    <div style={{ background:"var(--cvx-danger-bg)", border:"1px solid var(--cvx-danger-border)", borderRadius:"var(--r-lg)", padding:"var(--sp-4) var(--sp-5)", marginBottom:"var(--sp-2)" }}>
+      <p style={{ margin:"0 0 6px", fontSize:13.5, fontWeight:600, color:COLORS.text, fontFamily:"'DM Sans',sans-serif" }}>{flag.issue}</p>
+      <p style={{ margin:0, fontSize:13, color:COLORS.muted, lineHeight:1.70, fontFamily:"'DM Sans',sans-serif" }}>{flag.why_it_matters}</p>
       {flag.challengeable ? (
         <>
-          <button onClick={()=>{ const next=!show; setShow(next); if(next) Analytics.challengeViewed(flag.issue); }} style={{ marginTop:10, padding:"5px 12px", fontSize:11, fontWeight:700, background:show?"rgba(99,102,241,0.22)":"rgba(99,102,241,0.1)", color:"#a5b4fc", border:"0.5px solid rgba(99,102,241,0.22)", borderRadius:7, cursor:"pointer", fontFamily:"'DM Sans',sans-serif", transition:"all .15s" }}>
+          <button onClick={()=>{ const next=!show; setShow(next); if(next) Analytics.challengeViewed(flag.issue); }} style={{ marginTop:11, padding:"6px 14px", fontSize:11.5, fontWeight:700, background:show?"var(--cvx-accent-light)":"rgba(99,102,241,0.08)", color:"var(--cvx-accent)", border:`1px solid var(--cvx-accent-border)`, borderRadius:"var(--r-sm)", cursor:"pointer", fontFamily:"'DM Sans',sans-serif", transition:"background var(--dur-fast) var(--ease-standard)" }}>
             {show ? t.challenge_hide : t.challenge_btn}
           </button>
           {show && (
-            <div style={{ marginTop:9, padding:"11px 13px", background:"rgba(99,102,241,0.08)", border:"0.5px solid rgba(99,102,241,0.18)", borderRadius:9 }}>
-              <p style={{ margin:"0 0 5px", fontSize:10, fontWeight:700, color:"#818cf8", letterSpacing:"0.09em", textTransform:"uppercase", fontFamily:"'DM Sans',sans-serif" }}>{t.suggested}</p>
-              <p style={{ margin:0, fontSize:12.5, color:"rgba(200,190,255,0.85)", lineHeight:1.68, fontFamily:"'DM Sans',sans-serif" }}>{flag.challenge}</p>
+            <div style={{ marginTop:10, padding:"12px 14px", background:"var(--cvx-accent-light)", border:`1px solid var(--cvx-accent-border)`, borderRadius:"var(--r-md)" }}>
+              <p style={{ margin:"0 0 6px", fontSize:10, fontWeight:700, color:"var(--cvx-accent)", letterSpacing:"0.09em", textTransform:"uppercase", fontFamily:"'DM Sans',sans-serif" }}>{t.suggested}</p>
+              <p style={{ margin:0, fontSize:13, color:"var(--cvx-rec-text)", lineHeight:1.70, fontFamily:"'DM Sans',sans-serif", fontStyle:"italic" }}>{flag.challenge}</p>
             </div>
           )}
         </>
       ) : (
-        <span style={{ display:"inline-block", marginTop:8, fontSize:10, color:COLORS.faint, fontFamily:"'DM Sans',sans-serif" }}>{t.not_negotiable}</span>
+        <span style={{ display:"inline-block", marginTop:9, fontSize:11, color:COLORS.faint, fontFamily:"'DM Sans',sans-serif" }}>{t.not_negotiable}</span>
       )}
     </div>
   );
@@ -1066,13 +1083,21 @@ export default function Contrivox() {
         @keyframes spin{to{transform:rotate(360deg);}}
         @keyframes fadeUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
         @keyframes pulse{0%,100%{opacity:0.4}50%{opacity:1}}
-        @keyframes glow{0%,100%{box-shadow:0 0 20px rgba(139,92,246,0.2)}50%{box-shadow:0 0 35px rgba(139,92,246,0.45)}}
-        .fear-card{transition:border-color .2s,transform .2s;}
-        .fear-card:hover{border-color:rgba(239,68,68,0.32)!important;transform:translateY(-2px);}
-        .how-card{transition:background .2s,transform .2s;}
-        .how-card:hover{background:var(--cvx-surface)!important;transform:translateY(-2px);}
-        .nav-link{transition:color .15s;}
+        @keyframes glow{0%,100%{box-shadow:var(--shadow-accent)}50%{box-shadow:var(--shadow-accent-lg)}}
+        .fear-card{transition:border-color var(--dur-base) var(--ease-standard),transform var(--dur-base) var(--ease-standard),box-shadow var(--dur-base) var(--ease-standard);}
+        .fear-card:hover{border-color:var(--cvx-danger-border)!important;transform:translateY(-2px);box-shadow:var(--shadow-md);}
+        .how-card{transition:background var(--dur-base) var(--ease-standard),transform var(--dur-base) var(--ease-standard),box-shadow var(--dur-base) var(--ease-standard);}
+        .how-card:hover{background:var(--cvx-surface-2)!important;transform:translateY(-2px);box-shadow:var(--shadow-md);}
+        .testimonial-card{transition:border-color var(--dur-base) var(--ease-standard),transform var(--dur-base) var(--ease-standard),box-shadow var(--dur-base) var(--ease-standard);}
+        .testimonial-card:hover{border-color:var(--cvx-accent-border)!important;transform:translateY(-2px);box-shadow:var(--shadow-md);}
+        .nav-link{transition:color var(--dur-fast) var(--ease-standard);}
         .nav-link:hover{color:var(--cvx-heading)!important;}
+        .nav-cta-btn{transition:box-shadow var(--dur-fast) var(--ease-standard),transform var(--dur-fast) var(--ease-standard);}
+        .nav-cta-btn:hover{box-shadow:var(--shadow-accent-lg)!important;transform:translateY(-1px);}
+        .analyse-cta:hover:not(:disabled){box-shadow:var(--shadow-accent-lg)!important;transform:translateY(-1px);}
+        .analyse-cta{transition:box-shadow var(--dur-base) var(--ease-standard),transform var(--dur-base) var(--ease-standard);}
+        .trust-pill{transition:background var(--dur-fast),border-color var(--dur-fast);}
+        .trust-pill:hover{background:var(--cvx-surface-2)!important;border-color:var(--cvx-border-strong)!important;}
       `}</style>
 
       {showAuth && <AuthModal t={t} onClose={()=>setShowAuth(false)} onAuth={acc=>{ setAccount(acc); Analytics.signUpCompleted(acc.email); }}/>}
@@ -1099,7 +1124,7 @@ export default function Contrivox() {
               ) : (
                 <>
                   <button onClick={()=>{ Analytics.signInClicked(); setShowAuth(true); }} className="nav-link sign-in-link" style={{ padding:"6px 8px", fontSize:14, fontWeight:400, background:"none", color:COLORS.muted, border:"none", cursor:"pointer" }}>{t.nav_signin}</button>
-                  <button onClick={scrollToUpload} style={{ padding:"7px 16px", fontSize:12.5, fontWeight:700, background:COLORS.accentGrad, color:"white", border:"none", borderRadius:8, cursor:"pointer", animation:"glow 3s infinite", letterSpacing:"0.01em", minHeight:36 }}>{t.nav_cta}</button>
+                  <button onClick={scrollToUpload} className="nav-cta-btn" style={{ padding:"7px 16px", fontSize:12.5, fontWeight:700, background:COLORS.accentGrad, color:"white", border:"none", borderRadius:"var(--r-md)", cursor:"pointer", animation:"glow 3s infinite", letterSpacing:"0.01em", minHeight:36, boxShadow:"var(--shadow-accent)" }}>{t.nav_cta}</button>
                 </>
               )}
             </div>
@@ -1165,7 +1190,7 @@ export default function Contrivox() {
             <p style={{ fontSize:11, color:COLORS.faint, textAlign:"center", letterSpacing:"0.07em", textTransform:"uppercase", fontFamily:"'DM Sans',sans-serif", marginBottom:16 }}>{t.trust_label}</p>
             <div style={{ display:"flex", flexWrap:"wrap", justifyContent:"center", gap:"8px 14px" }}>
               {t.trust_items.map((item,i)=>(
-                <span key={i} style={{ fontSize:12, color:COLORS.muted, fontFamily:"'DM Sans',sans-serif", padding:"5px 14px", background:COLORS.surface, border:`0.5px solid ${COLORS.border}`, borderRadius:20 }}>{item}</span>
+                <span key={i} className="trust-pill" style={{ fontSize:12, color:COLORS.muted, fontFamily:"'DM Sans',sans-serif", padding:"5px 14px", background:COLORS.surface, border:`1px solid var(--cvx-border)`, borderRadius:"var(--r-full)" }}>{item}</span>
               ))}
             </div>
           </div>
@@ -1260,7 +1285,7 @@ export default function Contrivox() {
                   tabIndex={0}
                   onKeyDown={e=>e.key==="Enter"&&fileRef.current.click()}
                   aria-label={t.upload_drop}
-                  style={{ border:`1.5px dashed ${dragging?"rgba(139,92,246,0.7)":COLORS.faint}`, borderRadius:13, padding:"36px 20px", textAlign:"center", cursor:"pointer", background:dragging?"rgba(139,92,246,0.05)":"rgba(255,255,255,0.015)", transition:"all .2s", marginBottom:18, WebkitTapHighlightColor:"transparent", touchAction:"manipulation", userSelect:"none" }}
+                  style={{ border:`2px ${dragging?"solid":"dashed"} ${dragging?"var(--cvx-accent)":"var(--cvx-border)"}`, borderRadius:"var(--r-xl)", padding:"var(--sp-12) var(--sp-6)", textAlign:"center", cursor:"pointer", background:dragging?"var(--cvx-accent-light)":"rgba(255,255,255,0.015)", transition:"all var(--dur-base) var(--ease-standard)", marginBottom:18, WebkitTapHighlightColor:"transparent", touchAction:"manipulation", userSelect:"none", boxShadow:dragging?"var(--shadow-accent)":"none" }}
                 >
                   <div style={{ width:52, height:52, borderRadius:13, background:"rgba(139,92,246,0.12)", border:"0.5px solid rgba(139,92,246,0.25)", display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 13px" }}>
                     <IconFileDoc size={24} color="rgba(167,139,250,0.85)"/>
@@ -1282,7 +1307,8 @@ export default function Contrivox() {
               <button
                 onClick={analyse}
                 disabled={loading}
-                style={{ width:"100%", padding:"16px", fontSize:15, fontWeight:700, borderRadius:12, border:file&&!loading?"1.5px solid transparent":"1.5px solid var(--cvx-upload-cta-idle-bd)", cursor:loading?"wait":"pointer", background:file&&!loading?COLORS.accentGrad:"var(--cvx-upload-cta-idle-bg)", color:file&&!loading?"white":"var(--cvx-upload-cta-idle-text)", transition:"all .25s ease", letterSpacing:"0.02em", touchAction:"manipulation", WebkitTapHighlightColor:"transparent", minHeight:52, boxShadow:file&&!loading?"0 4px 24px rgba(99,102,241,0.40)":"none" }}
+                className="analyse-cta"
+                style={{ width:"100%", padding:"16px", fontSize:15, fontWeight:700, borderRadius:"var(--r-lg)", border:file&&!loading?"1.5px solid transparent":"1.5px solid var(--cvx-upload-cta-idle-bd)", cursor:loading?"wait":"pointer", background:file&&!loading?COLORS.accentGrad:"var(--cvx-upload-cta-idle-bg)", color:file&&!loading?"white":"var(--cvx-upload-cta-idle-text)", letterSpacing:"0.02em", touchAction:"manipulation", WebkitTapHighlightColor:"transparent", minHeight:52, boxShadow:file&&!loading?"var(--shadow-accent)":"none" }}
               >
                 {loading ? (
                   <span style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:10 }}>
@@ -1468,7 +1494,7 @@ export default function Contrivox() {
                 [t.t2n, t.t2r, t.t2t, "Non-Compete Clause"],
                 [t.t3n, t.t3r, t.t3t, "Auto-Renewal Clause"],
               ].map(([name, role, text, badge], i) => (
-                <div key={i} style={{ background:COLORS.surface, border:`0.5px solid ${COLORS.border}`, borderRadius:14, padding:"20px 18px", display:"flex", flexDirection:"column" }}>
+                <div key={i} className="testimonial-card" style={{ background:COLORS.surface, border:`1px solid var(--cvx-border)`, borderRadius:"var(--r-lg)", padding:"20px 18px", display:"flex", flexDirection:"column" }}>
                   <span style={{ display:"inline-block", alignSelf:"flex-start", marginBottom:12, padding:"3px 10px", fontSize:10, fontWeight:700, letterSpacing:"0.07em", textTransform:"uppercase", color:"var(--cvx-accent)", background:"rgba(124,58,237,0.12)", border:"1px solid rgba(124,58,237,0.30)", borderRadius:20, fontFamily:"'DM Sans',sans-serif" }}>{badge}</span>
                   <div style={{ marginBottom:12, color:"#f59e0b", fontSize:12, letterSpacing:"2px" }}>★★★★★</div>
                   <p style={{ fontSize:13, color:COLORS.text, lineHeight:1.74, marginBottom:16, fontStyle:"italic", fontFamily:"'DM Sans',sans-serif", flex:1 }}>"{text}"</p>
@@ -1503,7 +1529,7 @@ export default function Contrivox() {
             <p style={{ fontSize:14, color:COLORS.muted, marginBottom:10, lineHeight:1.7, fontFamily:"'DM Sans',sans-serif" }}>
               {t.cta_urgency}
             </p>
-            <button onClick={()=>{ Analytics.ctaClicked("cta_band"); document.getElementById("upload-sec")?.scrollIntoView({behavior:"smooth"}); }} style={{ padding:"16px 40px", fontSize:15.5, fontWeight:700, background:COLORS.accentGrad, color:"white", border:"none", borderRadius:12, cursor:"pointer", fontFamily:"'DM Sans',sans-serif", boxShadow:"0 5px 30px rgba(99,102,241,0.38)", animation:"glow 3s infinite", letterSpacing:"0.01em", minHeight:52, marginTop:10 }}>
+            <button onClick={()=>{ Analytics.ctaClicked("cta_band"); document.getElementById("upload-sec")?.scrollIntoView({behavior:"smooth"}); }} className="nav-cta-btn analyse-cta" style={{ padding:"16px 40px", fontSize:15.5, fontWeight:700, background:COLORS.accentGrad, color:"white", border:"none", borderRadius:"var(--r-lg)", cursor:"pointer", fontFamily:"'DM Sans',sans-serif", boxShadow:"var(--shadow-accent)", animation:"glow 3s infinite", letterSpacing:"0.01em", minHeight:52, marginTop:10 }}>
               Check My Contract — from $9
             </button>
             <p style={{ marginTop:12, fontSize:11.5, color:COLORS.faint, fontFamily:"'DM Sans',sans-serif" }}>{t.cta_trust}</p>

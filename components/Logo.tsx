@@ -18,11 +18,12 @@ export function Logo({ height = 28, className }: LogoProps) {
     >
       <defs>
         <linearGradient id="cvx-icon-g" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#7c3aed" />
+          <stop offset="0%"   stopColor="#9333ea" />
+          <stop offset="48%"  stopColor="#7c3aed" />
           <stop offset="100%" stopColor="#4f46e5" />
         </linearGradient>
-        <radialGradient id="cvx-icon-s" cx="30%" cy="25%" r="70%">
-          <stop offset="0%" stopColor="white" stopOpacity={0.15} />
+        <radialGradient id="cvx-icon-s" cx="28%" cy="22%" r="65%">
+          <stop offset="0%" stopColor="white" stopOpacity={0.22} />
           <stop offset="100%" stopColor="white" stopOpacity={0} />
         </radialGradient>
       </defs>

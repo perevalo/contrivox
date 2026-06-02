@@ -18,14 +18,13 @@ const MESSAGES = [
 const TIMEOUT_MS = 240_000;
 const SLOW_MS    = 90_000;
 
-// Dark-theme colour tokens
 const C = {
-  bg:      "#07070f",
-  surface: "rgba(255,255,255,0.035)",
-  border:  "rgba(255,255,255,0.09)",
-  text:    "rgba(255,255,255,0.82)",
-  muted:   "rgba(255,255,255,0.48)",
-  heading: "#ffffff",
+  bg:      "var(--cvx-bg)",
+  surface: "var(--cvx-surface)",
+  border:  "var(--cvx-border)",
+  text:    "var(--cvx-text)",
+  muted:   "var(--cvx-muted)",
+  heading: "var(--cvx-heading)",
 };
 
 const SCORE_COLORS: Record<string, string> = {
@@ -175,8 +174,8 @@ function ScoreRing({ score, label }: { score: number; label: string }) {
             strokeDashoffset={circ / 4}
             strokeLinecap="round"
           />
-          <text x={100} y={90} textAnchor="middle" fill="white" fontSize={52} fontWeight={800} fontFamily={FONT}>{score}</text>
-          <text x={100} y={114} textAnchor="middle" fill="rgba(255,255,255,0.38)" fontSize={14} fontFamily={FONT}>/100</text>
+          <text x={100} y={90} textAnchor="middle" fill="var(--cvx-heading)" fontSize={52} fontWeight={800} fontFamily={FONT_SERIF}>{score}</text>
+          <text x={100} y={114} textAnchor="middle" fill="var(--cvx-muted)" fontSize={14} fontFamily={FONT}>/100</text>
         </svg>
       </div>
       <div style={{
@@ -207,7 +206,7 @@ function RiskBadge({ level }: { level: "high" | "medium" | "low" }) {
 const SH = (label: string, accent = "#7c3aed") => ({
   display: "flex" as const, alignItems: "center" as const, gap: 10,
   fontSize: 12, fontWeight: 700, letterSpacing: "0.09em",
-  textTransform: "uppercase" as const, color: "rgba(255,255,255,0.45)",
+  textTransform: "uppercase" as const, color: "var(--cvx-muted)",
   margin: "0 0 20px", fontFamily: FONT,
   paddingBottom: 14, borderBottom: `1px solid ${C.border}`,
 });
@@ -648,8 +647,7 @@ export default function SuccessContent() {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap');
         *{box-sizing:border-box;margin:0;padding:0;}
-        body{background:#07070f;font-family:'DM Sans',sans-serif;}
-        :root{--cvx-heading:#ffffff;}
+        body{font-family:'DM Sans',sans-serif;}
         @keyframes spin{to{transform:rotate(360deg);}}
         @keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
         @keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
@@ -762,7 +760,15 @@ export default function SuccessContent() {
                   style={{ animation: "spin 1.4s linear infinite", transformOrigin: "center" }}
                   transform="rotate(-90 50 50)"/>
               </svg>
-              <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 28 }}>📋</div>
+              <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                  <polyline points="14 2 14 8 20 8"/>
+                  <line x1="16" y1="13" x2="8" y2="13"/>
+                  <line x1="16" y1="17" x2="8" y2="17"/>
+                  <polyline points="10 9 9 9 8 9"/>
+                </svg>
+              </div>
             </div>
 
             <h1 style={{ fontFamily: FONT_SERIF, fontSize: "clamp(22px,4vw,32px)", color: "white", marginBottom: 12, lineHeight: 1.2 }}>

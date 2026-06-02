@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 export function ThemeToggle() {
   const { isDark, toggle } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const [hovered, setHovered] = useState(false);
   useEffect(() => setMounted(true), []);
 
   return (
@@ -12,21 +13,24 @@ export function ThemeToggle() {
       onClick={toggle}
       aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
       title={isDark ? "Light mode" : "Dark mode"}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
       style={{
-        background: "none",
-        border: "0.5px solid var(--cvx-border)",
-        borderRadius: 8,
+        background: hovered ? "var(--cvx-surface-2)" : "none",
+        border: `1px solid ${hovered ? "var(--cvx-border-strong)" : "var(--cvx-border)"}`,
+        borderRadius: "var(--r-sm)",
         cursor: "pointer",
-        padding: "5px 8px",
-        fontSize: 15,
+        padding: "7px 10px",
         lineHeight: 1,
-        color: "var(--cvx-muted)",
+        color: hovered ? "var(--cvx-text)" : "var(--cvx-muted)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        transition: "all .15s",
+        transition: "background var(--dur-fast) var(--ease-standard), border-color var(--dur-fast) var(--ease-standard), color var(--dur-fast) var(--ease-standard)",
         WebkitTapHighlightColor: "transparent",
         opacity: mounted ? 1 : 0,
+        minHeight: 36,
+        minWidth: 36,
       }}
     >
       {isDark ? (
