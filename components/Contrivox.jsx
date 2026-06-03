@@ -632,14 +632,14 @@ function PreviewCard({ preview, onUnlock, unlockLoading, t, detection, onConfirm
           </div>
 
           {showPicker && !jurisdictionConfirmed && (
-            <div style={{ padding:"0 22px 14px", background:"rgba(167,139,250,0.03)" }}>
+            <div style={{ padding:"0 22px 14px", background:COLORS.surface2 }}>
               <p style={{ fontSize:11, color:COLORS.muted, fontFamily:"'DM Sans',sans-serif", margin:"0 0 8px" }}>
                 Select the jurisdiction that governs this contract:
               </p>
               <select
                 value={pickerCode}
                 onChange={e => setPickerCode(e.target.value)}
-                style={{ width:"100%", background:"rgba(255,255,255,0.06)", border:`0.5px solid ${COLORS.border}`, borderRadius:8, color:COLORS.heading, fontFamily:"'DM Sans',sans-serif", fontSize:13, padding:"8px 10px", marginBottom:10, outline:"none" }}
+                style={{ width:"100%", background:"var(--cvx-select-bg)", border:`0.5px solid ${COLORS.borderStrong}`, borderRadius:8, color:COLORS.heading, fontFamily:"'DM Sans',sans-serif", fontSize:13, padding:"8px 10px", marginBottom:10, outline:"none" }}
               >
                 {JURISDICTION_DISPLAY_LIST.map(group => (
                   <optgroup key={group.group} label={group.group}>

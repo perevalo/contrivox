@@ -268,7 +268,7 @@ body {
 }
 ::-webkit-scrollbar-thumb:hover { background: var(--cvx-scrollbar-hover); }
 
-select option { background: var(--cvx-select-bg); color: var(--cvx-heading); }
+select, select option, select optgroup { background: var(--cvx-select-bg); color: var(--cvx-heading); }
 
 input::placeholder { color: var(--cvx-placeholder); }
 
