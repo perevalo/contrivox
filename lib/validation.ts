@@ -52,6 +52,11 @@ export const contractCreateSchema = z.object({
   fileName:  z.string().max(500),
 });
 
+export const confirmJurisdictionSchema = z.object({
+  sessionId:        z.string().uuid(),
+  jurisdictionCode: z.string().max(20),
+});
+
 export const sendReportInputSchema = z.object({
   email:      z.string().email().max(320),
   whatsapp:   z.string().max(20).optional(),

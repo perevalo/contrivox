@@ -151,7 +151,7 @@ async function triggerRealAnalysis(contractSessionId: string, customerEmail: str
     .update({ status: "processing" })
     .eq("session_id", contractSessionId)
     .in("status", ["pending"])
-    .select("session_id, file_type, file_storage_path, file_text, media_type")
+    .select("session_id, file_type, file_storage_path, file_text, media_type, jurisdiction_code")
     .maybeSingle();
 
   if (fetchError) {
@@ -198,7 +198,7 @@ async function triggerRealAnalysis(contractSessionId: string, customerEmail: str
   // Run Claude analysis
   let analysis;
   try {
-    analysis = await analyseContract(payload);
+    analysis = await analyseContract(payload, contract.jurisdiction_code ?? "US-federal");
   } catch (e) {
     console.error("[analysis] Claude error for:", contractSessionId, e);
     await supabase

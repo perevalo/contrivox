@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Analytics } from "@/lib/analytics";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { JURISDICTION_DISPLAY_LIST } from "@/lib/jurisdiction";
 
 // ─── TRANSLATIONS ─────────────────────────────────────────────────────────────
 const T = {
@@ -550,7 +551,7 @@ function FlagCard({ flag, t }) {
 }
 
 // ─── Preview card (shown after upload, before payment) ────────────────────────
-function PreviewCard({ preview, onUnlock, unlockLoading, t }) {
+function PreviewCard({ preview, onUnlock, unlockLoading, t, detection, onConfirmJurisdiction, confirmingJurisdiction, jurisdictionConfirmed }) {
   const isZeroFindings = preview.high_risk_count === 0 && preview.flagged_count === 0;
   const totalIssues = (preview.high_risk_count || 0) + (preview.flagged_count || 0);
 
@@ -579,6 +580,11 @@ function PreviewCard({ preview, onUnlock, unlockLoading, t }) {
     return () => clearInterval(iv);
   }, []);
 
+  const [showPicker, setShowPicker]         = useState(false);
+  const [pickerCode, setPickerCode]         = useState(detection?.jurisdictionCode ?? "US-federal");
+
+  const isLowConfidence = detection && detection.confidence < 0.6 && !jurisdictionConfirmed;
+
   const blurText = { fontSize:13, color:COLORS.muted, fontFamily:"'DM Sans',sans-serif", filter:"blur(3.5px)", userSelect:"none", lineHeight:1.6, margin:0, pointerEvents:"none" };
   const fadeOverlay = { position:"absolute", bottom:0, left:0, right:0, height:"65%", background:"linear-gradient(to bottom, transparent, var(--cvx-bg))", pointerEvents:"none" };
   const lockBadge = (
@@ -603,6 +609,57 @@ function PreviewCard({ preview, onUnlock, unlockLoading, t }) {
           </p>
         </div>
       </div>
+
+      {/* Jurisdiction detection row */}
+      {detection && (
+        <div style={{ borderBottom:`0.5px solid ${COLORS.border}` }}>
+          <div style={{ padding:"10px 22px", display:"flex", alignItems:"center", justifyContent:"space-between", gap:10, flexWrap:"wrap" }}>
+            <div style={{ display:"flex", alignItems:"center", gap:8, flexWrap:"wrap" }}>
+              <span style={{ fontSize:10, fontWeight:700, color:"rgba(167,139,250,0.6)", letterSpacing:"0.1em", textTransform:"uppercase", fontFamily:"'DM Sans',sans-serif", flexShrink:0 }}>Jurisdiction</span>
+              <span style={{ fontSize:12, fontWeight:600, color:COLORS.heading, fontFamily:"'DM Sans',sans-serif", background:"rgba(167,139,250,0.1)", border:"0.5px solid rgba(167,139,250,0.25)", borderRadius:20, padding:"2px 10px" }}>
+                {detection.jurisdictionName}
+              </span>
+              {jurisdictionConfirmed
+                ? <span style={{ fontSize:10, color:"#4ade80", fontFamily:"'DM Sans',sans-serif" }}>✓ confirmed</span>
+                : isLowConfidence && <span style={{ fontSize:10, color:"#f59e0b", fontFamily:"'DM Sans',sans-serif" }}>· low confidence</span>
+              }
+            </div>
+            {!jurisdictionConfirmed && (
+              <button onClick={() => setShowPicker(p => !p)} style={{ fontSize:11, color:COLORS.muted, fontFamily:"'DM Sans',sans-serif", background:"none", border:"none", cursor:"pointer", padding:0, textDecoration:"underline", flexShrink:0 }}>
+                {isLowConfidence ? "Confirm or correct →" : "Change →"}
+              </button>
+            )}
+          </div>
+
+          {showPicker && !jurisdictionConfirmed && (
+            <div style={{ padding:"0 22px 14px", background:"rgba(167,139,250,0.03)" }}>
+              <p style={{ fontSize:11, color:COLORS.muted, fontFamily:"'DM Sans',sans-serif", margin:"0 0 8px" }}>
+                Select the jurisdiction that governs this contract:
+              </p>
+              <select
+                value={pickerCode}
+                onChange={e => setPickerCode(e.target.value)}
+                style={{ width:"100%", background:"rgba(255,255,255,0.06)", border:`0.5px solid ${COLORS.border}`, borderRadius:8, color:COLORS.heading, fontFamily:"'DM Sans',sans-serif", fontSize:13, padding:"8px 10px", marginBottom:10, outline:"none" }}
+              >
+                {JURISDICTION_DISPLAY_LIST.map(group => (
+                  <optgroup key={group.group} label={group.group}>
+                    {group.items.map(item => (
+                      <option key={item.code} value={item.code}>{item.label}</option>
+                    ))}
+                  </optgroup>
+                ))}
+              </select>
+              <button
+                onClick={() => { onConfirmJurisdiction(pickerCode); setShowPicker(false); }}
+                disabled={confirmingJurisdiction}
+                style={{ fontSize:12, fontWeight:600, color:"#1a1a2e", background:"linear-gradient(135deg,#a78bfa,#8b5cf6)", border:"none", borderRadius:8, padding:"7px 18px", cursor:"pointer", fontFamily:"'DM Sans',sans-serif", opacity:confirmingJurisdiction ? 0.6 : 1 }}
+              >
+                {confirmingJurisdiction ? "Saving…" : "Confirm Jurisdiction"}
+              </button>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Counts */}
       <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", borderBottom:`0.5px solid ${COLORS.border}` }}>
@@ -914,7 +971,10 @@ export default function Contrivox() {
   const [showAuth, setShowAuth]           = useState(false);
   const [showHist, setShowHist]           = useState(false);
   const [sessionId, setSessionId]         = useState(null);
-  const [unlockLoading, setUnlockLoading] = useState(null); // null | "basic" | "pro"
+  const [unlockLoading, setUnlockLoading]         = useState(null); // null | "basic" | "pro"
+  const [detection, setDetection]                 = useState(null);
+  const [jurisdictionConfirmed, setJurisdictionConfirmed] = useState(false);
+  const [confirmingJurisdiction, setConfirmingJurisdiction] = useState(false);
   const [dropHover, setDropHover]         = useState(false);
   const [barWidths, setBarWidths]         = useState([0, 0, 0]);
   const [navScrolled, setNavScrolled]     = useState(false);
@@ -959,6 +1019,7 @@ export default function Contrivox() {
   const analyse = async () => {
     if (!file) return;
     setLoading(true); setError(null); setPreview(null); setResult(null); setPdfUri(null); setSessionId(null);
+    setDetection(null); setJurisdictionConfirmed(false);
 
     const loadStart = Date.now();
     const loadTimers = [];
@@ -989,7 +1050,7 @@ export default function Contrivox() {
         throw new Error(body.error || `Server error ${res.status}`);
       }
 
-      const { sessionId: sid, preview: prev } = await res.json();
+      const { sessionId: sid, preview: prev, detection: det } = await res.json();
 
       // Hold on the last loading message until at least 4.5 s have elapsed
       const elapsed = Date.now() - loadStart;
@@ -1003,6 +1064,7 @@ export default function Contrivox() {
 
       setSessionId(sid);
       setPreview(prev);
+      setDetection(det ?? null);
 
       // Detect type for risk stats
       const typeStr = (prev?.contract_type ?? "").toLowerCase();
@@ -1029,6 +1091,24 @@ export default function Contrivox() {
     } finally {
       loadTimers.forEach(clearTimeout);
       setLoading(false);
+    }
+  };
+
+  const handleConfirmJurisdiction = async (code) => {
+    if (!sessionId || confirmingJurisdiction) return;
+    setConfirmingJurisdiction(true);
+    try {
+      await fetch("/api/contract/confirm-jurisdiction", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sessionId, jurisdictionCode: code }),
+      });
+      setDetection(prev => prev ? { ...prev, jurisdictionCode: code, jurisdictionName: JURISDICTION_DISPLAY_LIST.flatMap(g => g.items).find(i => i.code === code)?.label ?? code, confidence: 1 } : prev);
+      setJurisdictionConfirmed(true);
+    } catch {
+      // non-fatal — analysis still works with auto-detected value
+    } finally {
+      setConfirmingJurisdiction(false);
     }
   };
 
@@ -1357,7 +1437,7 @@ export default function Contrivox() {
         {preview && !result && (
           <section ref={resultsRef} style={{ padding:"0 20px 80px", animation:"fadeUp .5s ease" }}>
             <div style={{ maxWidth:660, margin:"0 auto" }}>
-              <PreviewCard preview={preview} onUnlock={handleUnlock} unlockLoading={unlockLoading} t={t}/>
+              <PreviewCard preview={preview} onUnlock={handleUnlock} unlockLoading={unlockLoading} t={t} detection={detection} onConfirmJurisdiction={handleConfirmJurisdiction} confirmingJurisdiction={confirmingJurisdiction} jurisdictionConfirmed={jurisdictionConfirmed}/>
             </div>
           </section>
         )}

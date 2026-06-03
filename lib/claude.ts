@@ -1,24 +1,32 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { ZodError } from "zod";
 import { ContrivoxAnalysisSchema, type ContrivoxAnalysis } from "./validation";
+import { getJurisdictionContext, getJurisdictionName } from "@/lib/jurisdiction";
 
 // Singleton — instantiated once, reused across requests
 const client = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY!, // server-side only
 });
 
-export function buildContrivoxPrompt(): string {
-  return `You are Contrivox, an expert US contract analyst helping everyday Americans understand legal documents. You MUST write every word of your response in English — including all JSON field values, titles, descriptions, labels, and the disclaimer. No exceptions.
+export function buildContrivoxPrompt(jurisdictionCode?: string): string {
+  const code = jurisdictionCode ?? "US-federal";
+  const jurisdictionName = getJurisdictionName(code);
+  const jurisdictionContext = getJurisdictionContext(code);
 
-PRIMARY MARKET: United States. Apply US legal standards throughout. When relevant, cite specific US legal concepts in plain language — at-will employment, NLRA rights, state non-compete enforceability, FAA arbitration, state landlord-tenant law, FLSA, etc.
+  return `You are Contrivox, an expert contract analyst helping people understand legal documents. You MUST write every word of your response in English — including all JSON field values, titles, descriptions, labels, and the disclaimer. No exceptions.
+
+JURISDICTION: ${jurisdictionName}
+GOVERNING LAW CONTEXT: ${jurisdictionContext}
+
+Apply the laws and standards of the above jurisdiction throughout your analysis. Cite specific legal concepts from this jurisdiction in plain language where relevant.
 
 score_label must be one of these exact enum values: Fair | Acceptable | Concerning | Unfair | Dangerous
 
-US CONTRACT TYPES you will encounter:
-- Employment offer letters (at-will clauses, IP assignment, non-solicitation)
-- Non-compete agreements (enforceability varies by state — always flag the state)
+CONTRACT TYPES you will encounter:
+- Employment offer letters (notice periods, IP assignment, non-solicitation, post-termination restrictions)
+- Non-compete and non-solicitation agreements (enforceability varies dramatically by jurisdiction — always flag the governing rules)
 - NDAs and confidentiality agreements (duration, scope, permitted disclosures)
-- Apartment/house leases (security deposit limits, auto-renewal, habitability)
+- Leases and tenancy agreements (security deposit limits, auto-renewal, landlord obligations)
 - Freelance and independent contractor agreements (IP ownership, kill fees, payment terms)
 - Service agreements (limitation of liability, indemnification, governing law)
 - Settlement agreements (release of claims, non-disparagement, confidentiality)
@@ -30,13 +38,13 @@ Return ONLY a valid JSON object — no markdown fences, no preamble, no text out
   "contract_type": "string",
   "summary": "string — 3-sentence plain-language overview",
   "parties": ["string"],
-  "governing_state": "US state name if identifiable, else null",
+  "governing_state": "state/province/region if identifiable, else null",
   "key_clauses": [{
     "title": "string",
     "plain_english": "string — simple explanation for a 16-year-old",
     "risk_level": "low" | "medium" | "high",
     "risk_note": "string or null",
-    "us_legal_context": "relevant US law in 1 plain-language sentence, or null"
+    "us_legal_context": "relevant law for this jurisdiction in 1 plain-language sentence, or null"
   }],
   "red_flags": [{
     "issue": "string",
@@ -61,9 +69,9 @@ Rules:
 5. Plain language throughout — no legalese whatsoever.
 6. NEVER include PII from the document beyond party names.
 7. NEVER reproduce verbatim contract text — always paraphrase.
-8. If governing_state is identifiable, tailor all advice to that state's laws.
-9. For non-competes, always note the state — enforceability differs dramatically.
-10. Be direct. Americans want to know: will this hurt me, how much, and what do I do?`;
+8. Tailor all analysis to ${jurisdictionName} law — do not apply a different jurisdiction's rules.
+9. For post-termination restrictions, always state enforceability under ${jurisdictionName} law explicitly.
+10. Be direct. People want to know: will this hurt me, how much, and what do I do?`;
 }
 
 export type FilePayload =
@@ -166,7 +174,8 @@ export class AppError extends Error {
 }
 
 export async function analyseContract(
-  payload: FilePayload
+  payload: FilePayload,
+  jurisdictionCode?: string
 ): Promise<ContrivoxAnalysis> {
   let userContent: Anthropic.MessageParam["content"];
 
@@ -202,7 +211,7 @@ export async function analyseContract(
     const message = await client.messages.create({
       model: "claude-sonnet-4-6",
       max_tokens: 8192,
-      system: buildContrivoxPrompt(),
+      system: buildContrivoxPrompt(jurisdictionCode),
       messages: [{ role: "user", content: userContent }],
     });
 
