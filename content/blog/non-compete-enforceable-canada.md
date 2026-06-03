@@ -2,11 +2,11 @@
 title: "Is a Non-Compete Enforceable in Canada? A Plain-English Guide (2025)"
 slug: "non-compete-enforceable-canada"
 metaTitle: "Is a Non-Compete Enforceable in Canada? A Plain-English Guide (2025)"
-metaDescription: "Ontario banned most employee non-competes in 2022. Here's what the law says province by province — and what to do if you have one in your contract."
+metaDescription: "Ontario banned most employee non-competes in 2021. Here's what the law says province by province — and what to do if you have one in your contract."
 primaryKeyword: "non-compete enforceable Canada"
 secondaryKeywords:
   - Ontario non-compete ban
-  - Working for Workers Act 2022
+  - Working for Workers Act 2021
   - Canadian non-compete law
   - non-compete Canada employee
 searchIntent: "Informational / High intent"
@@ -31,7 +31,7 @@ ctaPlacements:
 
 # Is a Non-Compete Enforceable in Canada? A Plain-English Guide (2025)
 
-**Quick summary:** Non-compete enforceability in Canada depends on your province and your role. Ontario banned non-competes for most employees in October 2022 — any clause signed after that date is void for the vast majority of Ontario workers. In every other province, non-competes can still be enforced, but Canadian courts apply a strict reasonableness test and many clauses fail it. If you're not sure whether yours holds up, read this before you make any decisions.
+**Quick summary:** Non-compete enforceability in Canada depends on your province and your role. Ontario banned non-competes for most employees effective October 25, 2021 — any clause signed after that date is void for the vast majority of Ontario workers. In every other province, non-competes can still be enforced, but Canadian courts apply a strict reasonableness test and many clauses fail it. If you're not sure whether yours holds up, read this before you make any decisions.
 
 ---
 
@@ -42,6 +42,16 @@ The answer depends on where you live, when you signed it, and what your title is
 > **Have a non-compete in your Canadian employment contract?** [Upload it to Contrivox](/#upload-sec)
 > for a plain-English breakdown of what it actually restricts — and whether it's likely to hold up.
 
+**Quick province reference:**
+
+| Province | Status | Short answer |
+|---|---|---|
+| Ontario | Banned by statute (most employees) | Void if signed after Oct 25, 2021 |
+| British Columbia | Common law — strict test | Enforced rarely; courts skeptical |
+| Alberta | Common law — moderate enforcement | Upheld more often than BC |
+| Quebec | Civil Code — explicit requirements | Rare; must be precisely scoped |
+| All other provinces | Common law reasonableness test | Depends on how it was drafted |
+
 ---
 
 ## Non-Competes in Canada vs the US — the Key Difference
@@ -50,7 +60,7 @@ In the United States, non-compete law is a state-by-state patchwork — Californ
 
 Canada has a more uniform starting point. Canadian courts have historically been more skeptical of non-competes than their American counterparts. At common law, a non-compete is treated as a restraint of trade — presumptively unenforceable — unless the employer can demonstrate it is reasonable. That default skepticism predates any legislation and applies across all common-law provinces.
 
-The other structural difference: Quebec operates under a civil law system rather than common law, which adds a distinct set of rules. And Ontario, Canada's most populous province, went further than anywhere else in 2022 by legislating a near-complete prohibition on employee non-competes.
+The other structural difference: Quebec operates under a civil law system rather than common law, which adds a distinct set of rules. And Ontario, Canada's most populous province, went further than anywhere else in 2021 by legislating a near-complete prohibition on employee non-competes.
 
 The comparison with US law is stark. [In California, non-competes are void by statute for nearly all employees.](/blog/non-compete-enforceable-california) Canada reached a similar outcome in Ontario through legislation, and approaches it elsewhere through judicial skepticism rather than a flat ban.
 
@@ -66,7 +76,7 @@ Outside Ontario (or for Ontario senior executives), a non-compete is enforceable
 
 All three parts must be satisfied. Fail any one of them and the clause falls.
 
-In *Shafron v. KRG Insurance Brokers* (2009), the Supreme Court of Canada reinforced a rule that distinguishes Canadian law from many US jurisdictions: Canadian courts will not "blue-pencil" a non-compete — meaning they will not rewrite or trim an overreaching clause to make it reasonable. If the restriction is too broad, the whole clause is struck down. This gives employees a meaningful defense against sloppy or aggressive drafting. (Verify this citation before relying on it in any legal proceeding.)
+In *Shafron v. KRG Insurance Brokers (Western) Inc.* (2009 SCC 6), the Supreme Court of Canada held that courts cannot use "notional severance" to rescue a defective non-compete — meaning a court cannot substitute new language to cure an ambiguous or overreaching clause. If the clause fails, it falls entirely. Unlike some US courts that trim overbroad restrictions to the nearest enforceable scope, Canadian courts do not rewrite the deal for the parties. This gives employees a meaningful defence against sloppy or aggressive drafting.
 
 For a deeper look at how the clause works, see the [non-compete clause legal breakdown](/clauses/non-compete-clause).
 
@@ -95,15 +105,15 @@ Courts are especially likely to strike down clauses that:
 
 ## Province-by-Province Overview
 
-### Ontario — Working for Workers Act 2022 Banned Most Employee Non-Competes
+### Ontario — Working for Workers Act 2021 Banned Most Employee Non-Competes
 
-Ontario's *Working for Workers Act, 2021* (effective October 25, 2022) added Section 67.2 to the *Employment Standards Act, 2000*. The effect is blunt: employers cannot enter into a non-compete agreement with an employee.
+Ontario's *Working for Workers Act, 2021* received Royal Assent on December 2, 2021, with the non-compete ban deemed effective October 25, 2021. It added Section 67.2 to the *Employment Standards Act, 2000*. The effect is blunt: employers cannot enter into a non-compete agreement with an employee.
 
-Any non-compete signed after October 25, 2022 by an Ontario employee is **void by statute** — regardless of how carefully it was drafted, what the employer paid, or what the contract says about governing law.
+Any non-compete signed after October 25, 2021 by an Ontario employee is **void by statute** — regardless of how carefully it was drafted, what the employer paid, or what the contract says about governing law.
 
 Two exceptions apply: **senior executives** and agreements made in connection with the **sale of a business** (both covered in detail below).
 
-Non-competes signed before October 25, 2022 are not automatically void — they remain subject to the common law reasonableness test.
+Non-competes signed before October 25, 2021 are not automatically void — they remain subject to the common law reasonableness test.
 
 ### British Columbia — Enforced but Courts Apply a Strict Reasonableness Test
 
@@ -128,7 +138,7 @@ Manitoba, Saskatchewan, Nova Scotia, New Brunswick, PEI, and Newfoundland all fo
 
 ## Non-Competes for Employees vs Independent Contractors
 
-Ontario's statutory ban applies to **employees** only. The *Employment Standards Act* does not cover independent contractors, and the 2022 prohibition is no different. A non-compete in a contractor agreement in Ontario is not automatically void under the Act.
+Ontario's statutory ban applies to **employees** only. The *Employment Standards Act* does not cover independent contractors, and the 2021 prohibition is no different. A non-compete in a contractor agreement in Ontario is not automatically void under the Act.
 
 Outside Ontario, the common law reasonableness test technically applies to both employees and contractors, but courts tend to be more skeptical of non-competes in contractor agreements. Independent contractors are, by definition, working across multiple clients — broadly restricting where they can work undermines the premise of the relationship.
 
@@ -136,15 +146,15 @@ If you're a freelancer or independent contractor with a non-compete in your agre
 
 ---
 
-## What Changed in Ontario in 2022
+## What Changed in Ontario in 2021
 
-Before October 25, 2022, Ontario employers routinely included non-competes in employment contracts. Courts applied the common law reasonableness test — some clauses held up, many didn't.
+Before October 25, 2021, Ontario employers routinely included non-competes in employment contracts. Courts applied the common law reasonableness test — some clauses held up, many didn't.
 
 The *Working for Workers Act* changed the starting position entirely for new agreements. Ontario's stated rationale: non-competes hurt worker mobility, suppress wages, and concentrate power with employers at the expense of employees.
 
 **What the ban means in practice:**
 
-- A non-compete clause signed after October 25, 2022 by an Ontario employee is void — the employer has no legal basis to enforce it
+- A non-compete clause signed after October 25, 2021 by an Ontario employee is void — the employer has no legal basis to enforce it
 - Non-solicitation clauses (agreeing not to poach clients or colleagues) are **not** affected — they remain permitted and enforceable if reasonable
 - Confidentiality and NDA clauses are unaffected
 - The rest of the employment contract remains valid — only the non-compete clause is struck
@@ -171,7 +181,7 @@ Under Ontario Regulation 297/01, a "senior executive" is a person who holds one 
 
 Title alone is not sufficient. A VP of a small team with no authority to bind the company will likely not qualify. The test looks at real decision-making power, not job title.
 
-If you are a genuine senior executive in Ontario and signed a non-compete after October 2022, the statutory ban does not protect you. The common law reasonableness test applies — the clause is not automatically void, but it still must satisfy the three-part test to be enforceable.
+If you are a genuine senior executive in Ontario and signed a non-compete after October 2021, the statutory ban does not protect you. The common law reasonableness test applies — the clause is not automatically void, but it still must satisfy the three-part test to be enforceable.
 
 ---
 
@@ -187,13 +197,25 @@ This distinction matters if you are a founder who sold your business and is now 
 
 ---
 
+## The Federal Proposal — What Budget 2025 Would Change
+
+The provincial picture above covers most Canadian workers. But for employees at **federally regulated employers** — banks, broadcasters, interprovincial trucking companies, and shipping firms regulated under the *Canada Labour Code* — a separate federal proposal is in play.
+
+Canada's Budget 2025 proposed amending the *Canada Labour Code* to restrict the use of non-compete agreements by federally regulated employers. The stated rationale mirrors Ontario's: non-competes suppress wages and limit worker mobility.
+
+**This is a proposal, not law.** As of June 2026, the federal government has not passed the amendment. Consultations were scheduled to begin in early 2026. If implemented, it would make the federal jurisdiction the second Canadian employment law regime — after Ontario — to ban non-competes by statute. The scope would be limited to federally regulated workplaces; it would not affect employees governed by provincial employment standards legislation.
+
+If you work at a bank, airline, national broadcaster, or interprovincial carrier, monitor this development. Until the amendment passes, the common law reasonableness test continues to apply to your non-compete.
+
+---
+
 ## What To Do If You Have a Non-Compete in Your Canadian Contract
 
-**If you're in Ontario and signed after October 25, 2022 (and you're not a senior executive or a business seller):** The clause is almost certainly void. You do not need to comply with it. That said, if your former employer threatens enforcement, get legal advice before acting publicly — a void clause can still generate costly legal pressure.
+**If you're in Ontario and signed after October 25, 2021 (and you're not a senior executive or a business seller):** The clause is almost certainly void. You do not need to comply with it. That said, if your former employer threatens enforcement, get legal advice before acting publicly — a void clause can still generate costly legal pressure.
 
 **If you're in any other province, or an Ontario senior executive:** The clause is not automatically void, but it may still be unenforceable if it fails the reasonableness test. Look at the duration, geographic scope, and activity restriction. Clauses that are overly broad — especially for non-senior employees — routinely fail.
 
-**If you're about to sign:** Push back. Ask to remove the non-compete entirely, or narrow the duration, territory, and scope to something proportionate. Employers in Canada expect negotiation on these clauses, particularly post-2022. Read the full guide on [how to get out of a non-compete](/blog/how-to-get-out-of-a-non-compete) for specific tactics.
+**If you're about to sign:** Push back. Ask to remove the non-compete entirely, or narrow the duration, territory, and scope to something proportionate. Employers in Canada expect negotiation on these clauses, particularly since Ontario's 2021 ban reset expectations. Read the full guide on [how to get out of a non-compete](/blog/how-to-get-out-of-a-non-compete) for specific tactics.
 
 **If you've received a letter or threat from a former employer:** Don't ignore it. Even an unenforceable clause can generate injunctions, cease-and-desist letters, and pressure on your new employer. Consult an employment lawyer who practises in your province before making any moves.
 
@@ -201,20 +223,20 @@ This distinction matters if you are a founder who sold your business and is now 
 
 ## FAQ: Non-Competes in Canada
 
-**Is a non-compete void if I signed it in Ontario after October 25, 2022?**
-Yes, for most employees. The *Working for Workers Act* makes non-compete agreements void for Ontario employees — the two exceptions are senior executives and agreements tied to the sale of a business. For everyone else, the clause has no legal force.
+**Is a non-compete void if I signed it in Ontario after October 25, 2021?**
+Yes, for most employees. The *Working for Workers Act, 2021* makes non-compete agreements void for Ontario employees — the two exceptions are senior executives and agreements tied to the sale of a business. For everyone else, the clause has no legal force.
 
 **My contract has a non-solicitation clause, not a non-compete. Does Ontario's ban apply?**
 No. The Ontario ban is specific to non-compete clauses. Non-solicitation clauses — restricting you from contacting former clients or recruiting former colleagues — are still permitted and can be enforced if the terms are reasonable.
 
-**Can my employer enforce a non-compete I signed before October 25, 2022 in Ontario?**
-Possibly. Pre-ban non-competes in Ontario are subject to the common law reasonableness test, not the statutory void rule. Whether a pre-2022 clause holds up depends on how it was drafted — duration, geographic scope, and the scope of restricted activities all matter.
+**Can my employer enforce a non-compete I signed before October 25, 2021 in Ontario?**
+Possibly. Pre-ban non-competes in Ontario are subject to the common law reasonableness test, not the statutory void rule. Whether a pre-2021 clause holds up depends on how it was drafted — duration, geographic scope, and the scope of restricted activities all matter.
 
 **What is garden leave and is it legal in Canada?**
 Garden leave requires you to remain employed and on salary during a notice period while not starting at a competitor. It is legal across Canada, including Ontario, because you are compensated for the restriction. Courts and legislatures treat it far more favourably than a non-compete. If your employer offers garden leave in place of a non-compete, that is generally a better outcome for both sides.
 
 **If I move provinces after signing a non-compete, does the law of my new province apply?**
-Not automatically. The answer depends on the contract's governing law clause and which court has jurisdiction. If your contract specifies Ontario law, Ontario courts would apply Ontario standards — meaning a post-2022 clause would still be void. Moving to Alberta doesn't make a void Ontario clause enforceable. This is a fact-specific question; get legal advice if you've received any threatening communications.
+Not automatically. The answer depends on the contract's governing law clause and which court has jurisdiction. If your contract specifies Ontario law, Ontario courts would apply Ontario standards — meaning a post-2021 clause would still be void. Moving to Alberta doesn't make a void Ontario clause enforceable. This is a fact-specific question; get legal advice if you've received any threatening communications.
 
 ---
 
@@ -229,7 +251,7 @@ Not automatically. The answer depends on the contract's governing law clause and
 
 ## Read It Before You Sign It
 
-Non-competes in Canada are not automatic. Ontario employees hired after October 2022 are protected by statute. Everyone else has meaningful defenses under common law — Canadian courts have never been friendly to these clauses, and overly broad ones routinely fail.
+Non-competes in Canada are not automatic. Ontario employees hired after October 2021 are protected by statute. Everyone else has meaningful defenses under common law — Canadian courts have never been friendly to these clauses, and overly broad ones routinely fail.
 
 The clause in your contract may already be unenforceable. But you need to read it before you can know.
 
