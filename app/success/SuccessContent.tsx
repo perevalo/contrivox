@@ -21,10 +21,15 @@ const SLOW_MS    = 90_000;
 const C = {
   bg:      "var(--cvx-bg)",
   surface: "var(--cvx-surface)",
+  surface2:"var(--cvx-surface-2)",
   border:  "var(--cvx-border)",
+  borderStrong: "var(--cvx-border-strong)",
   text:    "var(--cvx-text)",
   muted:   "var(--cvx-muted)",
+  faint:   "var(--cvx-faint)",
   heading: "var(--cvx-heading)",
+  nav:     "var(--cvx-nav)",
+  overlay: "var(--cvx-overlay)",
 };
 
 const SCORE_COLORS: Record<string, string> = {
@@ -164,7 +169,7 @@ function ScoreRing({ score, label }: { score: number; label: string }) {
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 14, flexShrink: 0 }}>
       <div style={{ filter: `drop-shadow(0 0 18px ${color}55)` }}>
         <svg width={200} height={200} viewBox="0 0 200 200">
-          <circle cx={100} cy={100} r={r} fill="none" stroke="rgba(255,255,255,0.07)" strokeWidth={14} />
+          <circle cx={100} cy={100} r={r} fill="none" stroke="var(--cvx-border-strong)" strokeWidth={14} />
           <circle
             cx={100} cy={100} r={r}
             fill="none"
@@ -255,7 +260,7 @@ function InlineReport({ analysis, tier, onUpgrade }: {
           )}
         </div>
         {analysis.parties?.length > 0 && (
-          <div style={{ color: "rgba(255,255,255,0.3)", fontSize: 13, fontFamily: FONT }}>
+          <div style={{ color: C.muted, fontSize: 13, fontFamily: FONT }}>
             {analysis.parties.join(" · ")}
           </div>
         )}
@@ -272,7 +277,7 @@ function InlineReport({ analysis, tier, onUpgrade }: {
           <p style={{ color: C.muted, lineHeight: 1.75, fontSize: 15, marginBottom: 14, fontFamily: FONT }}>
             {analysis.summary}
           </p>
-          <p style={{ color: "rgba(255,255,255,0.5)", lineHeight: 1.7, fontSize: 13.5, fontStyle: "italic", fontFamily: FONT, margin: 0 }}>
+          <p style={{ color: C.muted, lineHeight: 1.7, fontSize: 13.5, fontStyle: "italic", fontFamily: FONT, margin: 0 }}>
             {analysis.score_reasoning}
           </p>
         </div>
@@ -284,7 +289,7 @@ function InlineReport({ analysis, tier, onUpgrade }: {
           <SectionHeader label={`Key Clauses — ${sortedClauses.length}`} accent="#f59e0b" />
 
           {tier === "basic" && (
-            <p style={{ fontSize: 11.5, color: "rgba(255,255,255,0.3)", fontFamily: FONT, marginBottom: 14 }}>
+            <p style={{ fontSize: 11.5, color: C.faint, fontFamily: FONT, marginBottom: 14 }}>
               Showing 1 of {sortedClauses.length} clause{sortedClauses.length !== 1 ? "s" : ""} — unlock to see all
             </p>
           )}
@@ -313,7 +318,7 @@ function InlineReport({ analysis, tier, onUpgrade }: {
                     </p>
                   )}
                   {clause.us_legal_context && (
-                    <p style={{ color: "rgba(255,255,255,0.3)", fontSize: 12, marginTop: 8, fontStyle: "italic", fontFamily: FONT, marginBottom: 0 }}>
+                    <p style={{ color: C.faint, fontSize: 12, marginTop: 8, fontStyle: "italic", fontFamily: FONT, marginBottom: 0 }}>
                       {clause.us_legal_context}
                     </p>
                   )}
@@ -345,7 +350,7 @@ function InlineReport({ analysis, tier, onUpgrade }: {
               </div>
               <div style={{
                 position: "absolute", inset: 0,
-                background: "linear-gradient(to bottom, rgba(7,7,15,0.05) 0%, rgba(7,7,15,0.82) 55%)",
+                background: "linear-gradient(to bottom, transparent 0%, var(--cvx-bg) 65%)",
                 display: "flex", alignItems: "flex-end", justifyContent: "center", padding: 20,
                 borderRadius: 12,
               }}>
@@ -438,7 +443,7 @@ function InlineReport({ analysis, tier, onUpgrade }: {
             {tier === "basic" && (
               <div style={{
                 position: "absolute", inset: 0,
-                background: "rgba(7,7,15,0.55)",
+                background: C.overlay,
                 display: "flex", alignItems: "center", justifyContent: "center",
                 borderRadius: 12,
               }}>
@@ -458,13 +463,13 @@ function InlineReport({ analysis, tier, onUpgrade }: {
           background: "rgba(124,58,237,0.07)", border: "1px solid rgba(124,58,237,0.3)",
           textAlign: "center",
         }}>
-          <p style={{ fontFamily: FONT_SERIF, fontSize: 22, color: "white", marginBottom: 8, lineHeight: 1.2 }}>
+          <p style={{ fontFamily: FONT_SERIF, fontSize: 22, color: C.heading, marginBottom: 8, lineHeight: 1.2 }}>
             Unlock Your Full Report
           </p>
           <p style={{ fontSize: 13.5, color: C.muted, lineHeight: 1.65, marginBottom: 6, fontFamily: FONT }}>
             All clauses explained · Negotiation scripts · Missing protections · PDF download
           </p>
-          <p style={{ fontSize: 12, color: "rgba(255,255,255,0.28)", marginBottom: 22, fontStyle: "italic", fontFamily: FONT }}>
+          <p style={{ fontSize: 12, color: C.faint, marginBottom: 22, fontStyle: "italic", fontFamily: FONT }}>
             Most users unlock after seeing their risk score.
           </p>
           <button
@@ -500,7 +505,7 @@ function InlineReport({ analysis, tier, onUpgrade }: {
       </section>
 
       {analysis.disclaimer && (
-        <p style={{ color: "rgba(255,255,255,0.2)", fontSize: 11, lineHeight: 1.6, textAlign: "center", fontFamily: FONT, margin: 0 }}>
+        <p style={{ color: C.faint, fontSize: 11, lineHeight: 1.6, textAlign: "center", fontFamily: FONT, margin: 0 }}>
           {analysis.disclaimer}
         </p>
       )}
@@ -664,7 +669,7 @@ export default function SuccessContent() {
         <div style={{
           position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 50,
           padding: "12px 20px",
-          background: "rgba(7,7,15,0.92)",
+          background: C.nav,
           backdropFilter: "blur(16px)",
           WebkitBackdropFilter: "blur(16px)",
           borderTop: `1px solid ${C.border}`,
@@ -689,15 +694,15 @@ export default function SuccessContent() {
                 >
                   {upgradeLoading ? "Redirecting…" : "Unlock Full Report — $15"}
                 </button>
-                <p style={{ fontSize: 11, color: "rgba(255,255,255,0.28)", marginTop: 5, fontFamily: FONT }}>
+                <p style={{ fontSize: 11, color: C.faint, marginTop: 5, fontFamily: FONT }}>
                   Most users unlock after seeing their risk score.
                 </p>
               </div>
               <a href="/" style={{
                 padding: "9px 18px", borderRadius: 10,
-                background: "rgba(255,255,255,0.04)",
-                border: "0.5px solid rgba(255,255,255,0.1)",
-                color: "rgba(255,255,255,0.4)", fontSize: 12,
+                background: C.surface,
+                border: `0.5px solid ${C.border}`,
+                color: C.muted, fontSize: 12,
                 textDecoration: "none", fontFamily: FONT, fontWeight: 600,
                 flexShrink: 0, whiteSpace: "nowrap",
               }}>
@@ -707,9 +712,9 @@ export default function SuccessContent() {
           ) : (
             <a href="/" style={{
               padding: "9px 32px", borderRadius: 10,
-              background: "rgba(255,255,255,0.06)",
-              border: "0.5px solid rgba(255,255,255,0.14)",
-              color: "rgba(255,255,255,0.65)",
+              background: C.surface,
+              border: `0.5px solid ${C.border}`,
+              color: C.muted,
               fontSize: 13, fontWeight: 600,
               textDecoration: "none", fontFamily: FONT,
             }}>
@@ -754,7 +759,7 @@ export default function SuccessContent() {
           <div style={{ textAlign: "center", animation: "fadeUp .5s ease" }}>
             <div style={{ position: "relative", width: 100, height: 100, margin: "0 auto 32px" }}>
               <svg width="100" height="100" viewBox="0 0 100 100" style={{ position: "absolute", inset: 0 }}>
-                <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="6"/>
+                <circle cx="50" cy="50" r="42" fill="none" stroke={C.border} strokeWidth="6"/>
                 <circle cx="50" cy="50" r="42" fill="none" stroke="#7c3aed" strokeWidth="6"
                   strokeDasharray="60 204" strokeLinecap="round"
                   style={{ animation: "spin 1.4s linear infinite", transformOrigin: "center" }}
@@ -771,7 +776,7 @@ export default function SuccessContent() {
               </div>
             </div>
 
-            <h1 style={{ fontFamily: FONT_SERIF, fontSize: "clamp(22px,4vw,32px)", color: "white", marginBottom: 12, lineHeight: 1.2 }}>
+            <h1 style={{ fontFamily: FONT_SERIF, fontSize: "clamp(22px,4vw,32px)", color: C.heading, marginBottom: 12, lineHeight: 1.2 }}>
               {isUpgrade
                 ? "Unlocking your full report…"
                 : slow
@@ -788,7 +793,7 @@ export default function SuccessContent() {
 
             <div style={{ display: "inline-flex", alignItems: "center", gap: 9, padding: "10px 20px", background: "rgba(124,58,237,0.08)", border: "0.5px solid rgba(124,58,237,0.2)", borderRadius: 24, minWidth: 300 }}>
               <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#8b5cf6", animation: "pulse 1.4s infinite", flexShrink: 0 }}/>
-              <span className="msg-text" style={{ fontSize: 13, color: "rgba(255,255,255,0.65)", fontFamily: FONT, opacity: msgVisible ? 1 : 0 }}>
+              <span className="msg-text" style={{ fontSize: 13, color: C.muted, fontFamily: FONT, opacity: msgVisible ? 1 : 0 }}>
                 {MESSAGES[msgIdx]}
               </span>
             </div>
@@ -797,10 +802,10 @@ export default function SuccessContent() {
               {([
                 ["✓", "Payment confirmed", "#4ade80"],
                 ["⏳", isUpgrade ? "Activating upgrade" : "Analysing clauses", "#8b5cf6"],
-                [isUpgrade ? "⚡" : urlPlan === "pro" ? "✉" : "📊", isUpgrade ? "Full report ready soon" : urlPlan === "pro" ? "Report on its way" : "Results loading", "rgba(255,255,255,0.2)"],
+                [isUpgrade ? "⚡" : urlPlan === "pro" ? "✉" : "📊", isUpgrade ? "Full report ready soon" : urlPlan === "pro" ? "Report on its way" : "Results loading", C.faint],
               ] as const).map(([icon, label, color], i) => (
                 <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
-                  <div style={{ width: 36, height: 36, borderRadius: "50%", background: i === 0 ? "rgba(74,222,128,0.12)" : i === 1 ? "rgba(139,92,246,0.12)" : "rgba(255,255,255,0.04)", border: `0.5px solid ${color}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 15 }}>{icon}</div>
+                  <div style={{ width: 36, height: 36, borderRadius: "50%", background: i === 0 ? "rgba(74,222,128,0.12)" : i === 1 ? "rgba(139,92,246,0.12)" : C.surface, border: `0.5px solid ${color}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 15 }}>{icon}</div>
                   <span style={{ fontSize: 11, color, fontFamily: FONT, textAlign: "center", maxWidth: 80 }}>{label}</span>
                 </div>
               ))}
@@ -818,7 +823,7 @@ export default function SuccessContent() {
                 </svg>
               </div>
 
-              <h1 style={{ fontFamily: FONT_SERIF, fontSize: "clamp(24px,4vw,36px)", color: "white", marginBottom: 12, lineHeight: 1.15 }}>
+              <h1 style={{ fontFamily: FONT_SERIF, fontSize: "clamp(24px,4vw,36px)", color: C.heading, marginBottom: 12, lineHeight: 1.15 }}>
                 {analysisError
                   ? "Analysis failed"
                   : timedOut
@@ -864,7 +869,7 @@ export default function SuccessContent() {
                       </svg>
                       {downloading ? "Generating PDF…" : "Download My Report"}
                     </button>
-                    <p style={{ fontSize: 13, color: "rgba(255,255,255,0.38)", fontFamily: FONT, marginBottom: 24, textAlign: "center" }}>
+                    <p style={{ fontSize: 13, color: C.faint, fontFamily: FONT, marginBottom: 24, textAlign: "center" }}>
                       📩 A copy has been sent to your inbox
                     </p>
                   </>
@@ -919,8 +924,8 @@ export default function SuccessContent() {
                     href="/"
                     style={{
                       display: "block", width: "100%", padding: "14px", fontSize: 14, fontWeight: 600,
-                      background: "transparent", color: "rgba(255,255,255,0.6)",
-                      border: "0.5px solid rgba(255,255,255,0.14)", borderRadius: 12,
+                      background: C.surface, color: C.muted,
+                      border: `0.5px solid ${C.border}`, borderRadius: 12,
                       textDecoration: "none", fontFamily: FONT, textAlign: "center",
                     }}
                   >
@@ -940,7 +945,7 @@ export default function SuccessContent() {
             )}
 
             {/* Share section */}
-            <div style={{ background: "rgba(255,255,255,0.025)", border: `0.5px solid ${C.border}`, borderRadius: 12, padding: "16px 18px", marginTop: 32 }}>
+            <div style={{ background: C.surface, border: `0.5px solid ${C.border}`, borderRadius: 12, padding: "16px 18px", marginTop: 32 }}>
               <p style={{ fontSize: 12, color: C.muted, fontFamily: FONT, marginBottom: 12, lineHeight: 1.5, textAlign: "center" }}>
                 Found this useful? Share Contrivox with someone who has a contract to sign.
               </p>
@@ -960,7 +965,7 @@ export default function SuccessContent() {
                 <button
                   onClick={handleCopyLink}
                   className="share-btn"
-                  style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "8px 16px", fontSize: 12, fontWeight: 600, background: "rgba(255,255,255,0.07)", color: "rgba(255,255,255,0.65)", border: "0.5px solid rgba(255,255,255,0.1)", borderRadius: 8, cursor: "pointer", fontFamily: FONT, transition: "opacity .15s" }}
+                  style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "8px 16px", fontSize: 12, fontWeight: 600, background: C.surface, color: C.muted, border: `0.5px solid ${C.border}`, borderRadius: 8, cursor: "pointer", fontFamily: FONT, transition: "opacity .15s" }}
                 >
                   {copied ? "✓ Copied!" : "Copy link"}
                 </button>
@@ -970,7 +975,7 @@ export default function SuccessContent() {
           </div>
         )}
 
-        <p style={{ marginTop: 40, fontSize: 11, color: "rgba(255,255,255,0.16)", fontFamily: FONT, textAlign: "center", maxWidth: 460, lineHeight: 1.65 }}>
+        <p style={{ marginTop: 40, fontSize: 11, color: C.faint, fontFamily: FONT, textAlign: "center", maxWidth: 460, lineHeight: 1.65 }}>
           Not legal advice. Educational purposes only. Consult a qualified attorney before signing any contract.
         </p>
       </div>
