@@ -1202,7 +1202,7 @@ export default function Contrivox() {
       <div style={{ minHeight:"100vh", background:COLORS.bg, backgroundImage:"radial-gradient(ellipse 65% 38% at 50% -4%, rgba(109,40,217,0.22) 0%, transparent 55%), radial-gradient(ellipse 35% 25% at 90% 90%, rgba(239,68,68,0.07) 0%, transparent 50%)" }}>
 
         {/* NAV */}
-        <nav style={{ position:"sticky", top:0, zIndex:90, padding:"0 20px", backdropFilter:navScrolled?"blur(12px)":"none", background:navScrolled?"rgba(13,15,20,0.85)":"transparent", borderBottom:navScrolled?"1px solid rgba(255,255,255,0.06)":"none", transition:"all 200ms ease" }}>
+        <nav style={{ position:"sticky", top:0, zIndex:90, padding:"0 20px", backdropFilter:navScrolled?"blur(12px)":"none", background:navScrolled?COLORS.nav:"transparent", borderBottom:navScrolled?`1px solid ${COLORS.border}`:"none", transition:"all 200ms ease" }}>
           <div style={{ maxWidth:980, margin:"0 auto", display:"flex", alignItems:"center", justifyContent:"space-between", height:58 }}>
             <ContrivoxLogo size={19}/>
             <div className="nav-links" style={{ display:"flex", alignItems:"center", gap:2 }}>
@@ -1348,7 +1348,7 @@ export default function Contrivox() {
         {/* UPLOAD */}
         <section id="upload-sec" style={{ padding:"48px 20px 80px" }}>
           <div style={{ maxWidth:660, margin:"0 auto" }}>
-            <div className="upload-box" style={{ background:"#1A1E2A", border:"1px solid rgba(139,92,246,0.3)", borderRadius:16, padding:"32px", boxShadow:"0 0 60px rgba(139,92,246,0.06)" }}>
+            <div className="upload-box" style={{ background:COLORS.surface2, border:`1px solid ${COLORS.accentBorder}`, borderRadius:16, padding:"32px", boxShadow:"0 0 60px rgba(139,92,246,0.06)" }}>
               <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:22, color:COLORS.heading, marginBottom:4, fontWeight:700 }}>{t.upload_title}</h2>
               <p style={{ fontSize:12, color:"var(--cvx-upload-label)", margin:"0 0 18px", fontFamily:"'DM Sans',sans-serif" }}>{t.upload_formats}</p>
 
