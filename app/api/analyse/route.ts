@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/nextjs";
 import { NextRequest, NextResponse } from "next/server";
 import { analyseContract, AppError, type FilePayload } from "@/lib/claude";
 import { checkRateLimit } from "@/lib/rate-limit";
@@ -64,6 +65,7 @@ export async function POST(req: NextRequest) {
         { status: e.status }
       );
     }
+    Sentry.captureException(e);
     console.error("[analyse] unexpected error:", e);
     return NextResponse.json({ error: "Unexpected error" }, { status: 500 });
   }

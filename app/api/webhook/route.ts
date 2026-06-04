@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/nextjs";
 import { NextRequest, NextResponse } from "next/server";
 import { waitUntil } from "@vercel/functions";
 import { stripe, type PlanTier } from "@/lib/stripe";
@@ -52,6 +53,7 @@ export async function POST(req: NextRequest) {
       }, { onConflict: "stripe_session_id" });
 
     if (paymentError) {
+      Sentry.captureException(new Error(paymentError.message), { extra: { stripe_session_id: session.id } });
       console.error("[webhook] payment insert error:", paymentError.message);
       return NextResponse.json({ received: true });
     }
@@ -62,6 +64,7 @@ export async function POST(req: NextRequest) {
         amount: credits,
       });
       if (creditError) {
+        Sentry.captureException(new Error(creditError.message), { extra: { user_id: userId, credits } });
         console.error("[webhook] credit grant error:", creditError.message);
       }
     }
@@ -131,9 +134,10 @@ export async function POST(req: NextRequest) {
       const tier: PlanTier = plan.startsWith("basic") ? "basic" : "pro";
       // Respond to Stripe immediately; keep function alive for analysis
       waitUntil(
-        triggerRealAnalysis(contractSessionId, customerEmail, tier).catch(e =>
-          console.error("[webhook] triggerRealAnalysis error:", e)
-        )
+        triggerRealAnalysis(contractSessionId, customerEmail, tier).catch(e => {
+          Sentry.captureException(e, { extra: { contractSessionId } });
+          console.error("[webhook] triggerRealAnalysis error:", e);
+        })
       );
     }
   }
@@ -200,6 +204,7 @@ async function triggerRealAnalysis(contractSessionId: string, customerEmail: str
   try {
     analysis = await analyseContract(payload, contract.jurisdiction_code ?? "US-federal");
   } catch (e) {
+    Sentry.captureException(e, { extra: { contractSessionId } });
     console.error("[analysis] Claude error for:", contractSessionId, e);
     await supabase
       .from("contracts")
