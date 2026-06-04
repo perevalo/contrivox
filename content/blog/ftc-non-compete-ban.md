@@ -1,7 +1,8 @@
 ---
 title: "The FTC Non-Compete Ban: What It Was, Why It Was Struck Down, and What Applies Now"
+metaTitle: "FTC Non-Compete Ban: What's Actually in Effect (2026)"
 slug: "ftc-non-compete-ban"
-metaDescription: "The FTC's 2024 rule banning non-competes was vacated by a federal court in August 2024. It is not in effect. Here's what actually governs your non-compete today."
+metaDescription: "The FTC's 2024 non-compete ban was struck down by a federal court. It never took effect. Learn what state and federal rules govern your non-compete today."
 primaryKeyword: "ftc non compete ban"
 secondaryKeywords:
   - ftc noncompete rule

@@ -1,7 +1,8 @@
 ---
 title: "Does a Non-Compete Apply If You Were Fired? What Your State Says"
+metaTitle: "Non-Compete If Fired: Does It Still Apply? (2026)"
 slug: "non-compete-fired"
-metaDescription: "Being fired doesn't automatically void your non-compete. But it does affect enforceability — and in some states, it's a strong argument for dismissal. Here's the full picture."
+metaDescription: "Being fired doesn't automatically void your non-compete. Learn how dismissal affects enforceability and what your state says about fired employees in 2026."
 primaryKeyword: "non compete if fired"
 secondaryKeywords:
   - does non compete apply if fired

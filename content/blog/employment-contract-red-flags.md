@@ -1,7 +1,8 @@
 ---
 title: "10 Employment Contract Red Flags You Should Never Ignore"
+metaTitle: "10 Employment Contract Red Flags to Watch in 2026"
 slug: "employment-contract-red-flags"
-metaDescription: "Before you accept that job offer, read the fine print. Here are 10 employment contract red flags that could cost you — and how to spot them before you sign."
+metaDescription: "Before you sign that job offer, read the fine print. These 10 employment contract red flags could cost you thousands — and here's how to spot every one."
 primaryKeyword: "employment contract red flags"
 secondaryKeywords:
   - what to look for in an employment contract

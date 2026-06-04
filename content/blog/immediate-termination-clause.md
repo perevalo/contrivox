@@ -1,7 +1,8 @@
 ---
 title: "Immediate Termination Clause: What It Means and When It Can Be Used"
+metaTitle: "Immediate Termination Clause Explained (2026)"
 slug: "immediate-termination-clause"
-metaDescription: "An immediate termination clause lets employers fire you without notice. Know when it applies, what triggers it, and what you lose — before you sign."
+metaDescription: "An immediate termination clause lets employers fire you without notice or severance. Learn what triggers it, what you lose, and how to spot risky wording."
 primaryKeyword: "immediate termination clause"
 secondaryKeywords:
   - immediate dismissal clause
