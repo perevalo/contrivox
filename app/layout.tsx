@@ -11,9 +11,9 @@ const GA_ID = "G-NP37VTZ5KQ";
 const SITE = "https://contrivox.com";
 
 export const metadata: Metadata = {
-  title: "Contract Review AI — Red Flags, Fairness Score & Negotiation Scripts | Contrivox",
+  title: "Contrivox — AI Contract Review for US, UK, Canada & Australia",
   description:
-    "Upload any contract — employment, NDA, lease, or freelance — and get a plain-English analysis, red flags, fairness score, and negotiation scripts in 60 seconds. From $9.",
+    "Upload your contract and get a plain-English analysis in your language, under your local law. US, UK, Canada, Australia, Ireland & NZ. From $9, no subscription.",
   keywords: [
     "contract analysis", "non-compete checker", "NDA review", "lease analyser",
     "employment contract red flags", "contract review AI", "is my non-compete enforceable",
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   authors: [{ name: "Contrivox" }],
   alternates: { canonical: SITE },
   openGraph: {
-    title: "Contract Review AI — Red Flags, Fairness Score & Negotiation Scripts | Contrivox",
+    title: "Contrivox — AI Contract Review for US, UK, Canada & Australia",
     description: "Upload any contract — employment, NDA, lease, or freelance — and get a plain-English analysis, red flags, fairness score, and negotiation scripts in 60 seconds. From $9.",
     url: SITE,
     siteName: "Contrivox",
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Contract Review AI — Red Flags, Fairness Score & Negotiation Scripts | Contrivox",
+    title: "Contrivox — AI Contract Review for US, UK, Canada & Australia",
     description: "Upload any contract — employment, NDA, lease, or freelance — and get a plain-English analysis, red flags, fairness score, and negotiation scripts in 60 seconds. From $9.",
   },
   robots: { index: true, follow: true },

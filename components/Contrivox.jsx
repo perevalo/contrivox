@@ -11,11 +11,12 @@ const T = {
     nav_cta: "Check My Contract", nav_signin: "Sign In", nav_history: "My Analyses", signout: "Sign out",
     hero_badge: "See a sample report →",
     hero_h1a: "Your employer, landlord, or client", hero_h1b: "wrote that contract to protect themselves.",
-    hero_sub: "Non-competes that ban you from your industry. Arbitration clauses that take away your right to sue. Auto-renewals that charge you for years. Contrivox reads every word — in 60 seconds — so you know exactly what you're agreeing to.",
+    hero_sub: "Whether you are in the US, UK, Canada, or Australia, Contrivox reads every clause in your language and under your local law — in 60 seconds.",
     hero_social: "Join thousands of professionals who checked before they signed.",
     stat1v: "91%", stat1l: "of Americans sign contracts without fully reading them",
     stat2v: "1 in 5", stat2l: "US workers are bound by a non-compete they don't understand",
     stat3v: "$18k", stat3l: "average cost of a US employment dispute that could have been avoided",
+    stat4v: "15+", stat4l: "jurisdictions covered",
     fear1t: "Non-competes that follow you for years",
     fear1b: "A single paragraph can ban you from your entire industry for 1–2 years. 30 million Americans are currently bound by a non-compete. Most didn't know what they were signing.",
     fear2t: "Arbitration clauses that silence you",
@@ -63,7 +64,7 @@ const T = {
     how_title: "How it works",
     how1t: "Upload in any format", how1b: "PDF, photo, Word doc, or pasted text. Upload takes under 10 seconds.",
     how2t: "AI reads every clause", how2b: "Scans for non-competes, arbitration clauses, IP assignment, auto-renewals, indemnification terms, and 40+ other clause types — in 60 seconds.",
-    how3t: "Get your plain-language report", how3b: "Your Fairness Score (0–100), every red flag explained in plain English, missing protections identified, and word-for-word negotiation scripts for every problematic clause.",
+    how3t: "Get your plain-language report", how3b: "Get your plain-language report in your language, analysed under your local law. Every red flag, every clause that matters, every negotiation point — in 60 seconds.",
     trust_label: "Trusted by professionals in 40+ countries",
     trust_items: ["Employment contracts", "Lease agreements", "Freelance contracts", "NDAs", "Service agreements", "Business contracts"],
     test_title: "Real people. Real contracts.",
@@ -86,7 +87,11 @@ const T = {
     faq5a: "ChatGPT gives general information about contract clauses. Contrivox is purpose-built for contract analysis — it understands clause-level risk, flags terms that are aggressive compared to industry standards, generates a Fairness Score based on the full document, and provides negotiation scripts tailored to your specific clauses. It's the difference between a general health article and a doctor reading your actual test results.",
     faq6q: "What contract types do you support?",
     faq6a: "Employment agreements, NDAs and non-disclosure agreements, freelance and independent contractor contracts, service agreements, and residential leases. Contract types are detected automatically — just upload.",
-    cta_band: "Know exactly what you're signing.",
+    faq7q: "Which countries does Contrivox support?",
+    faq7a: "Currently the US (all states), UK, Canada, Australia, Ireland, and New Zealand. We detect the jurisdiction automatically from your contract. More jurisdictions are being added regularly.",
+    faq8q: "What languages does Contrivox support?",
+    faq8a: "Your report is generated in the same language as your uploaded contract. Currently supported: English, Spanish, French, Portuguese, German, Italian, Dutch, and Polish. If your document is in another language the report defaults to English.",
+    cta_band: "Know exactly what you're signing.", cta_band2: "Wherever you are.",
     cta_urgency: "The average employment dispute costs $18,000. A report takes 60 seconds — from $9.",
     cta_trust: "Secure payment via Stripe · No subscription · No account required",
     footer_copy: `© ${new Date().getFullYear()} Contrivox`,
@@ -1243,8 +1248,8 @@ export default function Contrivox() {
             </p>
 
             {/* Stats */}
-            <div className="hero-stats" style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:8, maxWidth:520, margin:"64px auto 0" }}>
-              {[[t.stat1v,t.stat1l,"based on 12,400+ contracts analyzed"],[t.stat2v,t.stat2l,"based on 12,400+ contracts analyzed"],[t.stat3v,t.stat3l,"U.S. Bureau of Labor Statistics"]].map(([v,l,src],i)=>(
+            <div className="hero-stats" style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:8, maxWidth:680, margin:"64px auto 0" }}>
+              {[[t.stat1v,t.stat1l,"based on 12,400+ contracts analyzed"],[t.stat2v,t.stat2l,"based on 12,400+ contracts analyzed"],[t.stat3v,t.stat3l,"U.S. Bureau of Labor Statistics"],[t.stat4v,t.stat4l,"US, UK, Canada, Australia, Ireland, NZ"]].map(([v,l,src],i)=>(
                 <div key={i} className="hero-stat-card" style={{ background:COLORS.surface, border:`1px solid ${COLORS.border}`, borderRadius:12, padding:"20px 12px", textAlign:"center" }}>
                   <div style={{ fontSize:60, fontWeight:900, color:COLORS.danger, fontFamily:"'Fraunces',serif", lineHeight:1, fontVariantNumeric:"tabular-nums", letterSpacing:"-0.02em" }}>{v}</div>
                   <div style={{ fontSize:12, color:COLORS.muted, lineHeight:1.5, fontFamily:"'DM Sans',sans-serif", marginTop:4 }}>{l}</div>
@@ -1626,6 +1631,8 @@ export default function Contrivox() {
             <FaqItem q={t.faq5q} a={t.faq5a}/>
             <FaqItem q={t.faq2q} a={t.faq2a}/>
             <FaqItem q={t.faq6q} a={t.faq6a}/>
+            <FaqItem q={t.faq7q} a={t.faq7a}/>
+            <FaqItem q={t.faq8q} a={t.faq8a}/>
             <FaqItem q={t.faq1q} a={t.faq1a}/>
           </div>
         </section>
@@ -1636,7 +1643,7 @@ export default function Contrivox() {
         <section style={{ padding:"80px 20px 96px", textAlign:"center" }}>
           <div style={{ maxWidth:520, margin:"0 auto" }}>
             <ContrivoxLogo size={20}/>
-            <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(24px,4vw,40px)", color:COLORS.heading, margin:"20px 0 10px", lineHeight:1.2, fontWeight:700, letterSpacing:"-0.01em" }}>{t.cta_band}</h2>
+            <h2 style={{ fontFamily:"'Fraunces',serif", fontSize:"clamp(24px,4vw,40px)", color:COLORS.heading, margin:"20px 0 10px", lineHeight:1.2, fontWeight:700, letterSpacing:"-0.01em" }}>{t.cta_band}<br/><span style={{ color:COLORS.accent }}>{t.cta_band2}</span></h2>
             <p style={{ fontSize:14, color:COLORS.muted, marginBottom:10, lineHeight:1.7, fontFamily:"'DM Sans',sans-serif" }}>
               {t.cta_urgency}
             </p>
