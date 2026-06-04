@@ -1248,10 +1248,10 @@ export default function Contrivox() {
             </p>
 
             {/* Stats */}
-            <div className="hero-stats" style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:8, maxWidth:680, margin:"64px auto 0" }}>
+            <div className="hero-stats" style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:8, maxWidth:800, margin:"64px auto 0" }}>
               {[[t.stat1v,t.stat1l,"based on 12,400+ contracts analyzed"],[t.stat2v,t.stat2l,"based on 12,400+ contracts analyzed"],[t.stat3v,t.stat3l,"U.S. Bureau of Labor Statistics"],[t.stat4v,t.stat4l,"US, UK, Canada, Australia, Ireland, NZ"]].map(([v,l,src],i)=>(
                 <div key={i} className="hero-stat-card" style={{ background:COLORS.surface, border:`1px solid ${COLORS.border}`, borderRadius:12, padding:"20px 12px", textAlign:"center" }}>
-                  <div style={{ fontSize:60, fontWeight:900, color:COLORS.danger, fontFamily:"'Fraunces',serif", lineHeight:1, fontVariantNumeric:"tabular-nums", letterSpacing:"-0.02em" }}>{v}</div>
+                  <div style={{ fontSize:48, fontWeight:900, color:COLORS.danger, fontFamily:"'Fraunces',serif", lineHeight:1, fontVariantNumeric:"tabular-nums", letterSpacing:"-0.02em" }}>{v}</div>
                   <div style={{ fontSize:12, color:COLORS.muted, lineHeight:1.5, fontFamily:"'DM Sans',sans-serif", marginTop:4 }}>{l}</div>
                   <div style={{ fontSize:10, color:COLORS.faint, fontFamily:"'DM Sans',sans-serif", marginTop:4, lineHeight:1.4, opacity:0.6 }}>{src}</div>
                 </div>
