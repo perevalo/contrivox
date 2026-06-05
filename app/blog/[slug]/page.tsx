@@ -2,9 +2,27 @@ import { getAllPosts, getPostBySlug, formatDate } from "@/lib/blog";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { BlogCTA } from "@/components/blog/BlogCTA";
+import { InlineCTA } from "@/components/blog/InlineCTA";
+import { BlogStickyBanner } from "@/components/blog/BlogStickyBanner";
 import "@/components/blog/BlogStyles.css";
 
 export const revalidate = false;
+
+const INLINE_CTA_SLUGS = new Set([
+  "non-compete-fired",
+  "ftc-non-compete-ban",
+  "what-is-an-nda",
+  "employment-contract-red-flags",
+  "non-compete-enforceable-california",
+  "termination-clause-explained",
+]);
+
+function splitAfterFirstParagraph(html: string): [string, string] {
+  const idx = html.indexOf("</p>");
+  if (idx === -1) return [html, ""];
+  const cut = idx + 4;
+  return [html.slice(0, cut), html.slice(cut)];
+}
 
 export function generateStaticParams() {
   return getAllPosts().map(p => ({ slug: p.slug }));
@@ -37,6 +55,11 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
 export default function BlogPost({ params }: { params: { slug: string } }) {
   const post = getPostBySlug(params.slug);
   if (!post) notFound();
+
+  const showInlineCTA = INLINE_CTA_SLUGS.has(params.slug);
+  const [bodyFirst, bodyRest] = showInlineCTA
+    ? splitAfterFirstParagraph(post.bodyHtml)
+    : [post.bodyHtml, ""];
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -107,9 +130,16 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
       </div>
 
       {/* Body — rendered from markdown */}
-      <div className="blog-body" dangerouslySetInnerHTML={{ __html: post.bodyHtml }} />
+      <div className="blog-body" dangerouslySetInnerHTML={{ __html: bodyFirst }} />
+      {showInlineCTA && (
+        <>
+          <InlineCTA slug={params.slug} />
+          {bodyRest && <div className="blog-body" dangerouslySetInnerHTML={{ __html: bodyRest }} />}
+        </>
+      )}
 
       <BlogCTA style={{ marginTop: 56 }} />
+      {showInlineCTA && <BlogStickyBanner />}
     </article>
   );
 }
