@@ -58,3 +58,6 @@ pnpm-debug.log*
 # Misc
 *.pem
 .turbo/
+
+# Sentry Config File
+.env.sentry-build-plugin

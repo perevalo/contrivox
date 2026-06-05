@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/nextjs";
 import type { Metadata } from "next";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
@@ -10,39 +11,44 @@ const GA_ID = "G-NP37VTZ5KQ";
 
 const SITE = "https://contrivox.com";
 
-export const metadata: Metadata = {
-  title: "Contrivox — AI Contract Review for US, UK, Canada & Australia",
-  description:
-    "Upload your contract and get a plain-English analysis in your language, under your local law. US, UK, Canada, Australia, Ireland & NZ. From $9, no subscription.",
-  keywords: [
-    "contract analysis", "non-compete checker", "NDA review", "lease analyser",
-    "employment contract red flags", "contract review AI", "is my non-compete enforceable",
-    "freelance contract review", "arbitration clause explained",
-  ],
-  authors: [{ name: "Contrivox" }],
-  alternates: { canonical: SITE },
-  openGraph: {
+export function generateMetadata(): Metadata {
+  return {
     title: "Contrivox — AI Contract Review for US, UK, Canada & Australia",
-    description: "Upload any contract — employment, NDA, lease, or freelance — and get a plain-English analysis, red flags, fairness score, and negotiation scripts in 60 seconds. From $9.",
-    url: SITE,
-    siteName: "Contrivox",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Contrivox — AI Contract Review for US, UK, Canada & Australia",
-    description: "Upload any contract — employment, NDA, lease, or freelance — and get a plain-English analysis, red flags, fairness score, and negotiation scripts in 60 seconds. From $9.",
-  },
-  robots: { index: true, follow: true },
-  metadataBase: new URL(SITE),
-  icons: {
-    icon: [
-      { url: "/favicon.svg", type: "image/svg+xml" },
-      { url: "/favicon.png", type: "image/png", sizes: "32x32" },
+    description:
+      "Upload your contract and get a plain-English analysis in your language, under your local law. US, UK, Canada, Australia, Ireland & NZ. From $9, no subscription.",
+    keywords: [
+      "contract analysis", "non-compete checker", "NDA review", "lease analyser",
+      "employment contract red flags", "contract review AI", "is my non-compete enforceable",
+      "freelance contract review", "arbitration clause explained",
     ],
-    apple: [{ url: "/favicon.png", sizes: "180x180", type: "image/png" }],
-  },
-};
+    authors: [{ name: "Contrivox" }],
+    alternates: { canonical: SITE },
+    openGraph: {
+      title: "Contrivox — AI Contract Review for US, UK, Canada & Australia",
+      description: "Upload any contract — employment, NDA, lease, or freelance — and get a plain-English analysis, red flags, fairness score, and negotiation scripts in 60 seconds. From $9.",
+      url: SITE,
+      siteName: "Contrivox",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "Contrivox — AI Contract Review for US, UK, Canada & Australia",
+      description: "Upload any contract — employment, NDA, lease, or freelance — and get a plain-English analysis, red flags, fairness score, and negotiation scripts in 60 seconds. From $9.",
+    },
+    robots: { index: true, follow: true },
+    metadataBase: new URL(SITE),
+    icons: {
+      icon: [
+        { url: "/favicon.svg", type: "image/svg+xml" },
+        { url: "/favicon.png", type: "image/png", sizes: "32x32" },
+      ],
+      apple: [{ url: "/favicon.png", sizes: "180x180", type: "image/png" }],
+    },
+    other: {
+      ...Sentry.getTraceData(),
+    },
+  };
+}
 
 const websiteSchema = {
   "@context": "https://schema.org",

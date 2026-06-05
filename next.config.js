@@ -98,12 +98,13 @@ const nextConfig = {
 };
 
 module.exports = withSentryConfig(nextConfig, {
-  org: process.env.SENTRY_ORG,
-  project: process.env.SENTRY_PROJECT,
+  org: "dxhub",
+  project: "contrivox",
   authToken: process.env.SENTRY_AUTH_TOKEN,
   silent: !process.env.CI,
   widenClientFileUpload: true,
   tunnelRoute: "/monitoring",
   hideSourceMaps: true,
   disableLogger: true,
+  automaticVercelMonitors: true,
 });
