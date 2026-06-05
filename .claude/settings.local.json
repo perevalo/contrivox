@@ -24,7 +24,32 @@
       "Bash(cd /d \"D:\\\\Alex\\\\contrivox\")",
       "Bash(find app *)",
       "Bash(Select-String \"@vercel/functions\")",
-      "Bash(npm list *)"
+      "Bash(npm list *)",
+      "Bash(findstr -i \"success\\\\|report\\\\|result\")",
+      "Bash(not exist *)",
+      "Bash(New-Item -ItemType Directory -Force -Path \"D:\\\\Alex\\\\contrivox\\\\plans\")",
+      "Bash(Out-Null)",
+      "Bash(gh workflow *)",
+      "Bash(gh run *)",
+      "Bash(python -c \"import sys,json; data=json.load\\(sys.stdin\\); [print\\(j['name'], '-', j['conclusion']\\) for j in data['jobs']]\")",
+      "Bash([ -f \"content/blog/$f.md\" ])",
+      "Bash(uipro init *)",
+      "Read(//c/Users/alepe/.claude/plugins/**)",
+      "Read(//c/Users/alepe/.claude/**)",
+      "Bash(Select-Object -First 30)",
+      "Bash(python *)",
+      "Bash(rtk next *)",
+      "Bash(rtk git *)",
+      "Bash(rtk proxy *)",
+      "Bash(rtk grep *)",
+      "Bash(rtk pnpm *)",
+      "WebSearch",
+      "Bash(New-Item -ItemType Directory -Force \"D:\\\\Alex\\\\contrivox\\\\app\\\\api\\\\contract\\\\confirm-jurisdiction\")",
+      "Bash(rtk tsc *)",
+      "WebFetch(domain:contrivox.com)",
+      "Bash(rtk ls *)",
+      "Bash(rtk json *)",
+      "Bash(Get-Content *)"
     ]
   }
 }

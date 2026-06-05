@@ -5,11 +5,14 @@ export const runtime = "nodejs";
 
 export async function GET() {
   const dsn = process.env.NEXT_PUBLIC_SENTRY_DSN;
+
+  Sentry.init({ dsn, enabled: true });
+
   const client = Sentry.getClient();
 
   const err = new Error("Contrivox Sentry test event — server-side ✓");
   Sentry.captureException(err);
-  const flushed = await Sentry.flush(3000);
+  const flushed = await Sentry.flush(5000);
 
   return NextResponse.json({
     ok: true,
