@@ -5,6 +5,7 @@ const HEADLINES: Record<string, string> = {
   "employment-contract-red-flags":      "Spotted a red flag in your contract?",
   "non-compete-enforceable-california": "Have a California non-compete you need checked?",
   "termination-clause-explained":       "Not sure what your termination clause actually means?",
+  "does-non-compete-apply-if-fired":    "Just let go and worried about your non-compete?",
 };
 
 export function InlineCTA({ slug }: { slug: string }) {

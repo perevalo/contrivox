@@ -15,6 +15,7 @@ const INLINE_CTA_SLUGS = new Set([
   "employment-contract-red-flags",
   "non-compete-enforceable-california",
   "termination-clause-explained",
+  "does-non-compete-apply-if-fired",
 ]);
 
 function splitAfterFirstParagraph(html: string): [string, string] {

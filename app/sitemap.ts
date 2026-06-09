@@ -1,15 +1,20 @@
 import { MetadataRoute } from "next";
-import { getAllPosts, getAllCategories } from "@/lib/blog";
+import { getAllPosts } from "@/lib/blog";
 import { createSupabaseServiceClient } from "@/lib/supabase/server";
 
 export const revalidate = 3600;
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const posts      = getAllPosts();
-  const categories = getAllCategories();
-  const base       = "https://contrivox.com";
+// Update these when the page content actually changes
+const STATIC_DATES = {
+  contact: "2026-05-18",
+  privacy: "2026-05-18",
+  terms:   "2026-05-18",
+};
 
-  // Fetch published SEO pages from Supabase
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const posts = getAllPosts();
+  const base  = "https://contrivox.com";
+
   const db = createSupabaseServiceClient();
   const [{ data: clauses }, { data: contracts }, { data: jurisdictions }] = await Promise.all([
     db.from("clauses").select("slug, generated_at, created_at").eq("published", true),
@@ -17,19 +22,28 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     db.from("clause_jurisdictions").select("clause_slug, jurisdiction_slug, generated_at, created_at").eq("published", true),
   ]);
 
-  const clauseUrls: MetadataRoute.Sitemap = (clauses ?? []).map((c) => ({
+  // Remove shorter slug when both "X" and "X-clause" exist — keep the more descriptive one
+  const clauseSlugSet = new Set((clauses ?? []).map((c) => c.slug));
+  const dedupedClauses = (clauses ?? []).filter(
+    (c) => !clauseSlugSet.has(`${c.slug}-clause`)
+  );
+
+  const clauseUrls: MetadataRoute.Sitemap = dedupedClauses.map((c) => ({
     url: `${base}/clauses/${c.slug}`,
     lastModified: new Date(c.generated_at ?? c.created_at),
     changeFrequency: "monthly" as const,
-    priority: 0.8,
+    priority: 0.6,
   }));
 
-  const jurisdictionUrls: MetadataRoute.Sitemap = (jurisdictions ?? []).map((j) => ({
-    url: `${base}/clauses/${(j as { clause_slug: string; jurisdiction_slug: string; generated_at: string | null; created_at: string }).clause_slug}/${(j as { clause_slug: string; jurisdiction_slug: string; generated_at: string | null; created_at: string }).jurisdiction_slug}`,
-    lastModified: new Date((j as { generated_at: string | null; created_at: string }).generated_at ?? (j as { created_at: string }).created_at),
-    changeFrequency: "monthly" as const,
-    priority: 0.75,
-  }));
+  const jurisdictionUrls: MetadataRoute.Sitemap = (jurisdictions ?? []).map((j) => {
+    const jj = j as { clause_slug: string; jurisdiction_slug: string; generated_at: string | null; created_at: string };
+    return {
+      url: `${base}/clauses/${jj.clause_slug}/${jj.jurisdiction_slug}`,
+      lastModified: new Date(jj.generated_at ?? jj.created_at),
+      changeFrequency: "monthly" as const,
+      priority: 0.5,
+    };
+  });
 
   const contractUrls: MetadataRoute.Sitemap = (contracts ?? []).map((c) => ({
     url: `${base}/contracts/${c.slug}`,
@@ -38,30 +52,31 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
-  const postUrls = posts.map(p => ({
+  const postUrls: MetadataRoute.Sitemap = posts.map((p) => ({
     url: `${base}/blog/${p.slug}`,
     lastModified: new Date(p.updatedAt),
     changeFrequency: "monthly" as const,
     priority: 0.8,
   }));
 
-  const catUrls = categories.map(c => ({
-    url: `${base}/blog/category/${c.slug}`,
-    lastModified: new Date(),
-    changeFrequency: "weekly" as const,
-    priority: 0.6,
-  }));
+  // Derive lastmod for index pages from most recent child content
+  const fallback = new Date(STATIC_DATES.contact);
+  const mostRecentPost = posts.length > 0
+    ? new Date(Math.max(...posts.map((p) => new Date(p.updatedAt).getTime())))
+    : fallback;
+  const mostRecentClause = dedupedClauses.length > 0
+    ? new Date(Math.max(...dedupedClauses.map((c) => new Date(c.generated_at ?? c.created_at).getTime())))
+    : fallback;
+  const mostRecentContent = new Date(Math.max(mostRecentPost.getTime(), mostRecentClause.getTime()));
 
   return [
-    { url: base,                        lastModified: new Date(), changeFrequency: "weekly"  as const, priority: 1   },
-    { url: `${base}/sample-report`,     lastModified: new Date(), changeFrequency: "monthly" as const, priority: 0.8 },
-    { url: `${base}/blog`,              lastModified: new Date(), changeFrequency: "weekly"  as const, priority: 0.9 },
-    { url: `${base}/clauses`,           lastModified: new Date(), changeFrequency: "weekly"  as const, priority: 0.9 },
-    { url: `${base}/contact`,           lastModified: new Date(), changeFrequency: "monthly" as const, priority: 0.5 },
-    { url: `${base}/privacy`,           lastModified: new Date(), changeFrequency: "monthly" as const, priority: 0.4 },
-    { url: `${base}/terms`,             lastModified: new Date(), changeFrequency: "monthly" as const, priority: 0.4 },
+    { url: base,              lastModified: mostRecentContent,                  changeFrequency: "weekly"  as const, priority: 1.0 },
+    { url: `${base}/blog`,    lastModified: mostRecentPost,                     changeFrequency: "weekly"  as const, priority: 0.9 },
+    { url: `${base}/clauses`, lastModified: mostRecentClause,                   changeFrequency: "weekly"  as const, priority: 0.9 },
+    { url: `${base}/contact`, lastModified: new Date(STATIC_DATES.contact),    changeFrequency: "monthly" as const, priority: 0.3 },
+    { url: `${base}/privacy`, lastModified: new Date(STATIC_DATES.privacy),    changeFrequency: "monthly" as const, priority: 0.3 },
+    { url: `${base}/terms`,   lastModified: new Date(STATIC_DATES.terms),      changeFrequency: "monthly" as const, priority: 0.3 },
     ...postUrls,
-    ...catUrls,
     ...clauseUrls,
     ...jurisdictionUrls,
     ...contractUrls,

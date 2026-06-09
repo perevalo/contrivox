@@ -97,7 +97,7 @@ function loadAll(): BlogPost[] {
   if (!fs.existsSync(POSTS_DIR)) return [];
   return fs
     .readdirSync(POSTS_DIR)
-    .filter(f => f.endsWith(".md"))
+    .filter(f => f.endsWith(".md") && !f.startsWith("_"))
     .map(f => parsePost(f))
     .filter((p): p is BlogPost => p !== null)
     .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
